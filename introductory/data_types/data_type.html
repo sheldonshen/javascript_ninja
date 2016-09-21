@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        //单行注释(comments)
+        /*
+           多行注释
+        */
+
+        //声明,javascript有三种声明
+        //1 var 声明变量
+        //2 let 声明块范围局部变量(block scope local variable)
+        //3 const 声明一个只读有名字的常量
+
+        //声明变量(Declaring variables)
+        //1使用var,var=42可以用来申明全局和局部变量
+        //2直接复制,x=42这样导致申明了一个全局变量,但是将会导致javascript编译时产生一个严格警告,因而你应该避免使用这种非常规的格式
+        //3使用关键字let,let y=12,这个语法可以用来声明语句块代码段的局部变量(block scope local variable)
+
+        //对变量求值(evaluating variables)
+        //用var或者let 声明的未赋初值的变量,值会被设定为undefined
+        var a;
+        console.log("The value of a is " + a);//undefined
+        //console.log("The value of b is " + b);//ReferenceError
+
+        //使用undefined来确定变量是否已经赋值
+        var input;
+        if(input === undefined){
+            console.log("the variable has not been initialized")
+        }else{
+            console.log("the variable has been initialized")
+        }
+        //undefined值在布尔类型环境中会被当做false
+        var myArray = new Array()
+        if(!myArray[0]){
+            console.log("undefined is regared as false in the context of boolean")
+        }
+        //undefined值在数值类型环境中会被转换为NaN
+        var a;//NaN
+        console.log(a+2)//Evaluates to NaN
+        //null值在布尔类型环境中会被当做false
+        var b=null;
+        if(!b){
+            console.log("null is regared as false in the context of boolean")
+        }
+        //null值在数值类型环境中会被转换为0
+        var b=null;
+        console.log(b+2);//Evaluates to 2
+
+        //变量的域(variable scope)
+        //全局变量:在所有函数之外声明的变量,局部变量:函数内部声明的变量
+        if(true){
+            var x = 5;//全局变量
+        }
+        console.log(x);//5
+
+        if(true){
+            //let y = 5;//块变量
+        }
+        //console.log(y);//ReferenceError:y
+
+        //变量声明提升(variable hoisting):你可以引用稍后声明的变量,而不会引发异常,这一概念称为声明提升(hoisting)
+        /*
+         * Example1
+         */
+        console.log(m === undefined);//true
+        var m = 3;
+        /*
+         * Example2
+         */
+        var myvar="my value";
+        (function(){
+            var myvar;
+            console.log(myvar);//undefined
+            myvar="local value"
+        })();
+        //由于存在变量声明提升,一个函数中所有的var语句应尽可能地放在接近函数顶部的地方，这大大提高程序的清晰度
+
+        //let(const)将不会提升变量到代码块的顶部
+        //console.log(z);//ReferenceError
+        //let z = 3
+
+        //函数提升(Functional hoisting):对于函数,只有函数声明会被提升到顶部,不包括函数表达式
+        /*函数声明*/
+        console.log(foo());//"bar"
+        function foo(){
+            return "bar";
+        }
+        /*函数表达式,表达式定义的函数,称为匿名函数,匿名函数没有函数提升*/
+        //baz()//TypeError:baz is not a function
+        var baz=function(){
+            console.log("bar 2")
+        };
+
+        //全局变量(Global variables):实际上全局对象的属性,在网页中,全局对象是Window
+        //所以你可以使用形如window.variable的语法来设置和访问全局变量
+        //例如在一个文档中申明一个phoneNumber的变量.你可以在一个子框架中里用parent.phoneNumber来引用
+
+        //常量(Constants),它必须被初始化为某个值
+        //常量的作用域规则与let块级作用域变量相同
+        const prefix = '212'
+        function f(){};
+        //const f=5;
+        //然而,对象属性是不受保护的,
+        const my_object={'key':'value'}
+        my_object.key='othervalue'
+
+        //数据结构和类型
+        //6中原始数据类型:1 Boolean 2 null 3 undefined 4 Number 5 String 6 Symbol 7 Object
+        //Objects和functions是本语言的其他两个要素,你可以将对象视为存放值的命名容器,而将函数视为你的应用程序能够执行的过程
+
+        //数据类型转换(Data type conversion)
+        var snswer = 42;
+        snswer="thanks for all the fish..."
+        x = "the answer is " + 42;
+        y = "42 is the answer";
+        console.log("37"-7);
+        console.log("37"+7);
+
+        //字符串转数字(converting strings to numbers)
+        //parseInt()和parseFloat()
+        //单面加法运算符(将字符串转化为数字)
+        console.log("1.1"+"1.1")
+        console.log((+"1.1") + (+"1.1"))
+
+        //字面值(Literals)
+        //数组字面值(Array literals)
+        var coffees=["French Roast","Colombian","Kona"]
+        var a =[3]
+        console.log(a.length)//1
+        console.log(a[0])//3
+
+        //数组字面值中的多余逗号(undefined)
+        //显示地将缺失的元素声明为undefined,加大大增加你的代码的清晰度和可维护性
+        var fish=['Lion',,"Angel",]
+        console.log(fish.length)
+        console.log(fish[1])//undefined
+
+        //整数(Intergers)
+        https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Grammar_and_types
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>
