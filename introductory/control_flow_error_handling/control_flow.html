@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        //语句块(block statement)
+        var x=1;
+        {
+            var x=2;
+        }
+        console.log(x);//2,这是因为 var x = 2 的作用范围与 var x = 1 的作用范围相同
+        //从ECMAScript6开始,使用let定义的变量是块作用域的.
+        //条件判断语句
+        //条件表达式中使用赋值,一个共同的习惯是在赋值语句前后额外的添加一对括号
+        if((x=3)){
+            //......
+        }
+        //False value:aka Falsy(a falsy value is a value that translates to false when evaluated in Boolean context)
+        //False value:false,undefined,null,0,NaN,空字符串(""),其他传递给条件值,都会计算为true
+        var b = new Boolean(false);
+        if (b){
+            console.log("evaluated to true")
+        }
+        //循环语句(loop statement)
+        function howMany(selectObject){
+            var numberSelected = 0;
+            for(var i = 0; i < selectObject.options.length;i++){
+                if(selectObject.options[i].selected){
+                    numberSelected++;
+                }
+            }
+            return numberSelected;
+        }
+        //do...while
+        //while...
+        //标签语句(label statement)
+        theMark=false;
+        markLoop:
+        while(theMark == true){
+            console.log("lable statement")
+        }
+        //break statement
+        var x = 0;
+        var z = 0;
+        labelCancelLoops:while(true){
+            //console.log("Outer loops:"+x);
+            x+=1;
+            z=1;
+            while(true){
+                //console.log("Inner loops:" +z);
+                z+=1;
+                if(z===10 && x === 10){
+                    break labelCancelLoops;
+                }else if(z===10){
+                    break;
+                }
+            }
+        }
+        //continue statement
+        //对象操作语句(Object Manipulation Statements)
+        var car={make:'Ford',model:'Mustang'};
+        function dump_props(obj,obj_name){
+            var result = "";
+            for(var i in obj){//for...in...迭代对象属性
+                result +=obj_name + "." + i + "=" +obj[i] +"<br>";
+            }
+            result += "<hr>";
+            return result;
+        }
+        console.log(dump_props(car,'car'));
+        //for each...in语句
+//        var sum=0;
+//        var obj = {prop1:5,prop2:13,prop3:8};
+//        for each (var item in obj){
+//            sum + item;
+//        }
+//        console.log(sum);
+        //https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Control_flow_and_error_handling
+    </script>
+</head>
+<body>
+<form name="selectForm">
+    <p>
+        <strong>Choose some music types, then click the button below:</strong>
+        <br/>
+        <select name="musicTypes" multiple="multiple">
+            <option selected="selected">R&B</option>
+            <option>Jazz</option>
+            <option>Blues</option>
+            <option>New Age</option>
+            <option>Classical</option>
+            <option>Opera</option>
+        </select>
+    </p>
+    <p>
+        <input type="button" value="How many are selected?"
+               onclick="alert ('Number of options selected: ' + howMany(document.selectForm.musicTypes))"/>
+    </p>
+</form>
+</body>
+</html>
