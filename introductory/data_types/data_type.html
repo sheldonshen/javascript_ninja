@@ -122,28 +122,99 @@
         //字符串转数字(converting strings to numbers)
         //parseInt()和parseFloat()
         //单面加法运算符(将字符串转化为数字)
-        console.log("1.1"+"1.1")
-        console.log((+"1.1") + (+"1.1"))
+        console.log("1.1"+"1.1");
+        console.log((+"1.1") + (+"1.1"));
 
         //字面值(Literals)
         //数组字面值(Array literals)
-        var coffees=["French Roast","Colombian","Kona"]
-        var a =[3]
-        console.log(a.length)//1
-        console.log(a[0])//3
+        var coffees=["French Roast","Colombian","Kona"];
+        var a =[3];
+        console.log(a.length);//1
+        console.log(a[0]);//3
 
         //数组字面值中的多余逗号(undefined)
         //显示地将缺失的元素声明为undefined,加大大增加你的代码的清晰度和可维护性
-        var fish=['Lion',,"Angel",]
-        console.log(fish.length)
-        console.log(fish[1])//undefined
+        var fish=['Lion',,"Angel",];
+        console.log(fish.length);
+        console.log(fish[1]);//undefined
 
-        //整数(Intergers)
-        https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Grammar_and_types
+        //整数字面值(Intergers literals)
+        //浮点数字面值(Floating-point literals)
+        console.log(-3.12e+12);
+        console.log(.1e-23);
+        //对象字面值(object literals):封闭在花括号对({})中的一个对象的零个或者多个“属性名-值”对的列表
+        var Sales="Toyota";
+        function CarType(name){
+            return (name === "Honda")?name:"Sorry,we don't sell " + name +".";
+        }
+        var car = {myCar:"Saturn",getCar:CarType("Honda"),special:Sales};
+        console.log(car.myCar);
+        console.log(car.getCar);
+        console.log(car.special);
+        var car = {manyCars:{a:"Saab","b":"Jeep"},7:"Mazda"};
+        console.log(car.manyCars.b);
+        console.log(car[7]);
 
+        var unusualPropertyNames={
+            "":"An Empty String",
+            "!":"Bang!"
+        }
+        //console.log(unusualPropertyNames."");
+        console.log(unusualPropertyNames[""]);
+        //console.log(unusualPropertyNames.!);
+        console.log(unusualPropertyNames["!"])
+        var foo = {a:"alpha",2:"two"};
+        console.log(foo.a);
+        console.log(foo[2]);
+        //console.log(foo.2);
+        console.log(foo[a]);//undefined
+        console.log(foo["a"]);
+        console.log(foo["2"]);
+
+        var obj = {
+            //__proto__
+           // __proto__:theProtoObj,
+            //shorthand for "handler:handler"
+            //handler,
+            //methods
+            toString(){
+                //super call
+                //return "d " + super.toString()
+            },
+            //Computed (dynamic) property names
+            ['prop_' + (() => 42)()]:42
+        };
+
+        //RegExp字面值
+        var re=/ab+c/;
+        //字符串字面值(String Literals)
+        console.log("John's car".length);
+        //除非有特别需要使用字符串对象,否则,你应当始终使用字符串字面值.
+        console.log(`in javascript '\n' is line-feed`);
+        console.log(`in javascript,this is
+                     not legal`);//multiple strings
+        //string interpolation
+        var name="Bob",time="today";
+        console.log(`Hello ${name},how are you ${time}?`);
+        var quote="He read \"The Cremation of Sam McGee\" by R.W. Service.";
+        console.log(quote);
+        var str="this string \
+        is broken \
+        across multiple\
+        lines\
+        ";
+        console.log(str);
+        var poem =
+                "Roses are red,\n\
+                Violets are blue.\n\
+                I'm schizophrenic,\n\
+                And so am I."
+        console.log(poem);
+        //Unicode编码
+        var x = "\u00A9 Netscape Communications";
+        console.log(x)
     </script>
 </head>
 <body>
-
 </body>
 </html>
