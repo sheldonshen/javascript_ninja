@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    //数组
+    let arr = [3,5,7];
+    arr.foo="hello";
+
+    for(let i in arr){
+        console.log(i);//0,1,2,foo
+    }
+
+    for(let i of arr){
+        console.log(i);//3,5,7
+    }
+
+</script>
+</body>
+</html>
