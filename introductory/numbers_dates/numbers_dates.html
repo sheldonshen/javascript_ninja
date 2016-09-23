@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+   //console.log(0888);
+    console.log(0755);
+    console.log(Number.MAX_VALUE)
+    //数字
+    //十进制数字(Decimal numbers)
+    //二进制数字(Binary numbers)
+    //八进制数字(Octal numbers)
+    //十六进制(Hexadecimal numbers)
+    //指数形式(Exponentiation)
+    //数字对象
+    //Math object
+    console.log(Math.PI);
+    //和其他对象不同，你不能够创建一个自己的Math对象。你只能使用内置的Math对象。
+    //日期对象
+    var IPOdate = new Date();
+    IPOdate.setTime(Date.parse("Aug 9, 1995"))
+    console.log(IPOdate);
+    var Xmas95 = new Date("December 25, 1995")
+    console.log(Xmas95);
+
+    var today = new Date();
+    var endYear = new Date(1995, 11, 31, 23, 59, 59, 999);//// 设置日和月，注意，月份是0-11
+    endYear.setFullYear(today.getFullYear());
+    var msPerDay = 24 * 60 * 60 * 1000;//每天的毫秒数
+    var left = (endYear.getTime()-today.getTime())/msPerDay;
+    var daysLeft = Math.round(left);///返回这一年剩下的天数
+    console.log(daysLeft);
+
+    function jsClock(){
+        var time = new Date();
+        var hour = time.getHours();
+        var minute = time.getMinutes();
+        var second = time.getSeconds();
+        var temp="" + ((hour>12)?(hour-12):hour);
+        if (hour == 12){
+            temp="12";
+        }
+        temp += ((minute < 10) ? ":0" : ":") + minute;
+        temp += ((second < 10) ? ":0" : ":") + second;
+        temp += (hour >= 12) ? " P.M." : " A.M.";
+        return temp;
+    }
+</script>
+</body>
+</html>
