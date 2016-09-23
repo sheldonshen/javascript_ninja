@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    //定义函数
+    function square(number){
+        return number * number;
+    }
+
+    //参数传递(1 pass to function by value,2 pass an object)
+    function passObject(theObject){
+        theObject.make="Toyota";
+    }
+
+    var mycar={make:"Honda",model:"Accord",year:1998};
+    x=mycar.make;
+    console.log(x);//Honda
+    passObject(mycar);
+    y=mycar.make;
+    console.log(y);//Toyota(make属性的值在函数中被改变了)
+
+    //函数表达式
+    var square = function(number){
+        return number * number;
+    };
+    var x = square(4);
+    console.log(x);
+    //在函数内部使用来代指其本身
+    var factorial = function fac(n) {
+      return n<2 ? 1 :n*fac(n-1); //在函数内部使用(fac)来代指其本身
+    };
+    console.log(factorial(3));
+    //函数本身作为参数
+    function map(f,a){
+        var result=[],//创建一个新的数组
+                i;
+        for(i=0;i != a.length;i++){
+            result[i]=f(a[i]);
+        }
+        return result;
+    }
+    console.log(map(function(x){return x * x},[0,1,2,5,10]));
+    //可以根据条件来定义函数
+    var myFunc;
+    var num=0;
+    if(num == 0){
+        myFunc = function(theObject){
+            theObject.make="Toyota";
+        };
+    }
+    //你可以在运行时用Function构造器由一个字符串来构建一个函数,很像eval函数
+    //创建了一个能返回2个参数和的函数
+    var adder = new Function("a","b","return a + b");
+    console.log(adder(2,6));
+    //当一个对象的属性是函数时,其称之为方法
+
+    //调用函数,函数一定要处于调用它们的域中，但是函数的声明可以在它们的调用语句之后
+    console.log(test(5));
+    function test(number){
+        return number * number;
+    }
+
+    //console.log(testF(4));//testF is not defined
+    testF=function(number){
+        return number * number;
+    };
+
+    function factorial(n){
+        if ((n == 0) || (n == 1)){
+            return 1;
+        }else{
+            return (n - factorial(n-1));
+        }
+    }
+
+    //var a, b, c, d, e;
+    console.log(factorial(1));
+    console.log(factorial(2));
+    console.log(factorial(3));
+    console.log(factorial(4));
+    console.log(factorial(5));
+    //动态调用函数,apply函数
+
+    //函数的作用域
+    //以下变量定义在全局范围内
+    var num1=20,num2=3,name="simon";
+    //本函数定义在全局范围内
+    function multiply(){
+        return num1 * num2;
+    }
+    console.log(multiply());
+
+    //嵌套函数的例子
+    function getScore(){
+        var num1=2,num2=3;
+        function add(){
+            return name + " scored " + (num1 + num2);
+        }
+        return add();
+    }
+
+    console.log(getScore());//simon scored 5
+
+    //作用域和函数堆栈(scope and function stack)
+    //递归(recursion)
+    function foo(i){
+        if(i<0){
+            return;
+        }
+        console.log("begin:" + i);
+        foo(i-1);
+        console.log("end:"+i)
+    }
+
+    foo(3);
+
+    //嵌套函数和闭包(nested functions and closures)
+    //总结
+    //内部函数只可以在外部函数中访问
+    //内部函数形成了一个闭包：它可以访问外部函数的参数和变量，但是外部函数却不能使用它的参数和变量
+    function addSquares(a,b){
+        function square(x){
+            return x * x;
+        }
+        return square(a) + square(b);
+    }
+
+    console.log(addSquares(2,3));
+    console.log(addSquares(3,4));
+    console.log(addSquares(4,5));
+
+    function outside(x){
+        function inside(y){
+            return x + y;
+        }
+        return inside;
+    }
+
+    fn_inside=outside(3);
+    result=fn_inside(5)
+    console.log(result);
+    console.log(outside(3)(5))
+    //保存变量(preservation of variables)
+    //多层嵌套函数(multiply-nested functions),域链(scope chaining)
+    function A(x){
+        function B(y){
+            function C(z){
+                console.log(x + y + z);
+            }
+            C(3);
+        }
+        B(2)
+    }
+    A(1)
+    //命令冲突,作用域链
+    function outside(){
+        var x = 10;
+        function inside(x){
+            return x;
+        }
+        return inside;
+    }
+    console.log(outside()(20))//作用域链是{inside,outside,全局对象}
+    //闭包(closures)
+
+</script>
+</body>
+</html>
