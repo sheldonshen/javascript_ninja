@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    //operators运算符
+    //destructuring解构
+    var foo = ["one","two","three"];
+    //不适用解构
+    var one = foo[0];
+    var two = foo[1];
+    var ttree = foo[2];
+    //使用解构
+    var [one,two,three]=foo;
+    console.log(one);
+    console.log(two);
+    console.log(three);
+    //算术运算符
+    console.log(+'3')//一元运算符, 如果操作数在之前不是number，试图将其转换为number
+    //一元操作符
+    //delete
+    x=42;
+    var y=43;
+    myobj = new Number();
+    myobj.h=4;
+    console.log(delete x);//returns true (can delete if declared implicitly)
+    console.log(delete y);//returns false (cannot delete if declared with var)
+    console.log(delete Math.PI);//returns false (cannot delete predefined properties)
+    console.log(delete myobj.h);//returns true (can delete user-defined properties)
+    console.log(delete myobj);//returns true (can delete if declared implicitly)
+    //删除数组元素
+    var trees = new Array("redwood", "bay", "cedar", "oak", "maple");
+    delete trees[3];
+    console.log(trees);//["redwood", "bay", "cedar", undefined, "maple"]
+    if(3 in trees){
+        console.log("1-executed");
+    }
+
+    var trees = new Array("redwood", "bay", "cedar", "oak", "maple");
+    trees[3]=undefined;
+    console.log(trees);//["redwood", "bay", "cedar", undefined, "maple"]
+    if(3 in trees){
+        console.log("2-executed");
+    }
+    //typeof operator
+    console.log(typeof dontExist);//undefined
+    console.log(typeof true);//booleam
+    console.log(typeof null);//object
+    console.log(typeof eval);//function
+    console.log(typeof Date);
+    console.log(typeof Function);
+    console.log(typeof Math);
+    console.log(typeof Option);
+    console.log(typeof String);
+    //void
+    //relational operators
+    //in operators
+
+    //Arrays
+    var trees = new Array("redwood", "bay", "cedar", "oak", "maple");
+    console.log(0 in  trees);
+    console.log(3 in  trees);
+    console.log(6 in  trees);
+    console.log("bay" in  trees);
+    console.log("length" in  trees);
+
+    //Predefined objects
+    console.log("PI" in Math);
+    var myString = new String("coral");
+    console.log("length" in myString);
+
+    //Custom objects
+    var myCar = {make:"Honda",model:"Accord",year:"1998"};
+    console.log("make" in myCar);
+    console.log("model" in myCar);
+
+    //instanceof operator
+    var theDay = new Date(1995,12,17);
+    if(theDay instanceof Date){
+        console.log("statement")
+    }
+    //expressions
+    function validate(obj,lowval,hival){
+        if((obj.value<lowval)||(obj.value > hival)){
+            console.log("invalid value");
+        }
+    }
+    //分组操作符()
+    //comprehensions
+    console.log([for (i of [1,2,3]) i * i]);
+    var abc=["A","B","C"];
+    console.log([for (letter of abc) letter.toLowerCase()])
+
+</script>
+
+<a href="javascript:void(document.form.submit())">click here to submit</a>
+<p>put a number between 18 and 99:</p>
+<input type="text" name="age" size=3 onchange="validate(this,18,99);">
+
+
+<form name="myform">
+form name:<input type="text" name="text1" value="beeeg">
+    <p>
+<input name="Button1" type="button" value="show form name"
+onclick="this.form.text1.value=this.form.name">
+
+</form>
+
+</body>
+</html>
