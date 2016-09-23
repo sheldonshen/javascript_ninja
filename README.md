@@ -4,6 +4,11 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript   MDN(English)<br>
 https://developer.mozilla.org/zh-CN/docs/Web/JavaScript   MDN(Chinese)<br>
 http://www.liaoxuefeng.com/wiki/001434446689867b27157e896e74d51a89c25cc8b43bdb3000 廖雪峰JavaScript教程<br>
 http://www.cnblogs.com/TomXu/tag/JavaScript/              汤姆大叔JavaScript系列文章<br>
+http://www.ruanyifeng.com/blog/javascript/                阮一峰javascript系列文章<br>
+http://javascript.info/                                   The JavaScript Tutorial<br>
+#video
+http://www.ycku.com/javascript/                           瓢城Web俱乐部JavaScript第一季<br>
+http://www.bjsxt.com/2014/down_1112/39.html               尚学堂科技_javascript视频教程_白贺翔<br>
 #books
 ##初级读物：
 《JavaScript高级程序设计》：一本非常完整的经典入门书籍，被誉为JavaScript圣经之一，详解的非常详细，最新版第三版已经发布了，建议购  买。<br>
