@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>本章介绍在Javascript中如何使用字符串与文本内容</title>
+</head>
+<body>
+<script>
+    //字符串
+    //String字面值
+    var str1="abc";
+    var str2="bcd";
+    //字符串对象
+    var s = new String("foo");//create a String object
+    console.log(s);
+    console.log(typeof s);//object
+    //除非必要,应该尽量使用String字面值,因为String对象的某些行为可能并不与直觉一致
+    var s1="2+2";
+    var s2 = new String("2+2");
+    console.log(eval(s1));//4
+    console.log(eval(s2));
+    //多行模板字符串
+    //模板字符串是一种允许内嵌表达式的String字面值. 可以用它实现多行字符串或者字符串内插等特性
+    //模板字符串使用反勾号(``,grave accent),模板字符串可以包含占位符,占位符用美元符号和花括号标识(${expression}).
+    //多行
+    console.log("string text line1\n\
+            string text line 2");
+    console.log(`string text line1
+            string text line2`);
+    //嵌入表达式
+    var a=5;
+    var b=10;
+    console.log("fifteen is "  + (a+b)+ " and\nnot" + (2*a+b)+".");
+    console.log(`fifteen is ${a+b} and not ${2*a+b}`)//25,20
+    //国际化
+    //日期和时间的格式化
+    var msPerDay=24 * 60 * 60 * 1000;
+    var july172014 = new Date(msPerDay * (44 * 365 + 11 + 197));//2014-1970=44年
+    var options = { year: "2-digit", month: "2-digit", day: "2-digit",
+        hour: "2-digit", minute: "2-digit", timeZoneName: "short" };
+    var americanDateTime=new Intl.DateTimeFormat("en-US",options).format;
+    console.log(americanDateTime(july172014));
+    //数字格式化
+    //https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Text_formatting
+    //定序
+    //正则表达式
+
+
+
+</script>
+</body>
+</html>
