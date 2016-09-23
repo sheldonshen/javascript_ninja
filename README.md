@@ -1,4 +1,4 @@
-# js_zero_hero
+# javascript_ninja
 #tutorial
 https://developer.mozilla.org/en-US/docs/Web/JavaScript   MDN(English)<br>
 https://developer.mozilla.org/zh-CN/docs/Web/JavaScript   MDN(Chinese)<br>
