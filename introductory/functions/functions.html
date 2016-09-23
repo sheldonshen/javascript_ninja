@@ -166,7 +166,137 @@
     }
     console.log(outside()(20))//作用域链是{inside,outside,全局对象}
     //闭包(closures)
+    var pet = function(name){//外部函数定义了一个变量"name"
+        var getName=function(){
+            return name;//内部函数可以访问外部函数定义的"name"
+        }
+        return getName;//返回这个内部函数,从而将其暴露在外部函数作用域
+    }
+    myPet=pet("Vivie");
+    console.log(myPet())//Vivie
 
+    var createPet = function(name){
+        var sex;
+        return {
+            setName:function(newName){
+                name = newName;
+            },
+            getName:function() {
+                return name;
+            },
+            getSex:function(){
+                return sex;
+            },
+            setSex:function(newSex){
+                if(typeof newSex == "string" && (newSex.toLowerCase() == "male" || newSex.toLowerCase()=="female")){
+                    sex = newSex;
+                }
+            }
+        }
+    }
+
+    var pet = createPet("Vivie");
+    console.log(pet.getName());
+    pet.setName("Oliver");
+    pet.setSex("male");
+    console.log(pet.getName());
+    console.log(pet.getSex());
+
+    var getCode=(function(){
+        var secureCode="0]Eal(eh&2";//a code we do not want outsiders to be able to modify....
+        return function () {
+            return secureCode;
+        }
+    })();
+    console.log(getCode());
+
+    //problem
+    var createPet=function (name) {
+      return {setName:function (name) {
+          name=name;//how do we access the name defined by outer function?
+      }}
+    };
+
+    //使用arguments对象
+    function myConcat(seperator){
+        var result="",i;
+        //iterate through arguments
+        for(i=1;i<arguments.length;i++){
+            result+=arguments[i]+seperator;
+        }
+        return result;
+    }
+
+    console.log(myConcat(',', "red", "orange", "blue"));
+    console.log(myConcat("; ", "elephant", "giraffe", "lion", "cheetah"));
+    console.log(myConcat(". ", "sage", "basil", "oregano", "pepper", "parsley"));
+
+    //函数参数(function parameter)
+    //从ecmascript开始,有两个新的类型参数,默认参数(default parameter)和剩余参数(rest parameter)
+    //默认参数(default paramter)
+    function multiply(a,b){
+        b = typeof b !== 'undefined'?b:1;
+        return a * b;
+    }
+
+    console.log(multiply(5));
+
+    function multiply(a,b=1){
+        return a * b;
+    }
+    console.log(multiply(5));
+    //剩余参数(rest parameter)
+    function multiply(multiplier,...theArgs){
+        return theArgs.map(x => multiplier * x);
+    }
+    var arr = multiply(2,1,2,3);
+    console.log(arr);//[2,4,6]
+
+    //箭头函数(Arrow functions)
+    //更简洁的函数
+    var a = [
+        "Hydrogen",
+        "Helium",
+        "Lithium",
+        "Beryl­lium"
+    ];
+    var a2 = a.map(function (s) {
+        return s.length;
+    });
+    console.log(a2);
+    var a3 = a.map(s => s.length);//箭头函数
+    console.log(a3);
+
+    //this的词法
+    function Person(){
+        //The Person() constructor defines 'this' as itself
+        this.age=0;
+        setInterval(function growUp(){
+            //in nonstrict mode,the growUp() function defines 'this'
+            //as the global object,which is different from the 'this'
+            //defined by the　Person() constructor
+            this.age++;
+        },1000);
+    }
+
+    var p = new Person();
+
+    //在ECMAScript 3/5里，通过把this的值赋值给一个变量可以修复这个问题。
+    function Person(){
+        var self = this;
+        self.age=0;
+        setInterval(function growUp(){
+            self.age++;
+        },1000);
+    }
+
+    function Person(){
+        this.age=0;
+        setInterval(() => {this.age++;//|this| property refers to the person object
+            },1000);
+    }
+
+    var p = new Person();
 </script>
 </body>
 </html>
