@@ -155,11 +155,53 @@
         return first + second;
     });
     console.log(total);
-    //多维数组
 
+    //多维数组
+    var a = new Array(4);
+    for(i=0;i<4;i++){
+        a[i]=new Array(4);
+        for(j=0;j<4;j++){
+            a[i][j]="["+i+","+j+"]";
+        }
+    }
+    console.log(a);
     //数组和正则表达式
+
     //working with array-like objects
-    //array comprehensions
+    Array.forEach([1,2,true,'12'],function(item){
+        console.log(item);
+    });
+    Array.prototype.forEach.call([1,2,true,'12'],function(item){
+        console.log(item);
+    });
+    Array.forEach("china",function(item){
+        console.log(item);
+    });
+
+    //array comprehensions(类似python的列表生成式)
+    var numbers = [1,2,3,4];
+    var doubled = [i * 2 for (i of numbers)];
+    console.log(doubled);//[2,4,6,8]
+    var doubled=numbers.map(function(item){
+        return item * 2;
+    });
+    console.log(doubled);
+    var numbers=[1, 2, 3, 21, 22, 30];
+    var evens = [i for (i of numbers ) if (i % 2 === 0)];
+    console.log(evens);
+    var evens = numbers.filter(function(item){
+        return item % 2 == 0;
+    });
+    console.log(evens);
+    var numbers = [1, 2, 3, 21, 22, 30];
+    var doubleEvens = [i * 2 for (i of numbers ) if (i % 2 === 0)];
+    console.log(doubleEvens);
+    var str = 'abcdef';
+    var consonantsOnlyStr = [c for (c of str) if (!(/[aeiouAEIOU]/).test(c))].join(" ");
+    var interpolatedZeros = [c + '0' for (c of str)].join('');
+    console.log(consonantsOnlyStr);
+    console.log(interpolatedZeros);
+
     //typed arrays
 </script>
 </body>
