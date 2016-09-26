@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript" charset="utf-8">
+     //Map和Set
+     //Map对象,从ECMAScript6引入
+     var sayings = new Map();
+     sayings.set('dog','woof');
+     sayings.set("cat","meow");
+     sayings.set("elephant","toot");
+     console.log(sayings.size);
+     console.log(sayings.get("fox"));
+     console.log(sayings.has("bird"))
+     sayings.delete("dog");
+     for(var [key,value] of sayings){
+         console.log(key + " goes " + value);
+     }
+     //Object和Map的比较
+     
+</script>
+</body>
+</html>
