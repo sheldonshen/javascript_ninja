@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript" charset="utf-8">
+    //数组对象
+    //创建数组
+    var arr = new Array(1,2,3,true,"abc");
+    var arr = Array(1,2,3,true,undefined);
+    var arr = [1,2,3,4];
+    //创建一个数组长度不为零,但是有没有任何元素的数组
+    var arr = new Array(4);//4为array length
+    var arr = Array(4);//4为array length
+    var arr = [];
+    arr.length = 4;//数组长度为4
+    //希望用单个元素初始化一个数组，而这个元素恰好又是数字(Number),那么你必须使用括号语法
+    var arr = [42];//create an array with only one element:the number 42
+    var arr = new Array(42);//create an array with no element,but with arr.length set to 42
+    //the above code is equivalent to
+    var arr = [];
+    arr.length=42;
+    //var arr = Array(9.3);//RangeError:invalid array length
+    //var arr = new Array(9.3);//RangeError:invalid array length
+    //如果你需要创建任意类型的单元素数组，安全的方式是使用字面值。或者在向数组添加单个元素之前先创建一个空的数组
+
+    //填充数组(populating an array)
+    var emp = [];
+    emp[0]="Casey Jones";
+    emp[1]="Phil Lesh";
+    emp[2]="Auguest West";
+    console.log(emp);
+    //如果你在以上代码中给数组操作符的是一个非整形数值，那么将作为一个代表数组的对象的属性(property)创建，而非作为数组的元素
+    emp[3.4]="Simin Wang";
+    console.log(emp);
+    console.log("length="+emp.length);
+    console.log(emp.hasOwnProperty(3.4));
+    var myArray = new Array("hello",3.12);
+    var myArray = ["Mango","Rain"];
+
+    //引用数组元素(referring to array elements)
+    var arr = ["one","two","three"];
+    console.log(arr[2]);
+    console.log(arr["length"]);//访问数组属性
+    //理解length
+    var cats = [];
+    cats[30]=['Dusty'];
+    console.log(cats.length);
+    var cats = ["Dusty",'Mistry','Twiggy'];
+    console.log(cats.length);
+    cats.length=2;//缩短数组
+    console.log(cats);
+    cats.length=0;//清空数组
+    console.log(cats);
+    cats.length=3;
+    console.log(cats);//[undefined,undefined,undefined];
+    //遍历数组
+    var colors=['red',"green","blue"];
+    colors.forEach(function(color,index,array){
+        console.log(color);
+    });
+    console.log("----------");
+    var array = ["first","second", ,"fourth"];
+    array.forEach(function(item,indexm,array){
+        console.log(item);//first second,fourth
+    });
+    if(array[2]===undefined){
+        console.log("array[2] is undefined");
+    }
+    //在数组定义时省略的元素不会在forEach遍历时被列出，但是手动赋值为undefined的元素是会被列出的
+    var array = ["first","second",undefined ,"fourth"];
+    array.forEach(function(item,index,array){
+        console.log(item);//first,second,undefined,fourth
+    });
+    //数组的方法
+    var myArray = new Array("1","2","3");
+    myArray = myArray.concat("a","b","c");
+    console.log(myArray);
+    var myArray = new Array("Wind","Rain","Fire");
+    var list = myArray.join(" - ");
+    console.log(list);
+    var myArray = new Array("1","2");
+    myArray.push("3");
+    console.log(myArray);
+    myArray.pop();
+    console.log(myArray);
+    myArray.shift();
+    console.log(myArray);
+    myArray.unshift("4","5");
+    console.log(myArray);
+    var myArray = new Array("a","b","c","d","e");
+    myArray = myArray.slice(1,4);
+    console.log(myArray);
+    var myArray = new Array("1","2","3","4","5");
+    myArray.splice(1,3,"a","b","c","d");
+    console.log(myArray);
+    var myArray = new Array("1","2","3");
+    myArray.reverse();
+    console.log(myArray);//[3,2,1];
+    var myArray = new Array("wind","rain",'Fire');
+    myArray.sort();
+    console.log(myArray);
+    var sortFn = function(a,b){
+        if(a[a.length-1]<b[b.length-1]){
+            return 1;
+        }else if(a[a.length-1]>b[b.length-1]){
+            return -1;
+        }else{
+            return 0;
+        }
+    };
+    myArray.sort(sortFn);
+    console.log(myArray);
+    var a = ["a","b","a","b","a"];
+    console.log(a.indexOf("b"));
+    console.log(a.indexOf("b",2));
+    console.log(a.indexOf("z"));
+    var a = ['a', 'b', 'c', 'd', 'a', 'b'];
+    console.log(a.lastIndexOf("b"));
+    console.log(a.lastIndexOf("b",4));
+    console.log(a.lastIndexOf("z"));
+    var a = ["a","b","c"];
+    a.forEach(function(element,index,array){
+        console.log(element);
+    });
+    var a1 = ["a","b","d"];
+    var a2 = a1.map(function(item,index,array){
+        return item.toUpperCase();
+    });
+    console.log(a2);
+    var a1 = ["a",10,'b',20,'c',30];
+    var a2 = a1.filter(function(item,index,array){
+        return typeof item == 'number';
+    });
+    console.log(a2);
+
+    var a1 = [1,2,3];
+    var a2 = ['1',2,3];
+    function isNumber(item){
+        return typeof item == 'number';
+    }
+    console.log(a1.every(isNumber));
+    console.log(a2.every(isNumber));
+    console.log(a1.some(isNumber));
+    console.log(a2.some(isNumber));
+
+    var a = [10,20,30];
+    var total = a.reduce(function(first,second){
+        return first + second;
+    });
+    console.log(total);
+    var total = a.reduceRight(function(first,second){
+        return first + second;
+    });
+    console.log(total);
+    //多维数组
+
+    //数组和正则表达式
+    //working with array-like objects
+    //array comprehensions
+    //typed arrays
+</script>
+</body>
+</html>
