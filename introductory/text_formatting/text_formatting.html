@@ -33,20 +33,27 @@
     console.log("fifteen is "  + (a+b)+ " and\nnot" + (2*a+b)+".");
     console.log(`fifteen is ${a+b} and not ${2*a+b}`)//25,20
     //国际化
-    //日期和时间的格式化
+    //日期和时间的格式化(DateTimeFormat)
     var msPerDay=24 * 60 * 60 * 1000;
     var july172014 = new Date(msPerDay * (44 * 365 + 11 + 197));//2014-1970=44年
     var options = { year: "2-digit", month: "2-digit", day: "2-digit",
         hour: "2-digit", minute: "2-digit", timeZoneName: "short" };
     var americanDateTime=new Intl.DateTimeFormat("en-US",options).format;
     console.log(americanDateTime(july172014));
-    //数字格式化
-    //https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Text_formatting
-    //定序
+    //数字格式化(NumberFormat)
+    var gasPrice = new Intl.NumberFormat("en-US",
+            {style:"currency",currency:"USD",minimumFractionDigits:3});
+    console.log(gasPrice.format(5.259));
+    var hanDecimalRMBInChina = new Intl.NumberFormat("zh-CN-u-nu-hanidec",
+            {style:'currency',currency:"CNY"});
+    console.log(hanDecimalRMBInChina.format(1314.25));
+    //定序(collator)
+    var names=["Hochberg", "Hönigswald", "Holzman"];
+    var germanPhonebook = new Intl.Collator("de-DE-u-co-phonebk");
+    console.log(names.sort(germanPhonebook.compare).join(", "));
+    var germanDictionary = new Intl.Collator("de-DE-u-co-dict");
+    console.log(names.sort(germanDictionary.compare).join(", "));
     //正则表达式
-
-
-
 </script>
 </body>
 </html>
