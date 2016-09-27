@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript" charset="utf-8">
+      //对象综述
+      //对象和属性
+      var myCat = new Object();
+      myCat.make="Ford";
+      myCat.model="Mustang";
+      myCat.year=1969;
+      console.log(myCat.make);
+      console.log(myCat.noProperty);//undefined
+      //console.log(myCat[make]);
+      console.log(myCat['make']);
+      function showProps(obj,objName){
+          var result = "";
+          for(var i in obj){
+              if(obj.hasOwnProperty(i)){
+                  result += objName + "." + i + " = " + obj[i] + "\n";
+              }
+          }
+          return result;
+      }
+      console.log(showProps(myCat,"myCat"))
+      //枚举一个对象的所有属性
+      // 1 for...in循环
+      for(var attr in myCat){
+          console.log(attr);
+      }
+      console.log(Object.keys(myCat));//2 Object.keys(o)
+      console.log(Object.getOwnPropertyNames(myCat).sort());//3 Object.getOwnPropertyNames(o)
+      //在 ECMAScript5之前，没有原生的方法枚举一个对象的所有属性.然而，可以通过以下函数完成
+      function listAllProperties(obj){
+          var objectToInspect;
+          var result=[];
+          for(objectToInspect=obj;objectToInspect!=null;objectToInspect=Object.getPrototypeOf(objectToInspect)){
+              result = result.concat(Object.getOwnPropertyNames(objectToInspect));
+          }
+          return result;
+      }
+      console.log(listAllProperties(myCat));
+
+      //创建新对象
+      //1 使用对象初始化器(字面值创建对象)
+      var myobj = {name:"simon",age:25};
+      console.log(myobj);
+      //2 使用构造函数
+      function Person(name,age,sex){
+          this.name = name;
+          this.age = age;
+          this.sex = sex;
+      }
+      var rand = new Person("Rand McKinnon", 33, "M");
+      var ken = new Person("Ken Jones", 39, "M");
+
+      function Car(make,model,year,owner){
+          this.make = make;
+          this.model = model;
+          this.year = year;
+          this.owner = owner;
+      }
+      var myCar = new Car("Eagle","Talon",1993,rand);
+      console.log(myCar.owner.name);
+      //增加新的属性
+      myCar.color="red";
+      console.log(myCar);
+      //3 使用object.create方法,该方法非常有用，因为它允许你为创建的对象选择其原型对象，而不用定义一个构造函数
+      //Animal properties and method encapsulation
+      var Animal = {
+          type:"Invertebrates",//Default value of properties
+          displayType:function(){//Method which will display type of Animal
+               console.log(this.type);
+          }
+      };
+      var animal = Object.create(Animal);
+      animal.displayType();
+      var fish = Object.create(Animal);
+      fish.type="fish";
+      fish.displayType();
+      //继承(所有的javascript对象继承于至少一个对象,被继承的对象被称作为原型,
+      // 并且继承的属性可通过构造函数的prototype对象找到)
+
+      //对象属性索引
+
+      //为对象类型定义属性
+      //你可以通过 prototype 属性为之前定义的对象类型增加属性。这为该类型的所有对象，而不是仅仅一个对象增加了一个属性
+      Car.prototype.color=null;
+      //定义方法
+      var myObj = {
+          myMethod:function(params){
+              //do something....
+          }
+      };
+      //通过this引用对象
+
+      //定义getter和setter
+      var o = {
+          a:7,
+          get b(){
+              return this.a + 1;
+          },
+          set c(x){
+              this.a = x / 2;
+          }
+      };
+      console.log(o.a);
+      console.log(o.b);
+      o.c=50;
+      console.log(o.a);
+
+      //下面这个例子展示使用getter和setter方法扩展 Date原型，为预定义好的Date类添加一个year的属性。
+      // 定义属性year的getter和setter
+      var d = Date.prototype;
+      Object.defineProperty(d,"year",{
+          get:function(){return this.getFullYear();},
+          set:function(y){this.setFullYear(y)}
+      });
+
+      var now = new Date();
+      console.log(now.year);
+      now.year=1991;
+      console.log(now);
+
+      var  o = {a:0};
+      Object.defineProperties(o,{
+           "b":{
+               get:function(){
+                     return this.a + 1;
+                  }
+           },
+           "c":{
+               set:function(x){
+                    this.a = x/2;
+               }
+           }
+      });
+      o.c=10;
+      console.log(o.b);
+
+      //删除属性,使用delete操作符删除一个不是继承而来的属性
+      var myobj = new Object;
+      myobj.a=5;
+      myobj.b=12;
+      delete myobj.a;
+      console.log(myobj);
+
+      //比较对象
+      var fruit = {name:"apple"};
+      var fruitbear={name:"apple"};
+      console.log(fruit==fruitbear);
+      console.log(fruit===fruitbear);
+
+      var fruit = {name:"apple"};
+      var fruitbear = fruit;
+      console.log(fruit==fruitbear);
+      console.log(fruit===fruitbear);
+      //see also
+</script>
+</body>
+</html>
