@@ -19,8 +19,49 @@
      for(var [key,value] of sayings){
          console.log(key + " goes " + value);
      }
-     //Object和Map的比较
-     
+     //Object和Map的比较（Object的键均为String类型）
+     //WeakMap对象(它的键必须是对象类型,它的键被弱保持,也就是说,当其键所指对象没有其他地方引用的时候,它会被GC回收掉)
+     //WeakMap的键是不可枚举的,
+     const privates = new WeakMap();
+     function Public(){
+         const me = {
+             //private data goes here
+         };
+         privates.set(this,me);
+     }
+
+     Public.prototype.method=function(){
+         const me = privates.get(this);
+         //do stuff with private data in 'me'...
+     };
+     //module.exports=Public;
+
+    //Sets(集合)
+    //Set对象是一组值的集合，这些值是不重复的，可以按照添加顺序来遍历
+    var mySet = new Set();
+    mySet.add(1);
+    mySet.add("some text");
+    mySet.add("foo");
+    console.log(mySet.has(1));
+    mySet.delete("foo");
+    console.log(mySet.size);
+//    for(let item of mySet){
+//             console.log(item);
+//         }
+
+    //数组(Array)和集合(Set)的转换
+     mySet = new Set([1,2,3,4,5,4,3,2,1]);
+     console.log(mySet);
+//     for(let item of mySet){
+//         console.log(item);
+//     }
+     console.log(Array.isArray(Array.from(mySet)));
+    //数组(Array)和集合(Set)的对比
+
+    //WeakSet对象
+    //WeakSet对象是一组对象的集合,WeakSet中的对象不可重复且不可枚举
+
+    //Map的键和Set的值的等值判断
 </script>
 </body>
 </html>
