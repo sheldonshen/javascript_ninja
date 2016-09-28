@@ -7,8 +7,11 @@ http://www.cnblogs.com/TomXu/tag/JavaScript/              汤姆大叔JavaScript
 http://www.ruanyifeng.com/blog/javascript/                阮一峰javascript系列文章<br>
 http://javascript.info/                                   The JavaScript Tutorial<br>
 #video
-http://www.ycku.com/javascript/                           瓢城Web俱乐部JavaScript第一季<br>
+http://www.ycku.com/javascript/                           瓢城Web俱乐部JavaScript第一季150集(注重项目实战)<br>
 http://www.bjsxt.com/2014/down_1112/39.html               尚学堂科技_javascript视频教程_白贺翔<br>
+http://www.icoolxue.com/album/show/77                     韩顺平轻松搞定网页设计视频教程(HTML,CSS,Javascript) <br>
+#website
+http://www.javascriptcn.com/                              javascript中文网<br>
 #books
 ##初级读物：
 《JavaScript高级程序设计》：一本非常完整的经典入门书籍，被誉为JavaScript圣经之一，详解的非常详细，最新版第三版已经发布了，建议购  买。<br>
@@ -25,6 +28,7 @@ http://www.bjsxt.com/2014/down_1112/39.html               尚学堂科技_javasc
 《Pro.JavaScript.Design.Patterns》：Apress出版社讲解JavaScript设计模式的书，非常不错。<br>
 《Developing JavaScript Web Applications》：构建富应用的好书，针对MVC模式有较为深入的讲解，同时也对一些流程的库进行了讲解。<br>
 《Developing Large Web Applications》：将这本书归结在这里，貌似有点不妥，因为这里不仅有JavaScript方面的介绍，还有CSS、HTML方面的   介绍，但是介绍的内容却都非常不错，真正考虑到了一个大型的Web程序下，如何进行JavaScript架构设计，值得一读。<br>
+
 
 
 
