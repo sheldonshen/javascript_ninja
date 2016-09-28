@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript" charset="utf-8">
+    //迭代器
+    function makeIterator(array){
+        var nextIndex=0;
+        return {
+            next:function(){
+                return nextIndex < array.length ?
+                {value:array[nextIndex++]}:{done:true};
+            }
+        };
+    }
+    var it = makeIterator(['yo','ya']);
+    console.log(it.next().value);
+    console.log(it.next().value);
+    console.log(it.next().done);
+    var it = Iterator(['hello','world']);
+    for(var pair in it){
+        console.log(pair);
+    }
+    var it = Iterator(['hello','world'],true);
+    for(var key in it){
+        console.log(key);
+    }
+    var langs = ['javascript','python','c++'];
+    var it = Iterator(langs);
+//    for(let [i,lang] in it){
+//        console.log(i+":"+lang);
+//    }
+
+    //定义自定义的迭代器
+    console.log("--定义自定义的迭代器--")
+    function Range(low,high){
+        this.low = low;
+        this.high = high;
+    }
+    function RangeIterator(range){
+        this.range = range;
+        this.current = this.range.low;
+    }
+    RangeIterator.prototype.next=function(){
+         if (this.current > this.range.high){
+             return "done";
+         }else{
+             return this.current++;
+         }
+    };
+    Range.prototype.__iterator__=function(){
+      return new RangeIterator(this);
+    };
+    var range = new Range(3,5);
+    for(var i in range){
+        console.log(i);
+        if(i === "done"){
+            break;
+        }
+    }
+    //生成器(generator):一个更好的方法来构建遍历器
+    //一个生成器其实就是一种特殊类型的函数,一个函数如果他里面包含一个或者多个yield表达式.
+    //那么就成为了一个生成器了
+    function* simpleGenerator(){
+        yield "first";
+        yield "second";
+        yield "third";
+        for(var i=0; i<3;i++){
+            yield i;
+        }
+    }
+
+    var g = simpleGenerator();
+    //console.log(g.next().value);
+    //console.log(g.next().done);
+    console.log(g.next());
+    console.log(g.next());
+    console.log(g.next());
+    console.log(g.next());
+    console.log(g.next());
+    console.log(g.next());
+    console.log(g.next());
+
+    //下面是Range重写成一个生成器
+    console.log("下面是Range重写成一个生成器");
+    function Range(low,high){
+        this.low = low;
+        this.high = high;
+    }
+    Range.prototype.__iterator__=function*(){
+        for(var i = this.low;i<= this.high;i++){
+            yield i;
+        }
+    }
+
+    var range = new Range(3,5);
+    for(var i in range){
+        console.log(i);
+    }
+    //并不是所有的生成器都会终止；它也可以创建一个无穷序列的生成器。下面实现了斐波纳契数列的生成器
+    console.log("斐波纳契数列的生成器");
+    function* fibonacci(){
+        var fn1 = 1;
+        var fn2 = 1;
+        while(1){
+            var current = fn2;
+            fn2 = fn1;
+            fn1=fn2+current;
+            yield current;
+        }
+    }
+
+    var sequence = new fibonacci();
+    console.log(sequence.next()); // 1
+    console.log(sequence.next()); // 1
+    console.log(sequence.next()); // 2
+    console.log(sequence.next()); // 3
+    console.log(sequence.next()); // 5
+    console.log(sequence.next()); // 8
+
+    console.log("变异的fibonacci()函数有一个limit参数");
+    //下面是一个变异的fibonacci()函数有一个limit参数，一旦满足条件将终止
+    function* fibonacci(limit){
+        var fn1 = 1;
+        var fn2 = 1;
+        while(1){
+            var current = fn2;
+            fn2 = fn1;
+            fn1=fn2+current;
+            if(limit && current > limit){
+                return;
+            }
+            yield current;
+        }
+    }
+    var sequence = new fibonacci(5);
+    console.log(sequence.next()); // 1
+    console.log(sequence.next()); // 1
+    console.log(sequence.next()); // 2
+    console.log(sequence.next()); // 3
+    console.log(sequence.next()); // 5
+    console.log(sequence.next()); // 8
+
+    //高级生成器
+    console.log("这里是斐波那契生成器使用send()来重新启动序列");
+    function* fibonacci_limit(){
+        var fn1 = 1;
+        var fn2 = 1;
+        while (1){
+            var current = fn2;
+            fn2 = fn1;
+            fn1 = fn1 + current;
+            var reset = yield current;
+            if (reset){
+                fn1 = 1;
+                fn2 = 1;
+            }
+        }
+    }
+    var sequence = fibonacci_limit();
+    console.log(sequence.next());     // 1
+    console.log(sequence.next());     // 1
+    console.log(sequence.next());     // 2
+    console.log(sequence.next());     // 3
+    console.log(sequence.next());     // 5
+    console.log(sequence.next());     // 8
+    console.log(sequence.next());     // 13
+    console.log(sequence.send(true)); // 1
+    console.log(sequence.next());     // 1
+    console.log(sequence.next());     // 2
+    console.log(sequence.next());     // 3
+
+    //生成器表达式(从javascript1.8引入)
+    //https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Iterators_and_Generators
+
+</script>
+</body>
+</html>
