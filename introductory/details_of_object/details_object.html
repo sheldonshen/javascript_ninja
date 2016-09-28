@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript" charset="utf-8">
+    //javascript是一种基于原型的面向对象的语言,而不是基于类的.
+    //基于类（java,c++）VS基于原型(javascript)的语言
+    //基于类的语言:类,实例,基于原型的语言并不存在这种区别,它只有对象
+    //基于原型的语言具有所谓原型对象(prototypical object)的概念,原型对象可以作为一个模板,新对象可以从中获得原始的属性
+    //任何对象都可以指定其自身的属性,既可以是创建时也可以是在运行时创建,而且,任何一个对象都可以作为里一个对象的原型
+    //从而允许后者共享前者的属性
+
+    //定义类
+    //基于类的语言中,需要专门的类定义符号来定义类
+    //JavaScript 也遵循类似的模型，但却不同于基于类的语言。在 JavaScript
+    //中你只需要定义构造函数来创建具有一组特定的初始属性和属性值的对象。任何 JavaScript
+    //函数都可以用作构造器.也可以使用 new 操作符和构造函数来创建一个新对象
+
+    //java:类链继承属性,javascript原型链继承属性
+
+    //子类和继承
+    //javascript通过将构造器函数与原型对象相关联的方式来实现继承
+    //向某个构造器函数的原型对象中添加新的属性
+    function Employee(name,dept){//更灵活的构造器
+        this.name = name || "";
+        this.dept = dept || "general";
+    }
+    Employee.prototype.specialty="none";
+
+    function Manager(){
+        this.reports = [];
+    }
+    Manager.prototype = new Employee;
+
+    function WorkerBee(name,dept,projs){//更灵活的构造器
+        this.base = Employee;
+        this.base(name,dept);
+        this.projects =projs || [];
+    }
+    WorkerBee.prototype=new Employee;
+
+    function SalesPerson(){
+        this.dept = "sales";
+        this.quota = 100;
+    }
+    SalesPerson.prototype=new WorkerBee;
+
+    function Engineer(name,projs,mach){//更灵活的构造器
+//        this.base=WorkerBee;
+//        this.base(name,"engineering",projs);
+        WorkerBee.call(this,name,"engineering",projs);
+        this.machine=mach || "";
+    }
+    Engineer.prototype=new WorkerBee;
+    Engineer.prototype.specialty="code";
+
+    var jim = new Employee("Jones,Jim","marketing");
+    console.log(jim.name);
+    console.log(jim.dept);
+
+    var sally = new Manager;
+    console.log(sally.name);
+    console.log(sally.dept);
+    console.log(sally.reports);
+
+    var mark = new WorkerBee("smith,mark","marketing","javascript");
+    console.log(mark.name);
+    console.log(mark.dept);
+    console.log(mark.projects);
+
+    var fred = new SalesPerson;
+    console.log(fred.name);
+    console.log(fred.dept);
+    console.log(fred.projects);
+    console.log(fred.quota);
+
+    var jane = new Engineer("Doe,Jane",["navigator","javascript"],"belau");
+    console.log(jane.name);
+    console.log(jane.dept);
+    console.log(jane.projects);
+    console.log(jane.machine);
+
+    //对象的属性,继承属性,添加属性
+    console.log("对象的属性,继承属性,添加属性");
+    mark.name = "Doe, Mark";
+    mark.dept = "admin";
+    mark.projects = ["navigator"];
+    console.log(mark.name);
+    console.log(mark.dept);
+    console.log(mark.projects);
+    console.log("添加属性");
+    mark.bonus = 3000;
+    console.log(mark.bonus);
+    var simon = new WorkerBee;
+    console.log(simon.bonus);
+    console.log("向某个构造器函数的原型对象中添加新的属性");
+    console.log(mark.specialty);
+    console.log(jane.specialty);
+    //再谈属性的继承
+    //本地值和继承值
+    //判断实例的关系
+    //构造器中的全局信息
+    //没有多继承
+</script>
+</body>
+</html>
