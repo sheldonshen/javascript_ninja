@@ -99,11 +99,91 @@
     console.log("向某个构造器函数的原型对象中添加新的属性");
     console.log(mark.specialty);
     console.log(jane.specialty);
-    //再谈属性的继承
-    //本地值和继承值
+
+     //再谈属性的继承
+    console.log("再谈属性的继承,本地值和继承值");
+    function Employee(){
+        //this.name = "";
+        this.dept = "general";
+    }
+    Employee.prototype.name="";
+
+    function WorkerBee(){
+        this.projects=[];
+    }
+    WorkerBee.prototype=new Employee;
+    var amy = new WorkerBee;
+    console.log(amy.name);
+    console.log("------change name-----");
+    Employee.prototype.name="Unknown";
+    console.log(amy.name);
+
     //判断实例的关系
+    //每个对象都有一个 __proto__ 对象属性（除了 Object）；每个函数都有一个 prototype 对象属性
+    var chris = new Engineer("Pigman, Chris", ["jsd"], "fiji");
+    console.log(chris.__proto__ == Engineer.prototype);
+    console.log(chris.__proto__.__proto__ == WorkerBee.prototype);
+    console.log(chris.__proto__.__proto__.__proto__ == Employee.prototype);
+    console.log(chris.__proto__.__proto__.__proto__.__proto__ == Object.prototype);
+    console.log(chris.__proto__.__proto__.__proto__.__proto__.__proto__ == null);
+    console.log( (chris instanceof Engineer));
+    console.log( (chris instanceof WorkerBee));
+    console.log( (chris instanceof Employee));
+    console.log( (chris instanceof Object));
+
     //构造器中的全局信息
+    var idCounter=1;
+    function Employee(name,dept){
+        this.name = name || "";
+        this.dept = dept || "";
+        this.id = idCounter++;
+    }
+    var idCounter = 1;
+
+    function Employee (name, dept) {
+        this.name = name || "";
+        this.dept = dept || "general";
+        if(name)
+            this.id = idCounter++;
+    }
+
+    function Manager (name, dept, reports) {}
+    Manager.prototype = new Employee;
+
+    function WorkerBee (name, dept, projs) {}
+    WorkerBee.prototype = new Employee;
+
+    function Engineer (name, projs, mach) {}
+    Engineer.prototype = new WorkerBee;
+
+    function SalesPerson (name, projs, quota) {}
+    SalesPerson.prototype = new WorkerBee;
+
+    var mac = new Engineer("Wood, Mac");
+    console.log(mac.id);
+</script>
+<script type="text/javascript" charset="utf-8">
     //没有多继承
+    function WorkerBee(name,dept,projs){
+        this.name = name;
+        this.dept = dept;
+        this.projs = projs;
+    }
+    function Hobbyist(hobby){
+        this.hobby = hobby || "scuba";
+    }
+    Hobbyist.prototype.equipment = ["mask", "fins", "regulator", "bcd"];
+    function Engineer(name, projs, mach, hobby){
+        this.base1=WorkerBee;
+        this.base1(name,"engineering",projs);
+        this.base2=Hobbyist;
+        this.base2(hobby);
+        this.machine=mach||"";
+    }
+    Engineer.prototype=new WorkerBee;
+    var dennis = new Engineer("Doe", "Dennis", ["collabra"], "hugo");
+    console.log(dennis.hobby);
+    console.log(dennis.equipment);
 </script>
 </body>
 </html>
