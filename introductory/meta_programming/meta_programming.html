@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript" charset="utf-8">
+    //通过Proxy和Reflect对象,你可以在javascript元级别(meta level)编程
+    var handler = {
+        get:function(target,name){
+            return name in target ? target[name]:42;
+        }
+    };
+    var p = new Proxy({},handler);
+    p.a=1;
+    console.log(p.a,p.b);//1,42
+
+    //Revocable Proxy(可撤销)
+    var revocable = Proxy.revocable({},{
+        get:function (target,name) {
+            return "[[" +name+ "]]";
+        }
+    });
+
+    var proxy = revocable.proxy;
+    console.log(proxy.foo);//[[foo]];
+    revocable.revoke();
+    //console.log(proxy.foo);
+    //proxy.foo=1;
+    //delete proxy.foo;
+    console.log(typeof proxy);// "object", typeof doesn't trigger any trap
+
+    //反射(Reflection)
+    console.log(Reflect.has(Object,"assign"));
+
+</script>
+</body>
+</html>
