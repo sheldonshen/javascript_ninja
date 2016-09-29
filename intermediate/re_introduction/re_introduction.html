@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript" charset="utf-8">
+    //       function Person(firstName){
+    //           this.firstName = firstName;
+    //       }
+    //       Person.prototype.sayHello=function(){
+    //            alert("I'm " + this.firstName);//this的理解很重要
+    //       };
+    //
+    //       var person1 = new Person("Alice");
+    //       var person2 = new Person("Bob");
+    //       var helloFunction=person1.sayHello;
+    //
+    //       person1.sayHello();
+    //       person2.sayHello();
+    //       helloFunction();//alerts "Hello, I'm undefined" (or fails with a TypeError in strict mode)
+    //       console.log(helloFunction==person1.sayHello);
+    //       console.log(helloFunction==Person.prototype.sayHello);
+    //       helloFunction.call(person1);//I'm Alice
+
+    //         //定义Person构造器
+    //         function Person(firstName){
+    //             this.firstName = firstName;
+    //         }
+    //         //在Person.prototype中加入方法
+    //         Person.prototype.walk=function () {
+    //             console.log("I'm walking");
+    //         };
+    //         Person.prototype.sayHello=function(){
+    //             console.log("Hello,I'm " + this.firstName);
+    //         };
+    //
+    //         //定义Student构造器
+    //         function Student(firstName,subject){
+    //             //调用父类构造器,确保(使用Function#call)"this"在调用的过程中设置正确
+    //             Person.call(this,firstName);
+    //             //初始化Student类的特有属性
+    //             this.subject = subject;
+    //         }
+    //
+    //        // 建立一个由Person.prototype继承而来的Student.prototype对象.
+    //        // 注意: 常见的错误是使用 "new Person()"来建立Student.prototype.
+    //        // 这样做的错误之处有很多, 最重要的一点是我们在实例化时
+    //        // 不能赋予Person类任何的FirstName参数
+    //        // 调用Person的正确位置如下，我们从Student中来调用它
+    //        Student.prototype = Object.create(Person.prototype);//see note below
+    //
+    //        //设置"constructor"属性指向Student
+    //        Student.prototype.constructor=Student;
+    //        //更换"sayHello"方法
+    //        Student.prototype.sayHello=function(){
+    //           console.log("Hello,I'm " + this.firstName + ".I'm studying " + this.subject + ".");
+    //        };
+    //        //加入sayGoodBye方法
+    //        Student.prototype.sayGoodBye=function(){
+    //            console.log("Goodbye!");
+    //        };
+    //        //测试实例
+    //        var student1 = new Student("Janet","Applied Physics");
+    //        student1.sayHello();
+    //        student1.walk();
+    //        student1.sayGoodBye();
+    //        //测试实例
+    //        console.log(student1 instanceof Person);
+    //        console.log(student1 instanceof Student);
+
+    //概览
+    //数字
+    //单元运算符 + 也可以把数字字符串转换成数值
+    console.log(typeof(+"42"));
+    console.log(typeof(+"010"));
+    console.log(parseInt("hello", 10));
+    console.log(NaN + 4);
+    console.log(isNaN(NaN));
+    console.log(1 / 0);
+    console.log(-1 / 0);
+    console.log("-------");
+    console.log(+"10.2abc");//NaN
+    console.log(parseFloat("10.2abc"));//10.2
+    //字符串
+    //其他类型
+    //对象
+    //数组
+    //函数
+    function avg() {
+        var sum = 0;
+        for (var i = 0, j = arguments.length; i < j; i++) {
+            sum += arguments[i];
+        }
+        return sum / arguments.length;
+    }
+
+    console.log(avg.apply(null, [2, 3, 4, 5])); // 3.5
+
+    var avg = function () {
+        var sum = 0;
+        for (var i = 0, j = arguments.length; i < j; i++) {
+            sum += arguments[i];
+        }
+        return sum / arguments.length;
+    };
+
+    //隐藏局部变量
+    var a = 1;
+    var b = 2;//()立即执行
+    (function () {
+        var b = 3;
+        a += b;
+    })();
+    console.log(a);
+    console.log(b);
+    //自定义对象
+    //内部函数
+     function betterExampleNeeded(){
+         var a = 1;
+         function oneMoreThankA(){
+             return a + 1;
+         }
+         return oneMoreThankA();
+     }
+    //闭包
+    function makeAdder(a){
+        return function(b){
+            return a + b;
+        }
+    }
+    var x = makeAdder(5);
+    var y = makeAdder(20);
+    console.log(x(6));
+    console.log(y(7));
+    //一个闭包就是一个函数和被创建的函数中的作用域对象的组合
+
+    //内存泄露
+    //javascript是一种具有垃圾回收机制的语言
+    function leakMemory() {
+        var el = document.getElementById('el');
+        var o = { 'el': el };
+        el.o = o;
+    }
+    function addHandler(){
+        document.getElementById('el').onclick = function(){
+            this.style.backgroundColor = 'red';
+        };
+    }
+    function addHandler() {
+        var clickHandler = function() {
+            this.style.backgroundColor = 'red';
+        };
+        (function() {
+            var el = document.getElementById('el');
+            el.onclick = clickHandler;
+        })();
+    }
+</script>
+</body>
+</html>
