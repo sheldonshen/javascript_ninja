@@ -174,7 +174,13 @@
     console.log(sequence.next());     // 3
 
     //生成器表达式(从javascript1.8引入)
-    //https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Iterators_and_Generators
+    //延迟计算(lazy computation),一个数组推导式将会在内存中创建整个包含所有偶数的数组
+    //var doubles = [i * 2 for (i in it)];
+    //生成器表达式将会创建一个新的迭代器，并且在需要的时候按需来计算偶数值
+    //var it2 = (i * 2 for (i in it));
+    //console.log(it2.next());//生成器表达式将会创建一个新的迭代器，并且在需要的时候按需来计算偶数值
+    //console.log(it2.next());//The second value from it, doubled
+    //var result = dosomething(i * 2 for (i in it));
 
 </script>
 </body>
