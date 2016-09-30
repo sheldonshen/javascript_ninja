@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 12px;
+        }
+
+        h1 {
+            font-size: 1.5em;
+        }
+        h2 {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+<a href="#" id="size-12">12</a>
+<a href="#" id="size-14">14</a>
+<a href="#" id="size-16">16</a>
+
+<p id="help">Helpful notes will appear here</p>
+<p>E-mail: <input type="text" id="email" name="email"></p>
+<p>Name: <input type="text" id="name" name="name"></p>
+<p>Age: <input type="text" id="age" name="age"></p>
+
+</body>
+</html>
+<script type="text/javascript" charset="UTF-8">
+    //词法作用域
+    function init(){
+        var name = "Mozilla";
+        function displayName(){
+            alert(name);
+        }
+        displayName();
+    }
+    //init();
+    //闭包
+    function makeFunc(){
+        var name = "Mozzila";
+        function displayName(){
+            alert(name);
+        }
+        return displayName;
+    }
+    var myFunc = makeFunc();
+    //myFunc();
+    function makeAddr(x){
+        return function (y) {
+            return x + y;
+        }
+    }
+    var add5 = makeAddr(5);
+    var add10 = makeAddr(10);
+    console.log(add5(2));
+    console.log(add10(2));
+
+    //实用的闭包
+    function makeSizer(size) {
+        return function() {
+            document.body.style.fontSize = size + 'px';
+        };
+    }
+
+    var size12 = makeSizer(12);
+    var size14 = makeSizer(14);
+    var size16 = makeSizer(16);
+    document.getElementById('size-12').onclick = size12;
+    document.getElementById('size-14').onclick = size14;
+    document.getElementById('size-16').onclick = size16;
+    //用闭包模拟私有的方法
+    var Counter = (function(){
+        var privateCount = 0;
+        function changeBy(val){
+            privateCount+=val;
+        }
+        return {
+            increment:function(){
+                changeBy(1);
+            },
+            decrement:function () {
+                changeBy(-1);
+            },
+            value:function () {
+                return privateCount;
+            }
+        };
+    })();
+    console.log(Counter.value());
+    Counter.increment();
+    Counter.increment();
+    console.log(Counter.value());
+    Counter.decrement();
+    console.log(Counter.value());
+    //该共享环境创建于一个匿名函数体内，该函数一经定义立刻执行
+    //环境中包含两个私有项：名为 privateCounter 的变量和名为 changeBy 的函数
+    //这两项都无法在匿名函数外部直接访问。必须通过匿名包装器返回的三个公共函数访问
+    console.log("---blow---")
+    var makeCounter = function(){
+        var privateCount = 0;
+        function changeBy(val){
+            privateCount+=val;
+        }
+        return {
+            increment:function(){
+                changeBy(1);
+            },
+            decrement:function () {
+                changeBy(-1);
+            },
+            value:function () {
+                return privateCount;
+            }
+        };
+    };
+    var counter1 = makeCounter();
+    var counter2 = makeCounter();
+    console.log(counter1.value());//0
+    counter1.increment();
+    counter1.increment();
+    console.log(counter1.value());//2
+    counter1.decrement();
+    console.log(counter1.value());//1
+    console.log(counter2.value());//0
+    //请注意两个计数器是如何维护它们各自的独立性的。每次调用 makeCounter() 函数期间，
+    // 其环境是不同的。每次调用中， privateCounter 中含有不同的实例
+
+    //在循环中创建闭包：一个常见的错误
+    console.log("在循环中创建闭包：一个常见的错误");
+    function showHelp(help){
+        document.getElementById("help").innerHTML = help;
+    }
+    //所有的回调不再共享同一个环境， makeHelpCallback 函数为每一个回调创建一个新的环境。
+    //在这些环境中，help 指向 helpText 数组中对应的字符串
+    function makeHelpCallback(help){
+        return function(){
+            showHelp(help);
+        }
+    }
+    function setupHelp(){
+        var helpText = [
+            {'id': 'email', 'help': 'Your e-mail address'},
+            {'id': 'name', 'help': 'Your full name'},
+            {'id': 'age', 'help': 'Your age (you must be over 16)'}
+        ];
+        for(var i =0; i < helpText.length;i++){
+            var index = i;
+            //var item = helpText[i];
+            var item = helpText[index];
+            //解决这个问题的一种方案是使onfocus指向一个新的闭包对象
+            document.getElementById(item.id).onfocus=makeHelpCallback(item.help);
+        }
+    }
+    setupHelp();
+
+    //性能考量
+    function MyObject(name,message){
+        this.name = name.toString();
+        this.message = message.toString();
+        this.getName = function(){
+            return this.name;
+        };
+        this.getMessage = function(){
+            return this.message;
+        };
+    }
+
+    function MyObject(name,message){
+        this.name = name;
+        this.message = message;
+    }
+    MyObject.prototype={
+        getName:function(){
+            return this.name;
+        },
+        getMessage:function(){
+            return this.message;
+        }
+    };
+    MyObject.prototype.getName=function(){
+        return this.name;
+    };
+    MyObject.prototype.getMessage=function(){
+        return this.message;
+    };
+</script>
