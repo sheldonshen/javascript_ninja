@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript中的相等性判断</title>
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+    //Object.is方法
+//    console.log(Object.is("foo","foo"));
+//    console.log(Object.is(window,window));
+//    console.log(Object.is("foo","bar"));
+//    console.log(Object.is([],[]));
+//    console.log(Object.is(null,null));
+//    //special case
+//    console.log(Object.is(-0,-0));
+//    console.log(Object.is(-0,0));
+//    console.log(Object.is(NaN,0/0));
+    //严格相等===
+    var num = 0;
+    var obj = new String("0");
+    var str = "0";
+    var b = false;
+    console.log(num === num);
+    console.log(obj === obj );
+    console.log(str === str);
+    console.log(num === obj);
+    console.log(num === str);
+    console.log(obj === str);
+    console.log(null === undefined);
+    console.log(obj === null);
+    console.log(obj === undefined);
+    //非严格相等==,在比较前将2个被比较的值转换为相同的类型
+    console.log("非严格相等==,在比较前将2个被比较的值转换为相同的类型");
+    var num = 0;
+    var obj = new String("0");
+    var str = "0";
+    var b = false;
+
+    console.log(num == num);
+    console.log(obj == obj);
+    console.log(str == str);
+
+    console.log(num == obj);
+    console.log(num == str);
+    console.log(obj == str);
+    console.log(null == undefined);
+
+    //both false,except in rare cases
+    console.log(obj == null);
+    console.log(obj == undefined);
+    //有些开发者认为，最好永远都不要使用相等操作符。全等操作符的结果更容易预测，并且因为没有隐式转换，全等比较的操作会更快
+
+    //同值相等
+    //向Nmuber 构造函数添加一个不可变的属性 NEGATIVE_ZERO
+    Object.defineProperty(Number,"NEGATIVE_ZERO",{value:-0,writable:false,configurable:false,enumerable:false});
+    function attemptMutation(v){
+        Object.defineProperty(Number,"NEGATIVE_ZERO",{value:v});
+        //Object.defineProperty(Number, "NEGATIVE_ZERO", { value: v });
+    }
+    attemptMutation(-0);//ok
+    attemptMutation(+0);//error
+    //零值相等,与同值相等类似，不过会认为 +0 与 -0 相等
+
+    //规范中的相等,严格相等以及同值相等,ecma specification
+    //理解相等比较的模型
+    //什么时候使用Object.is或者是三等
+</script>
+</body>
+</html>
