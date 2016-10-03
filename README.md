@@ -28,6 +28,8 @@ http://www.javascriptcn.com/                              javascript中文网<br
 《Pro.JavaScript.Design.Patterns》：Apress出版社讲解JavaScript设计模式的书，非常不错。<br>
 《Developing JavaScript Web Applications》：构建富应用的好书，针对MVC模式有较为深入的讲解，同时也对一些流程的库进行了讲解。<br>
 《Developing Large Web Applications》：将这本书归结在这里，貌似有点不妥，因为这里不仅有JavaScript方面的介绍，还有CSS、HTML方面的   介绍，但是介绍的内容却都非常不错，真正考虑到了一个大型的Web程序下，如何进行JavaScript架构设计，值得一读。<br>
+《Learning JavaScript Design Patterns》 A book by Addy Osmani Volume 1.6.2,介绍js世界中的有关设计模式.非常值得仔细阅读<br>
+
 
 
 
