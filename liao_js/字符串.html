@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>字符串</title>
+    <script type="text/javascript" charset="UTF-8">
+         //编码字符
+         console.log("\x41");
+         console.log("\u4e2d\u6587");//unicode字符
+         //多行字符串
+         console.log(`多行
+          字符串
+         测试`);
+        //模板字符串
+        var name = 'sheldon';
+        var age = 25;
+        console.log(`你好,${name},你今年${age}岁了`);
+        //操作字符串
+        var s = 'hello,world';
+        console.log(s[20]);//undefined,超出范围的索引不会报错,但是一律返回undefined
+        //需要特别注意的是:字符串是不可变的,如果多字符串的某个索引赋值,不会有任何错误,但是也不会有任何的效果
+        var s ='test';
+        s[0]='x';
+        console.log(s);//s仍然为'test'
+        //JavaScript为字符串提供了一些常用方法，注意，调用这些方法本身不会改变原有字符串的内容，而是返回一个新字符串
+        //toUpperCase,toLowerCase,indexOf,substring
+        var s = "hello, world";
+        console.log(s.indexOf("world"));
+        console.log(s.indexOf("World"));
+        var s = "hello, world";
+        console.log(s.substring(0,5));//[0,5),半开半闭
+        console.log(s.substring(7));//从索引7到结束
+    </script>
+</head>
+<body>
+</body>
+</html>
