@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" charset="UTF-8">
+           //变量提升
+           'use strict';
+           function foo(){
+               var x = 'Hello,' + y;
+               alert(x);//Hello,undefined,JavaScript引擎自动提升了变量y的声明，但不会提升变量y的赋值
+               var y = 'Bob';
+           }
+           //对于上述foo()函数，JavaScript引擎看到的代码相当于
+           function foo() {
+               var y; // 提升变量y的申明
+               var x = 'Hello, ' + y;
+               alert(x);
+               y = 'Bob';
+           }
+           foo();
+           function foo() {
+               var
+                       x = 1, // x初始化为1
+                       y = x + 1, // y初始化为2
+                       z, i; // z和i为undefined
+               // 其他语句:
+               for (i=0; i<100; i++) {
+                 //...
+               }
+           }
+           //全局作用域(JavaScript默认有一个全局对象window，全局作用域的变量实际上被绑定到window的一个属性：)
+           "use strict";
+           var course = "learn javascript";
+           console.log(course);
+           console.log(window.course);
+           function foo(){
+               //alert("foo1111");
+           }
+           //foo();
+           //window.foo();
+           //window.alert('调用window.alert()');
+           var old_alert=window.alert;//// 把alert保存到另一个变量:
+           window.alert=function(){};//// 给alert赋一个新函数:
+           alert('无法用alert()显示了!');
+
+           //名字空间(减少冲突的一个方法是把自己的所有变量和函数全部绑定到一个全局变量中)
+
+
+           //局部作用域
+
+           //常量
+    </script>
+</head>
+<body>
+</body>
+</html>
