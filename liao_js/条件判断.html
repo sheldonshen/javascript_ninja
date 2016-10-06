@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>条件判断</title>
+    <script type="text/javascript" charset="UTF-8">
+         var obj = {
+             name:'jack',
+             age:20,
+             city:'beijing'
+         };
+         for(var key in obj){
+             console.log(key);
+         }
+         //过滤掉对象继承的属性
+         for(var key in obj){
+             if(obj.hasOwnProperty(key)){
+                 console.log(key);
+             }
+         }
+         var arr = ["a","b","c"];
+         for(var key in arr){
+             console.log(typeof key);//string
+             console.log(key+"="+arr[key]);
+         }
+    </script>
+</head>
+<body>
+</body>
+</html>
