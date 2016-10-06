@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>对象</title>
+    <script type="text/javascript" charset="UTF-8">
+        var xiaoming={
+            name:'小明',
+            birth:1990,
+            'middle-school':'No.1 Middle School',
+            height:1.70,
+            weight:65,
+            score:null
+        };
+        console.log(xiaoming.name);
+        console.log(xiaoming['name']);
+        console.log(xiaoming.birth);
+        console.log(xiaoming['middle-school']);
+        console.log(xiaoming.age);//JavaScript规定，访问不存在的属性不报错，而是返回undefined
+        //由于JavaScript的对象是动态类型，你可以自由地给一个对象添加或删除属性
+        var xiaoming={
+          name:'xiaoming',
+        };
+        console.log(xiaoming.age);//undefined
+        xiaoming.age=18;
+        console.log(xiaoming.age);//// 新增一个age属性
+        delete xiaoming.age;//删除age属性
+        console.log(xiaoming.age);
+        delete xiaoming['name'];// 删除name属性
+        console.log(xiaoming.name);
+        delete xiaoming.school;// 删除一个不存在的school属性也不会报错
+
+        //检测xiaoming是否有某一属性,可以用in操作符
+        var xiaoming = {
+            name: '小明',
+            birth: 1990,
+            school: 'No.1 Middle School',
+            height: 1.70,
+            weight: 65,
+            score: null
+        };
+        console.log('name' in xiaoming);
+        console.log('grade' in xiaoming);
+        console.log("toString" in xiaoming);
+        //要判断一个属性是否是xiaoming自身拥有的，而不是继承得到的，可以用hasOwnProperty()方法
+        var xm = {
+            name:'小明'
+        };
+        console.log(xm.hasOwnProperty('name'));
+        console.log(xm.hasOwnProperty('toString'));
+    </script>
+</head>
+<body>
+</body>
+</html>
