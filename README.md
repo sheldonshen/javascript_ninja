@@ -11,6 +11,7 @@ http://javascript.info/                                   The JavaScript Tutoria
 http://www.ycku.com/javascript/                           瓢城Web俱乐部JavaScript第一季150集(注重项目实战)<br>
 http://www.bjsxt.com/2014/down_1112/39.html               尚学堂科技_javascript视频教程_白贺翔<br>
 http://www.icoolxue.com/album/show/77                     韩顺平轻松搞定网页设计视频教程(HTML,CSS,Javascript) <br>
+http://www.kokojia.com/course-881.html                    JavaScript Ajax JQuery 教学视频教程(比较浅显)<br>
 #website
 http://www.javascriptcn.com/                              javascript中文网<br>
 #books
@@ -30,6 +31,9 @@ http://www.javascriptcn.com/                              javascript中文网<br
 《Developing JavaScript Web Applications》：构建富应用的好书，针对MVC模式有较为深入的讲解，同时也对一些流程的库进行了讲解。<br>
 《Developing Large Web Applications》：将这本书归结在这里，貌似有点不妥，因为这里不仅有JavaScript方面的介绍，还有CSS、HTML方面的   介绍，但是介绍的内容却都非常不错，真正考虑到了一个大型的Web程序下，如何进行JavaScript架构设计，值得一读。<br>
 《Learning JavaScript Design Patterns》 A book by Addy Osmani Volume 1.6.2,介绍js世界中的有关设计模式.非常值得仔细阅读<br>
+
+##更多javascript图书
+https://search.jd.com/Search?keyword=javascript&enc=utf-8&suggest=1.rem.1.coverage&wq=javasc&pvid=jasjkyti.vcj4pe jd搜索
 
 
 
