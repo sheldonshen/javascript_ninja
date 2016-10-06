@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Map和Set</title>
+    <script type="text/javascript" charset="UTF-8">
+         'use strict';
+          var m = new Map();
+          var s = new Set();
+          //Map
+          //alert("test");
+          //初始化一个Map需要一个二维数组
+          var map = new Map([['micheal',95],['simon',88],['cong',45]]);
+          console.log(map.get('cong'));
+          //初始化一个空的Map
+          var map = new Map();
+          map.set('simon',77);//添加新的key-value
+          map.set('cong',22);
+          console.log(map.has('cong'));//是否存在key 'cong': true
+          console.log(map.get('cong'));
+          map.delete('cong');//删除key 'cong'
+          console.log(map.get('cong'));//undefined
+          //由于一个key只能对应一个value，所以，多次对一个key放入value，后面的值会把前面的值冲掉
+          var map =new Map();
+          map.set('cong',22);
+          map.set('cong',23);
+          console.log(map.get('cong'));
+          //Set
+          var set = new Set();
+          var set = new Set([1,2,3,3,'3']);//重复元素在Set中自动被过滤
+          console.log(set);
+          set.add('4');//添加元素
+          console.log(set);
+          s.delete(3);//删除元素
+          console.log(set);
+    </script>
+</head>
+<body>
+</body>
+</html>
