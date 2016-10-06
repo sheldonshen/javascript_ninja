@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" charset="UTF-8">
+       //定义函数
+       function abs(x){
+           if(x>=0){
+               return x;
+           }else{
+               return -x;
+           }
+       }
+       var abs = function(x){//要避免收到undefined，可以对参数进行检查
+           if(typeof x !== 'number'){
+               throw 'Not a number';
+           }
+           if(x>=0){
+               return x;
+           }else{
+               return -x;
+           }
+       };
+       //调用函数
+       console.log(abs(10));
+       //由于JavaScript允许传入任意个参数而不影响调用，因此传入的参数比定义的参数多也没有问题，
+       //虽然函数内部并不需要这些参数
+       console.log(abs(10,'balabna'));
+       //console.log(abs());//此时abs(x)函数的参数x将收到undefined，计算结果为NaN
+       //arguments,它只在函数内部起作用
+       function foo(x){
+           console.log(x);
+           for(var i=0;i<arguments.length;i++){
+               console.log("args----" + arguments[i]);
+           }
+       }
+
+       foo(1,20,30);
+
+       function abs1(){
+           if(arguments.length == 0){
+               return 0;
+           }
+           var x = arguments[0];
+           return x >= 0 ? x : -x;
+       }
+       console.log(abs1());
+       console.log(abs1(10));
+       console.log(abs1(-9));
+       //实际上arguments最常用于判断传入参数的个数
+       // foo(a[, b], c)
+       // 接收2~3个参数，b是可选参数，如果只传2个参数，b默认为null：
+       function foo(a, b, c) {
+           if (arguments.length === 2) {
+               // 实际拿到的参数是a和b，c为undefined
+               c = b; // 把b赋给c
+               b = null; // b变为默认值
+           }
+           // ...
+       }
+       //要把中间的参数b变为“可选”参数，就只能通过arguments判断，然后重新调整参数并赋值.
+       //rest参数
+       function restParam(a,b,...rest){
+           console.log('a = ' + a);
+           console.log('b = ' + b);
+           console.log(rest);
+       }
+       restParam(1, 2, 3, 4, 5);
+       restParam(1);
+       //小心你的return语句
+       function foo() {
+           return
+           { name: 'foo' };
+       }
+       //要小心了，由于JavaScript引擎在行末自动添加分号的机制，上面的代码实际上变成了：
+       function foo() {
+           return; // 自动添加了分号，相当于return undefined;
+           { name: 'foo' }; // 这行语句已经没法执行到了
+       }
+       //正确的写法
+       function foo() {
+         return { // 这里不会自动加分号，因为{表示语句尚未结束
+           name: 'foo'
+         };
+       }
+    </script>
+</head>
+<body>
+</body>
+</html>
