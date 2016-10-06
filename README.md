@@ -2,6 +2,7 @@
 #tutorial
 https://developer.mozilla.org/en-US/docs/Web/JavaScript   MDN(English)<br>
 https://developer.mozilla.org/zh-CN/docs/Web/JavaScript   MDN(Chinese)<br>
+https://msdn.microsoft.com/en-us/library/d1et7k7c%28v=vs.94%29.aspx  MSDN(javascript)<br>
 http://www.liaoxuefeng.com/wiki/001434446689867b27157e896e74d51a89c25cc8b43bdb3000 廖雪峰JavaScript教程<br>
 http://www.cnblogs.com/TomXu/tag/JavaScript/              汤姆大叔JavaScript系列文章<br>
 http://www.ruanyifeng.com/blog/javascript/                阮一峰javascript系列文章<br>
