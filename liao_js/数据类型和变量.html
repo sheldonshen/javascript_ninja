@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" charset="UTF-8">
+          //数据类型
+          //Number(javascript不区分整数和浮点数,统一用Number表示)
+          console.log(typeof 123);
+          console.log(typeof 0.456);
+          console.log(typeof NaN);
+          console.log(typeof Infinity);
+          console.log(0/0);
+          console.log(2/0);
+          console.log(10.5 % 3);
+          //字符串
+          //布尔值
+          //比较运算符(实际上javascript可以对任意数据类型做比较)
+          console.log(false == 0);
+          console.log(false === 0);
+          /*有2种比较运算符
+           *第一种是"==",它会自动转换数据类型再比较,很多时候,会得到非常诡异的结果
+           *第二种是"===",它不会自动转换数据类型,如果数据类型不一致,返回false,如果一致,再比较
+           * 由于javascript这个设计的缺陷,不要使用==比较,始终坚持使用===比较
+           */
+          console.log(NaN===NaN);//NaN这个特殊的Number与所有其他值都不相等,包括他自己
+          console.log(isNaN(NaN));//通过isNaN来判断NaN
+          console.log(1/3 === (1 - 2/3));//false
+          console.log(Math.abs(1/3 - (1 - 2/3)) < 0.0000001);
+          //null和undefined,在其他语言中，也有类似JavaScript的null的表示，例如Java也用null，Swift用nil，Python用None表示
+          //数组,javaScript的数组可以包括任意数据类型
+          var arr = [1,2,3.14,'hello',null,true];
+          console.log(arr[6]);//undefined
+          //对象
+          var person={
+              name:'Bob',
+              age:20,
+              tags:['js','web','mobile'],
+              city:'beijing',
+              hasCar:true,
+              zipcode:null
+          };
+          //变量
+          //strict模式(不用var申明的变量会被视为全局变量，为了避免这一缺陷，所有的JavaScript代码都应该使用strict模式)
+          "use strict";
+    </script>
+</head>
+<body>
+
+</body>
+</html>
