@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数组</title>
+    <script type="text/javascript" charset="UTF-8">
+        //javascript的Array可以包含任意的数据类型
+        var arr = [1,2,3.14,'Hello',null,true];
+        console.log(arr.length);
+        //请注意:直接给Array的length赋一个新的值会导致Array大小的变化
+        var arr = [1,2,3];
+        console.log(arr.length);
+        arr.length=6;
+        console.log(arr);//[1,2,3,undefined,undefined,undefined]
+        arr.length=2;
+        console.log(arr);//[1,2]
+        var arr = ['A','B','C'];
+        arr[1]=99;
+        console.log(arr);//['A',99,'C']
+        //请注意，如果通过索引赋值时，索引超过了范围，同样会引起Array大小的变化：
+        var arr = [1,2,3];
+        arr[5]='x';
+        console.log(arr);//[1,2,3,undefined,undefined,"x"]
+        //大多数其他编程语言不允许直接改变数组的大小，越界访问索引会报错。然而，JavaScript的Array却不会有任何错误
+        //在编写代码时，不建议直接修改Array的大小，访问索引时要确保索引不会越界
+        //数组常用方法
+        //indexOf
+        var arr = [10,20,'30','xyz'];
+        console.log(arr.indexOf(10));
+        console.log(arr.indexOf(20));
+        console.log(arr.indexOf("30"));
+        console.log(arr.indexOf(30));//-1
+        //slice:slice()就是对应String的substring()版本，它截取Array的部分元素，然后返回一个新的Array
+        var arr = ['a','b','c','d','e','f','g'];
+        console.log(arr.slice(0,3));//[0,3)
+        console.log(arr.slice(3))//从索引3到结束
+        //如果不给slice()传递任何参数，它就会从头到尾截取所有元素。利用这一点，我们可以很容易地复制一个Array
+        var arr = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+        var aCopy =arr.slice();
+        console.log(aCopy);//['A', 'B', 'C', 'D', 'E', 'F', 'G']
+        console.log(arr === aCopy);//falae
+        //push与pop,向数组末尾添加或者删除元素
+        var arr = [1,2];
+        var newLength = arr.push('a','b');
+        console.log(newLength);
+        console.log(arr);
+        var element = arr.pop();
+        console.log(element);
+        console.log(arr);
+        arr.pop();arr.pop();arr.pop();
+        console.log(arr);
+        console.log(arr.pop());//空数组继续pop不会报错，而是返回undefined
+        console.log(arr);
+        //unshift和shift,向数组的头部添加或者删除元素
+        var arr = [1,2];
+        var newLength = arr.unshift('a','b');//向头部添加元素'a','b'
+        console.log(newLength);
+        console.log(arr);//['a','b',1,2]
+        var element = arr.shift();
+        console.log(element);
+        console.log(arr);
+        arr.shift();arr.shift();arr.shift();
+        console.log(arr);
+        console.log(arr.shift());//undefined //空数组继续shift不会报错，而是返回undefined
+        console.log(arr);
+        //sort sort()可以对当前Array进行排序，它会直接修改当前Array的元素位置
+        var arr = ['B','C','A'];
+        arr.sort();
+        console.log(arr);
+        //reverse
+        var arr = ['one','two','three'];
+        arr.reverse();
+        console.log(arr);
+        //splice(是修改Array的万能方法)
+        var arr = ['Microsoft', 'Apple', 'Yahoo', 'AOL', 'Excite', 'Oracle'];
+        console.log(arr.splice(2,3,'Facebook','Google'));//// 从索引2开始删除3个元素,然后再添加两个元素,
+        // 返回删除的元素 ['Yahoo', 'AOL', 'Excite']
+        console.log(arr);
+        //只删除,不添加
+        console.log(arr.splice(2,2));
+        console.log("======"+arr);
+        //值添加,删除
+        arr.splice(2,0,'Google','Facebook');
+        console.log(arr);
+        //concat
+        var arr = ["a",'b','c'];
+        var added = arr.concat([1,2,3]);
+        console.log(added);
+        console.log(arr);
+        var arr = ['A', 'B', 'C'];
+        console.log(arr.concat(1, 2, [3, 4])); // ['A', 'B', 'C', 1, 2, 3, 4]
+        //join
+        var arr = ['A','B','c',1,2,3];
+        console.log(arr.join('-'));
+        //多维数组
+    </script>
+</head>
+<body>
+</body>
+</html>
