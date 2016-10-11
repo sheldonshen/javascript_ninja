@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>箭头函数</title>
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+      //es6标准新增了一种新的函数:Arrow Function(箭头函数)
+     //"use strict";
+     var fn = x => x * x;
+      //alert('你的浏览器支持ES6的Arrow Function!');
+     var fn = x => {//函数体
+         if(x>0){
+             return x * x;
+         }else{
+             return -x * x;
+         }
+      };
+     console.log(fn(9));
+
+              //两个参数
+    var fn  = (x,y) => x * x + y * y;
+    console.log(fn(3,4));
+             //无参数
+    var fn = () => 3.14;
+    console.log(fn());//3.14
+             //可变参数
+    var fn = (x,y,...rest)=>{
+        var i,sum = x + y;
+        for(i=0;i<rest.length;i++){
+            sum+=rest[i];
+        }
+        return sum;
+      };
+    console.log(fn(1,2,3,4));
+
+    var fn = ()=>{{a:1}};
+    //console.log(fn()['a']);
+
+    //this
+    var obj = {
+        birth:1990,
+        getAge:function(){
+            var b = this.birth;
+            var fn = function(){
+                 return new Date().getFullYear() - this.birth;//this指向window或者undefined
+                 //return new Date().getFullYear() - b;
+            };
+            return fn();
+        }
+    };
+    console.log(obj.getAge());
+
+      var obj = {
+          birth:1990,
+          getAge:function(){
+              var b = this.birth;
+              var fn = () => {
+                  return new Date().getFullYear() - this.birth;//this指向obj对象
+              };
+              return fn();
+          }
+      };
+      console.log(obj.getAge());
+      //现在，箭头函数完全修复了this的指向，this总是指向词法作用域，也就是外层调用者obj
+
+      //由于this在箭头函数中已经按照词法作用域绑定了，所以，
+      //用call()或者apply()调用箭头函数时，无法对this进行绑定，即传入的第一个参数被忽略
+      var obj = {
+          birth:1990,
+          getAge:function(year){
+            var b = this.birth;//1990
+            var fn = (y) => y - this.birth;//this.birth仍是1990
+            return fn.call({birth:2000},year);
+          }
+      };
+      console.log(obj.getAge(2015));
+</script>
+</body>
+</html>
