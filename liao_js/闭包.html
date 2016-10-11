@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>闭包</title>
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+    //函数作为返回值
+    function lazy_sum(arr){
+        var sum = function(){
+            return arr.reduce(function(x,y){
+                return x + y;
+            });
+        };
+        return sum;
+    }
+    console.log(lazy_sum([1,2,3]))
+    var f1 = lazy_sum([1,2,3]);
+    var f2 = lazy_sum([1,2,3]);
+    console.log(typeof f1);
+    console.log(f1());
+    console.log(f1 === f2);//false
+    //闭包
+    function count(){
+        var arr = [];
+        for(var i=1;i<=3;i++){
+            arr.push(function(){
+                return i * i;
+            });
+        }
+        return arr;
+    }
+
+    var result = count();
+    var f1 = result[0];
+    var f2 = result[1];
+    var f3 = result[2];
+    console.log(f1());//16
+    console.log(f2());//16
+    console.log(f3());//16
+    //返回闭包需要牢记的一点就是:返回函数不要引用任何循环变量,或者后续会发生变化的变量
+
+    //如果一定要引用循环变量怎么办？方法是再创建一个函数，用该函数的参数绑定循环变量当前的值，
+    //无论该循环变量后续如何更改，已绑定到函数参数的值不变：
+    function count(){
+        var arr = [];
+        for(var i=1;i<=3;i++){
+            arr.push((function(n){
+                return function(){
+                    return n * n;
+                }
+            })(i));//立即执行的匿名函数
+        }
+        return arr;
+    }
+    var arr = count();
+    var f1 = arr[0];
+    var f2 = arr[1];
+    var f3 = arr[2];
+    console.log(f1());
+    console.log(f2());
+    console.log(f3());
+    //在没有class机制,只有函数的语言里,借助闭包,同样可以封装一个私有变量
+    //javascript创建计数器
+    "use strict";
+    function create_counter(initial){
+           var x = initial || 0;
+           return {inc:function(){
+               x +=1;
+               return x;
+           }};
+    }
+    var c1 = create_counter();
+    console.log(c1.inc());
+    console.log(c1.inc());
+    console.log(c1.inc());
+    var c1 = create_counter(10);
+    console.log(c1.inc());
+    console.log(c1.inc());
+    console.log(c1.inc());
+    //闭包就是携带状态的函数
+
+    //闭包还可以把多参数的函数变成单参数的函数
+    function make_pow(n){
+        return function(x){
+            return Math.pow(x,n);
+        };
+    }
+    //创建2个新函数
+    var pow2 = make_pow(2);
+    var pow3 = make_pow(3);
+    console.log(pow2(5));
+    console.log(pow3(7));
+
+    //脑洞大开
+    "use strict";
+    //定义数字0
+    var zero = function(f){
+        return function(x){
+            return x;
+        };
+    };
+    //定义数字1
+    var one = function(f){
+        return function(x){
+            return f(x);
+        }
+    };
+    //定义加法
+    function add(m,n){
+        return function(f){
+            return function(x){
+                return m(f)(n(f)(x));
+            }
+        }
+    }
+
+    // 计算数字2 = 1 + 1:
+    var two = add(one, one);
+    console.log(two);
+    // 计算数字3 = 1 + 2:
+    var three = add(one, two);
+    console.log(three);
+    // 计算数字5 = 2 + 3:
+    var five = add(two, three);
+    console.log(five);
+
+    // 你说它是3就是3，你说它是5就是5，你怎么证明？
+
+    // 呵呵，看这里:
+
+    // 给3传一个函数,会打印3次:
+    (three(function () {
+        console.log('print 3 times');
+    }))();
+
+    // 给5传一个函数,会打印5次:
+    (five(function () {
+        console.log('print 5 times');
+    }))();
+
+    // 继续接着玩一会...
+</script>
+</body>
+</html>
