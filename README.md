@@ -35,6 +35,10 @@ http://www.javascriptcn.com/                              javascript中文网<br
 ##更多javascript图书
 https://search.jd.com/Search?keyword=javascript&enc=utf-8&suggest=1.rem.1.coverage&wq=javasc&pvid=jasjkyti.vcj4pe jd搜索
 
+#糖语言
+typescript<br>
+coffeescript<br>
+
 
 
 
