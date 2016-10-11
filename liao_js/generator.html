@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>generator</title>
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+    //generator定义
+    function* foo(x){
+        yield x +1;
+        yield x + 2;
+        return x + 3;
+    }
+
+    function fib(max){
+        var a=0,b=1,t,arr=[0,1];
+        while(arr.length < max){
+            t = a + b;
+            a = b;
+            b = t;
+            arr.push(b);
+        }
+        return arr;
+    }
+    console.log(fib(5));
+    console.log(fib(10));
+
+    function* fib(max){
+        var t,a=0,b=1,n=1;
+        while(n < max){
+            yield a;
+            t = a;
+            a = b ;
+            b = b + t;
+            n++;
+        }
+        return a;
+    }
+
+    console.log(fib(5));//generator
+    //调用generator对象有2个方法
+    var f = fib(5);
+    console.log(f.next());//方法1
+    console.log(f.next());
+    console.log(f.next());
+    console.log(f.next());
+    console.log(f.next());
+
+    for(var m of fib(5)){//方法2
+        console.log(m);
+    }
+
+    /*for (var x of fib(5)) {
+        console.log(x); // 依次输出0, 1, 1, 2, 3
+    }*/
+
+    //generator和普通函数相比,有什么用?
+    //因为generator可以在执行过程中多次返回，
+    // 所以它看上去就像一个可以记住执行状态的函数，利用这一点，写一个generator就可以实现需要用面向对象才能实现的功能。
+    // 例如，用一个对象来保存状态，得这么写
+    var fib = {
+        a:0,
+        b:1,
+        n:0,
+        max:5,
+        next:function(){
+            var r = this.a,t = this.a + this.b;
+            this.a = this.b;
+            this.b = t;
+            if(this.n < this.max){
+                this.n++;
+                return r;
+            }else{
+                return undefined;
+            }
+        }
+    };
+    console.log(fib.next());
+    console.log(fib.next());
+    console.log(fib.next());
+    console.log(fib.next());
+    console.log(fib.next());
+    console.log(fib.next());
+
+    //generator还有另一个巨大的好处，就是把异步回调代码变成“同步”代码。这个好处要等到后面学了AJAX以后才能体会到
+    //没有generator之前的黑暗时代，用AJAX时需要这么写代码：
+
+    ajax('http://url-1', data1, function (err, result) {
+        if (err) {
+            return handle(err);
+        }
+        ajax('http://url-2', data2, function (err, result) {
+            if (err) {
+                return handle(err);
+            }
+            ajax('http://url-3', data3, function (err, result) {
+                if (err) {
+                    return handle(err);
+                }
+                return success(result);
+            });
+        });
+    });
+
+    //回调越多，代码越难看。
+
+    //有了generator的美好时代，用AJAX时可以这么写：
+
+    try {
+        r1 = yield ajax('http://url-1', data1);
+        r2 = yield ajax('http://url-2', data2);
+        r3 = yield ajax('http://url-3', data3);
+        success(r3);
+    }
+    catch (err) {
+        handle(err);
+    }
+    //看上去是同步的代码，实际执行是异步的。
+    "use strict";
+    function* next_id(){
+        var current_id=0;
+        while(true){
+            current_id++;
+            yield current_id;
+        }
+    }
+</script>
+</body>
+</html>
