@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>工厂方式定义对象</title>
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+    var add = function(number1,number2,number3){
+        alert("hello world");
+    };
+    //每一个函数对象都有一个length属性,表示该函数期望接收的参数个数
+    //arguments.length表示函数实际接收的参数个数
+    //alert(add.length);
+    //javascript中有5种原始数据类型:Undefined,Null,Boolean,Number以及String
+    var s=null;
+    //alert(s);//undefined
+    //Undefined数据类型的值只有一个:undefined
+    //Null数据类型的值只有一个:null
+    var s = 'hello'
+    alert(typeof s);//string
+    var s = new String("hello");//s是对象类型
+    alert(typeof s);//object
+    function add(){
+        return;
+    };
+    alert(add());//undefined
+    alert(typeof  abc);
+    alert(undefined == null);
+    //强制类型转换:在javascript中有3中强制类型转换：Boolean(value),Number(value),String(value);
+    var s = Number("3");
+    alert(typeof s);//number
+    var s = Boolean("");
+    alert(s);//false
+    var s = new String("hello");
+    alert(typeof s);
+    //在javascript中,所有的对象都是从Object对象继承过来的
+    var object = new Object();
+    for(var v in object){
+        alert(v);
+    }
+    alert("last="+object.propertyIsEnumerable("prototype"));
+
+    for(var v in window){
+        alert("window =" + v);
+    }
+</script>
+<script type="text/javascript" charset="UTF-8">
+    
+</script>
+</body>
+</html>
