@@ -129,6 +129,25 @@
     person2.username.push("lisi");
     person1.getInfo();
     person2.getInfo();
+    //使用原型+构造函数方式来定义对象,对象之间的属性互不干扰,各个对象间共享同一个方法
+
+    //6 动态原型的方式定义对象(在构造函数中通过标志量让所有对象共享一个方法,而每个对象拥有自己的属性)
+    function Person(username,password){
+        this.username = username;
+        this.password = password;
+        if(typeof Person.flag == "undefined"){//动态原型的方式定义对象
+            //alert("first");
+            Person.prototype.getInfo=function(){
+                alert(this.username + ":" + this.password);
+            }
+            Person.flag=true;
+        }
+    }
+
+    var person1 = new Person('zhangsan','123');
+    var person2 = new Person('lisi','234');
+    person1.getInfo();
+    person2.getInfo();
 
 
 </script>
