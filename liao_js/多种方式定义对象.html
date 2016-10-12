@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>工厂方式定义对象</title>
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+
+    //1 基于已有对象扩充其属性及方法
+
+    //2 工厂方式创建对象
+    /*function createObject(){
+        var object = new Object();
+        object.username="zhangsan";
+        object.password="123";
+        object.get=function(){
+            alert(this.username + ";" + this.password);
+        };
+        return object;
+    }
+
+    var object1 = createObject();
+    var object2 = createObject();
+    object1.get();*/
+
+    /*function createObject(username,password){
+        var object = new Object();
+        object.username = username;
+        object.password = password;
+        object.get = function() {
+            alert(this.username + ":" + this.password);
+        };
+        return object;
+    }
+    var object1 = createObject('zhangsan','123');
+    object1.get();*/
+
+
+    /*function get(){
+        alert(this.username + ":" + this.password);
+    }
+    function createObject(username,password){
+        var object = new Object();
+        object.username = username;
+        object.password = password;
+        object.get = get;//让一个函数对象被多个对象所共享,而不是每一个对象都拥有一个函数对象
+        return object;
+    }
+    var object1 = createObject("zhangsan",'123');
+    var object2 = createObject("lisi",'234');
+    object1.get();
+    object2.get();*/
+
+    //3 构造函数方式创建对象
+    /*function Person(){
+        //在执行第一行代码前,js引擎会为我们生成一个对象
+        this.username = 'zhangsan';
+        this.password = '123';
+        this.getInfo = function(){
+            alert(this.username + ":" + this.password);
+        }
+        //此处有一个隐藏的return语句,用于将之前生成的对象返回
+    }
+
+    var person = new Person();
+    person.getInfo();*/
+
+    /*function Person(username,password){
+        this.username = username;
+        this.password = password;
+        this.getInfo = function(){
+            alert(this.username + ":" + this.password);
+        }
+    }
+
+    var person = new Person("lisi","234");
+    person.getInfo();*/
+
+    //4 使用原型(prototype)方式创建对象
+    /*function Person(){
+
+    }
+
+    Person.prototype.username = "zhangsan123";
+    Person.prototype.password = "123";
+    Person.prototype.getInfo=function(){
+        alert(this.username + ":" + this.password);
+    }
+
+    var person = new Person();
+    var person2 = new Person();
+    person.username = "lisi";
+    person.getInfo();
+    person2.getInfo();*/
+
+    //单纯使用原型方式定义类无法在构造函数中为属性赋初值,只能在对象生成后再去改变属性值
+
+    /*function Person(){
+
+    }
+
+    Person.prototype.username = new Array();
+    Person.prototype.password = "123";
+    Person.prototype.getInfo=function(){
+        alert(this.username + ":" + this.password);
+    }
+
+    var person = new Person();
+    var person2 = new Person();
+    person.username.push("zhangsan");
+    person.username.push("lisi");
+    person.password="456";
+    person.getInfo();
+    person2.getInfo();*/
+
+    //5 使用原型(方法共享)+构造函数(属性不共享)的方式来定义对象
+    function Person(password){
+        this.username  = new Array();//属性不共享
+        this.password  = password;
+    }
+    Person.prototype.getInfo=function(){//方法共享
+        alert(this.username + ":" + this.password);
+    }
+
+    var person1 = new Person("123");
+    var person2 = new Person("234");
+    person1.username.push("zhangsan");
+    person2.username.push("lisi");
+    person1.getInfo();
+    person2.getInfo();
+
+
+</script>
+<script type="text/javascript" charset="UTF-8">
+    var add = function(number1,number2,number3){
+        alert("hello world");
+    };
+    //每一个函数对象都有一个length属性,表示该函数期望接收的参数个数
+    //arguments.length表示函数实际接收的参数个数
+    //alert(add.length);
+    //javascript中有5种原始数据类型:Undefined,Null,Boolean,Number以及String
+    var s=null;
+    //alert(s);//undefined
+    //Undefined数据类型的值只有一个:undefined
+    //Null数据类型的值只有一个:null
+    var s = 'hello'
+    alert(typeof s);//string
+    var s = new String("hello");//s是对象类型
+    alert(typeof s);//object
+    function add(){
+        return;
+    };
+    alert(add());//undefined
+    alert(typeof  abc);
+    alert(undefined == null);
+    //强制类型转换:在javascript中有3中强制类型转换：Boolean(value),Number(value),String(value);
+    var s = Number("3");
+    alert(typeof s);//number
+    var s = Boolean("");
+    alert(s);//false
+    var s = new String("hello");
+    alert(typeof s);
+    //在javascript中,所有的对象都是从Object对象继承过来的
+    var object = new Object();
+    for(var v in object){
+        alert(v);
+    }
+    alert("last="+object.propertyIsEnumerable("prototype"));
+
+    for(var v in window){
+        alert("window =" + v);
+    }
+</script>
+</body>
+</html>
