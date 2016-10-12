@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+
+    //继承第一种方式:对象冒充
+
+    function Parent(username){
+        this.username = username;//this由指向Parent改为指向Child
+        this.sayHello=function(){
+            alert(this.username);
+        }
+    }
+
+    function Child(username,password){
+        //下面的3行代码是最关键的
+        this.method = Parent;//指向函数的引用
+        this.method(username);//调用构造函数
+        delete this.method;
+
+        //Parent(username) //wrong  syntax error
+        //new Parent(username) //wrong  this keyword still points to Parent
+
+        this.password = password;
+        this.sayWord=function(){
+            alert(this.password);
+        }
+    }
+
+    var parent = new Parent("zhangsan");
+    var child  = new Child('lisi','234');
+    parent.sayHello();
+    child.sayHello();
+    child.sayWord();
+
+    //继承第二种方式 call方法
+    //call方法是Function对象中的方法,因此我们定义的每个函数都拥有该方法
+    //可以通过函数名来调用call方法
+
+    function Parent(username){
+        this.username = username;//this由指向Parent改为指向Child
+        this.sayHello=function(){
+            alert(this.username);
+        }
+    }
+
+    function Child(username,password){
+        Parent.call(this,username);//
+        this.password = password;
+        this.sayWord=function(){
+            alert(this.password);
+        }
+    }
+
+    var parent = new Parent("zhangsan");
+    var child  = new Child('lisi','234');
+    parent.sayHello();
+    child.sayHello();
+    child.sayWord();
+
+    /*function test(str){
+        alert(this.name + ";" + str);
+    }
+    var object = new Object();
+    object.name = "object";
+    //test.call相当于调用了test函数
+    test.call(object,"helloworld");//将object赋给了this*/
+
+
+    //继承第三种方式 apply方法
+    function Parent(username){
+        this.username = username;//this由指向Parent改为指向Child
+        this.sayHello=function(){
+            alert(this.username);
+        }
+    }
+
+    function Child(username,password){
+        Parent.apply(this,new Array(username));//数组
+        this.password = password;
+        this.sayWord=function(){
+            alert(this.password);
+        }
+    }
+
+    var parent = new Parent("zhangsan123");
+    var child  = new Child('lisi','234567');
+    parent.sayHello();
+    child.sayHello();
+    child.sayWord();
+
+    //继承第四种方式 原型链(prototype chain)
+    //无法传递属性参数值
+    function Parent(){
+
+    }
+    Parent.prototype.hello="hello";
+    Parent.prototype.sayHello = function(){
+        alert(this.hello);
+    }
+
+    function Child(){
+
+    }
+
+    Child.prototype = new Parent();
+    Child.prototype.world="world";
+    Child.prototype.sayWorld=function(){
+        alert(this.world);
+    }
+
+    var parent = new Parent();
+    parent.sayHello();
+    var child = new Child();
+    child.sayHello();
+    child.sayWorld();
+
+    //继承第五种方式 混合方式(最推荐)
+    function Parent(hello){
+        this.hello=hello;
+    }
+    Parent.prototype.sayHello=function(){
+        alert(this.hello);
+    }
+    function Child(world){
+        Parent.call(this,world);
+        this.world = world;
+    }
+    Child.prototype = new Parent();
+    Child.prototype.sayWorld=function(){
+        alert(this.world);
+    }
+    var parent = new Parent("hello");
+    parent.sayHello();
+    var child = new Child("world");
+    child.sayHello();
+    child.sayWorld();
+</script>
+</body>
+</html>
