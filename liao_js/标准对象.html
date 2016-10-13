@@ -11,7 +11,55 @@
     console.log(typeof {});//object
     //如果我们用typeof将无法区分出null、Array和通常意义上的object——{}
     console.log(typeof undefined);//undefined
-
+    //包装对象
+    console.log("包装对象");
+    var num = new Number(123);//生成了新的包装类型
+    var bool = new Boolean(true);//生成了新的包装类型
+    var str  = new String("str");//生成了新的包装类型
+    console.log(typeof num);
+    console.log(num === 123);
+    console.log(typeof bool);
+    console.log(bool === true);
+    console.log(typeof str);
+    console.log(str === "str");
+    //所以闲得蛋疼也不要使用包装对象,尤其是针对string对象
+    console.log("---type conversion---")
+    //如果我们在使用Number、Boolean和String时，没有写new会发生什么情况？
+    //此时，Number()、Boolean和String()被当做普通函数，把任何类型的数据转换为number、
+    //boolean和string类型（注意不是其包装类型）：
+    var n = Number("123");//123 相当于parseInt()或者parseFloat()
+    console.log(n);
+    console.log(typeof n);//number
+    var b = Boolean("true");
+    console.log(b);
+    console.log(typeof b);
+    var b1 = Boolean("false");//true,false'字符串转换结果为true！因为它是非空字符串！
+    var b2 = Boolean("");
+    console.log(b1);//true
+    console.log(b2);//false
+    var s = String(123.45);
+    console.log(typeof s);
+    //console.log(123.toString());
+    console.log(123..toString());
+    console.log((123).toString());
+    //不要问为什么，这就是JavaScript代码的乐趣！
 </script>
+不要使用new Number()、new Boolean()、new String()创建包装对象；<br>
+
+用parseInt()或parseFloat()来转换任意类型到number；<br>
+
+用String()来转换任意类型到string，或者直接调用某个对象的toString()方法；<br>
+
+通常不必把任意类型转换为boolean再判断，因为可以直接写if (myVar) {...}；<br>
+
+typeof操作符可以判断出number、boolean、string、function和undefined；<br>
+
+判断Array要使用Array.isArray(arr)；<br>
+
+判断null请使用myVar === null；<br>
+
+判断某个全局变量是否存在用typeof window.myVar === 'undefined'；<br>
+
+函数内部判断某个变量是否存在用typeof myVar === 'undefined'。<br>
 </body>
 </html>
