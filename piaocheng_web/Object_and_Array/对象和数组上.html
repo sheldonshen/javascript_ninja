@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>对象和数组</title>
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+    var box = new Object();//创建一个对象
+    box.name = "zhangsan";
+    box.age = 24;
+    //alert(box.name);
+
+    var box = Object();//创建一个对象(new关键字省略)
+    //alert(box);
+
+    var box = {};//创建一个对象(字面量方式创建对象)
+    //alert(box);
+
+    var box = {//用字面量对象封装数据
+        name:"张三",
+        age:28
+    };
+    //alert(box.name);
+    var box = {};//字面量方式
+    box.name = "张四";//传统赋值方式
+    //alert(box.name);
+    //alert(box['name']);
+    //alert(box["name"]);
+    //alert(box[name]);undefined
+
+    function test(obj){//对象作为参数
+        if(obj.name != undefined){
+            alert(obj.name);
+        }
+        if(obj.age != undefined){
+            alert(obj.age);
+        }
+        if(obj.address != undefined){
+            alert(obj.address);
+        }
+        if(obj.love != undefined){
+            alert(obj.love);
+        }
+    }
+
+    var object = {
+        name:"李阳辉",
+        age:28,
+        address:"江苏盐城"
+    };
+    test({//匿名对象
+        name:"李阳辉",
+        age:28,
+        address:"江苏盐城"
+    });
+</script>
+</body>
+</html>
