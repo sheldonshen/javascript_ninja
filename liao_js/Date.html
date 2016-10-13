@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Date</title>
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+          var now = new Date();
+          console.log(now);
+          console.log(now.getFullYear());
+          console.log(now.getMonth());//月份范围是0~11
+          console.log(now.getDate());//表示日
+          console.log(now.getDay());//表示星期
+          console.log(now.getHours());
+          console.log(now.getMinutes());
+          console.log(now.getSeconds());
+          console.log(now.getMilliseconds());
+
+          var d = Date.parse("2015-06-24T19:49:22.875+08:00");
+          console.log(d);
+          var date = new Date(d);
+          console.log(date);
+
+          var date = new Date(1435146562875);
+          console.log(date.toString());//本地时间（北京时区+8:00），显示的字符串与操作系统设定的格式有关
+          console.log(date.toUTCString());//UTC时间，与本地时间相差8小时
+
+          //获得时间戳
+          if(Date.now){
+              alert(Date.now());//// 老版本IE没有now()方法
+          }else{
+              alert(new Date().getTime());
+          }
+</script>
+</body>
+</html>
