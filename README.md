@@ -14,6 +14,9 @@ http://www.icoolxue.com/album/show/77                     韩顺平轻松搞定�
 http://www.kokojia.com/course-881.html                    JavaScript Ajax JQuery 教学视频教程(比较浅显)<br>
 #website
 http://www.javascriptcn.com/                              javascript中文网<br>
+#online books(在线电子书)
+http://eloquentjavascript.net/     Eloquent JavaScript<br>
+https://addyosmani.com/resources/essentialjsdesignpatterns/book/   Learning JavaScript Design Patterns<br>
 #books
 ##初级读物：
 《JavaScript高级程序设计》：一本非常完整的经典入门书籍，被誉为JavaScript圣经之一，详解的非常详细，最新版第三版已经发布了，建议购  买。<br>
