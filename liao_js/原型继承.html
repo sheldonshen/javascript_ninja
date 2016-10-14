@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>原型继承</title>
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+function Student(props){
+    this.name = props.name || "unnamed";
+}
+Student.prototype.hello=function(){
+    console.log("Hello, " + this.name + "!");
+}
+
+function PrimaryStudent(props){
+    Student.call(this,props);
+    this.grade = props.grade || 1;
+}
+
+//空函数
+function F(){
+}
+//把F的原型指向Student.prototype
+F.prototype = Student.prototype;
+//把PrimaryStudent的原型指向一个新的F对象，F对象的原型正好指向Student.prototype:
+PrimaryStudent.prototype = new F();
+//把PrimaryStudent原型的构造函数修复为PrimaryStudent:
+PrimaryStudent.prototype.constructor=PrimaryStudent;
+//继续在PrimaryStudent原型（就是new F()对象）上定义方法：
+PrimaryStudent.prototype.getGrade=function(){
+    return this.grade;
+}
+
+//创建小明
+var xiaoming = new PrimaryStudent({name:"小明",grade:2});
+console.log(xiaoming.name);
+console.log(xiaoming.grade);
+
+//验证原型
+console.log(xiaoming.__proto__===PrimaryStudent.prototype);//true
+console.log(xiaoming.__proto__.__proto__===Student.prototype);//true
+
+//继承
+function inherits(Child,Parent){
+   var F = function(){};
+   F.prototype = Parent.prototype;
+   Child.prototype = new F();
+   Child.prototype.constructor=Child;
+}
+
+//这个inherits函数可以复用
+function Student(props){
+    this.name = props.name || 'Unnamed';
+}
+Student.prototype.hello=function(){
+    alert("hello " + this.name + "!");
+}
+
+function PrimaryStudent(props){
+    Student.call(this,props);
+    this.grade = props.grade || 1;
+}
+
+//实现原型链继承
+inherits(PrimaryStudent,Student);
+
+//绑定其他方法到PrimaryStudent原型:
+PrimaryStudent.prototype.getGrade = function(){
+    return this.grade;
+}
+
+/*
+ JavaScript的原型继承实现方式就是：
+
+ 定义新的构造函数，并在内部用call()调用希望“继承”的构造函数，并绑定this；
+
+ 借助中间函数F实现原型链继承，最好通过封装的inherits函数完成；
+
+ 继续在新的构造函数的原型上定义新方法。
+
+ */
+</script>
+</body>
+</html>
