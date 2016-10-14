@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>创建对象</title>
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+     //1 原型链(javascript对创建的每个对象都会设置一个原型,指向他的原型对象)
+    //很容易想到，如果原型链很长，那么访问一个对象的属性就会因为花更多的时间查找而变得更慢，因此要注意不要把原型链搞得太长
+    //构造函数
+     function Student(name){
+         this.name = name;
+         /*this.hello = function(){
+             alert("Hello," + this.name + "!");
+         }*/
+     }
+     Student.prototype.hello=function(){
+         //alert("Hello," + this.name + "!");
+     }
+     var xiaoming = new Student('小明');
+     var xiaohong = new Student('小红');
+     console.log(xiaoming.name);
+     xiaoming.hello();
+     var xiaohua = Student('小花');//忘记写new???
+     console.log(xiaohua);//undefined
+     //如果不写new，这就是一个普通函数，它返回undefined。但是，如果写了new，它就变成了一个构造函数，
+     //它绑定的this指向新创建的对象，并默认返回this，也就是说，不需要在最后写return this;
+     console.log("-----------------");
+     console.log(xiaoming);
+     console.log("====" + xiaoming.prototype);//undefined
+     console.log(xiaoming.__proto__);
+     console.log(Student);
+     console.log(Student.prototype);
+     console.log(Student.prototype.constructor);
+     console.log(xiaoming.constructor === Student.prototype.constructor);//true
+     console.log(Student.prototype.constructor === Student);//true
+     console.log(Object.getPrototypeOf(xiaoming) === Student);//false
+     console.log(Object.getPrototypeOf(xiaoming) === Student.prototype);//true
+     console.log(xiaoming instanceof Student);//true
+     console.log("-------------------------");
+     console.log(xiaoming.name);
+     console.log(xiaohong.name);
+     console.log(xiaoming.hello);
+     console.log(xiaohong.hello);
+     console.log(xiaoming.hello === xiaohong.hello);//false
+    //忘记写new怎么办?  JSLint
+    function Student(props){
+        this.name = props.name || '匿名';
+        this.age = props.age || 1;
+    }
+
+    Student.prototype.hello = function(){
+        console.log("hello " + this.name + "!");
+    }
+
+    function createStudent(props){
+        return new Student(props || {});
+    }
+
+    var xiaoming = createStudent({name:'test人'});
+     xiaoming.hello();
+</script>
+</body>
+</html>
