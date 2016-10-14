@@ -6,6 +6,7 @@ https://msdn.microsoft.com/en-us/library/d1et7k7c%28v=vs.94%29.aspx  MSDN(javasc
 http://www.liaoxuefeng.com/wiki/001434446689867b27157e896e74d51a89c25cc8b43bdb3000 廖雪峰JavaScript教程<br>
 http://www.cnblogs.com/TomXu/tag/JavaScript/              汤姆大叔JavaScript系列文章<br>
 http://www.ruanyifeng.com/blog/javascript/                阮一峰javascript系列文章<br>
+http://javascript.crockford.com/                          douglas crockford<br>
 http://javascript.info/                                   The JavaScript Tutorial<br>
 #video
 http://www.ycku.com/javascript/                           瓢城Web俱乐部JavaScript第一季150集(注重项目实战)<br>
