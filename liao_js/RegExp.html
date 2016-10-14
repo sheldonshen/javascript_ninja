@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RegExp</title>
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+   //因为正则表达式也是用字符串表示的,所以,我们首先了解如何用字符来描述字符
+   //\d可以匹配一个数字,\w可以匹配一个数字或字母
+   //.可以匹配任意字符(仅表示一个字符)
+   //*表示任意个字符(包括0个),+表示至少一个字符,用?表示0个或者1个字符
+   //{n}表示n个字符,用{n,m}表示n-m个字符(最少n个,最多m个
+
+   //进阶
+   //[]表示范围
+   //A|B可以匹配A或者B
+   //^表示行的开头,$表示行的结束
+   //^\d表示必须以数字开头,\d$表示必须以数字结束
+
+   //RegExp
+   //javascript2种方式创建正则表达式
+   //way1 /正则表达式/ , way2 new RegExp("正则表达式");
+   var re1 = /ABC\-001/;
+   var re2 = new RegExp("ABC\\-001");
+   var re = /^\d{3}\-\d{3,8}$/;
+   console.log(re.test("010-12345"));//true
+   console.log(re.test("010-1234x"));//false
+   console.log(re.test("010 12345"));//false
+
+   //切分字符串
+   console.log("a b   c".split(' '));//无法识别连续的空格
+   console.log("a b   c".split(/\s+/));
+   console.log("a,b;;   c  d".split(/[\s\,\;]+/));
+   //分组,用()表示的就是要提取的分组(group)
+   var re = /^(\d{3})-(\d{3,8})$/;
+   console.log(re.exec("010-12345"));//['010-12345', '010', '12345']
+   console.log(re.exec("010 12345"));//null,匹配失败
+
+   //贪婪匹配,正则表达式默认是贪婪匹配的,也就是匹配尽可能多的字符
+   var re = /^(\d+)(0*)$/;//(\d+)贪婪匹配
+   console.log(re.exec("102300"));
+
+   var re = /^(\d+?)(0*)$/;//(\d+?)非贪婪匹配
+   console.log(re.exec("102300"));
+
+   //全局搜索
+   var r1 = /test/g;
+   //等价于
+   var r2 = new RegExp('test','g');
+
+   var s = 'JavaScript, VBScript, JScript and ECMAScript';
+   var re = /[a-zA-Z]+Script/g;
+   //使用全局匹配
+   console.log(re.exec(s));//['JavaScript']
+   console.log(re.lastIndex);//10
+   console.log(re.exec(s));//['VBScript']
+   console.log(re.lastIndex);//20
+   console.log(re.exec(s));//['VBScript']
+   console.log(re.lastIndex);//29
+   console.log(re.exec(s));//['VBScript']
+   console.log(re.lastIndex);//44
+   console.log(re.exec(s));// null，直到结束仍没有匹配到
+</script>
+</body>
+</html>
