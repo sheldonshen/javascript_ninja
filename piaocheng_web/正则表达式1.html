@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>正则表达式</title>
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+
+    /*
+     var box = new RegExp('Box');//参数:模式字符串
+     alert(box);// /Box/两个反斜杠是正则表达式的字面量表示法
+
+     var box = new RegExp('Box','gi');//参数:模式字符串,第二个参数是模式修饰符
+     alert(box);// /Box/两个反斜杠是正则表达式的字面量表示法
+
+     var box = /Box/ig;//使用字面量方式的正则，带修饰符
+     alert(box);
+
+     var pattern = new RegExp("Box",'i');
+     var str = "box";
+     alert(pattern.test(str));
+
+     alert(/Box/i.test('box'));//一句话匹配
+
+     var pattern = /Box/i;
+     var str = 'box';
+     alert(pattern.test(str));
+
+     var pattern = /Box/i;
+     var str = "this is a box!";
+     alert(pattern.test(str));
+     */
+     var pattern = /Box/i;
+     var str = 'xox';
+     alert(Array.isArray(pattern.exec(str)));//true
+     alert(pattern.exec(str));//object
+</script>
+</body>
+</html>
