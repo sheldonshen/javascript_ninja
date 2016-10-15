@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>正则表达式</title>
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+    /*
+    var pattern = /goo\sgle/; // \s表示空格匹配
+    var str = 'goo gle';
+    alert(pattern.test(str));
+
+    var pattern = /google\b/; // \s表示到达边界
+    var str = 'google12';
+    alert(pattern.test(str));
+
+     var pattern = /google|bing|baidu/; // |表示选择模式
+     var str = 'google';
+     alert(pattern.test(str));
+
+     var pattern = /google|bing|baidu/; // |表示选择模式
+     var str = 'this is bing';//匹配，不是相等,包含的意思
+     alert(pattern.test(str));
+
+     var pattern = /google{4,8}$/; //
+     var str = 'googleeeeeeee';
+     alert(pattern.test(str));
+
+     var pattern = /(google){4,8}$/; //(google)表示分组
+     var str = 'googlegooglegooglegoogle';
+     alert(pattern.test(str));
+
+     var pattern = /8(.*)8/; //(google)表示分组
+     var str = 'this is a 8google8';
+     alert(pattern.test(str));
+     alert(RegExp.$1);//
+
+     var pattern = /8(.*)8/; //(google)表示分组
+     var str = 'this is a 8baidu8';
+     document.write(str.replace(pattern,'<strong>$1</strong>'));
+     //$1表示分组获取字符串匹配到的内容
+
+     var pattern = /(.*)\s(.*)/;
+     var str = "google baidu";
+     alert(str.replace(pattern,"$2 $1"));//位置交换
+
+     //+ 贪婪  +?惰性
+     var pattern = /[a-z]+/;
+     var str = 'abcdefg';
+     alert(str.replace(pattern,'1'));
+
+     //+ 贪婪  +?惰性
+     var pattern = /[a-z]+?/;
+     var str = 'abcdefg';
+     alert(str.replace(pattern,'1'));
+
+     //+ 贪婪  +?惰性
+     var pattern = /8(.*?)8/g;//使用惰性,开启全局
+     var str = '8google8 8google8 8google8';
+     document.write(str.replace(pattern,'<strong>$1</strong>'));
+    */
+     //+ 贪婪  +?惰性
+    var pattern = /8([^8]*)8/g;//使用惰性,开启全局
+    var str = '8google8 8google8 8google8';
+    document.write(str.replace(pattern,'<strong>$1</strong>'));
+</script>
+</body>
+</html>
