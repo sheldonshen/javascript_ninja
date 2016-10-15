@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Function类型</title>
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+    /*
+    var func = new Function("num1","num2","alert(num1+num2);");
+    func(1,2);
+
+     function box(num){
+     if(num == 1){
+     return 1 ;
+     }else{
+     return num * arguments.callee(num-1);//使用arguments.callee调用函数本身,实现递归
+     }
+     }
+     alert(box(4));
+     alert(this);
+     alert(typeof this);
+     var color="红色";
+     alert(window.color);
+     alert(this.color);
+
+     var color="红色";
+     var box = {
+     color:'蓝色',
+     sayColor:function(){
+     alert(this);
+     alert(this.color);//this指向box
+     }
+     };
+     alert(this);//this指向window
+     alert(this.color);
+     box.sayColor();
+
+
+     window.color='红色';
+     function sayColor(){
+     //alert(this);
+     alert(this.color);
+     }
+     sayColor();
+
+     var box ={
+     color:'蓝色'
+     };
+     box.sayColor=sayColor;
+     box.sayColor();
+
+
+     function box(num1,num2){
+     return num1 + num2;
+     }
+
+     function sum(num1,num2){//call和apply可以冒充例外一个函数
+     //return box.apply(this,[num1,num2]);
+     return box.apply(this,arguments);
+     //return box.call(this)
+     }
+
+     alert(sum(1,2));
+    */
+
+     var color='红色';
+     var box = {
+         color:'蓝色'
+     };
+     function sayColor(){
+         alert(this.color);
+     }
+     sayColor.call(window);//this指向window
+     sayColor.call(box);//this指向为box
+</script>
+</body>
+</html>
