@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>正则表达式</title>
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+    /*var pattern = /^[a-z]+/;
+    var str = 'google 2012';
+    alert(pattern.exec(str));
+
+     var pattern = /^([a-z]+)\s([0-9]{4})$/;
+     var str = "google 2012";
+     var a = pattern.exec(str);//分组[]
+     alert(a[0]);//google 2012
+     alert(a[1]);//google
+     alert(a[2]);//2012
+
+     //捕获性分组
+     var pattern = /(\d+)([a-z])/;//这个叫捕获性分组,所有的分组都捕获返回
+     var str = '123abc';
+     var a = pattern.exec(str);
+     alert(a[0]);
+     alert(a[1]);
+     alert(a[2]);
+
+     ///非捕获性分组(?:)
+     var pattern = /(?:\d+)(?:[a-z])/;//这个叫捕获性分组,所有的分组都捕获返回
+     var str = '123abc';
+     var a = pattern.exec(str);
+     alert(a);//123a
+
+     //嵌套分组
+     var pattern =/(a?(b?(c?)))/;
+     var str = "abc";
+     alert(pattern.exec(str));
+
+     var pattern = /goo(?=gle)/;//前瞻性捕获
+     var str = "google";
+     alert(pattern.exec(str));
+
+     var pattern = /\[/;//特性字符匹配
+     var str ="[";
+     alert(pattern.test(str));
+    */
+
+     //换行模式
+     var pattern = /^\d+/gm;
+     var str = '1.baidu\n2.google\n3.bing';
+     alert(str.replace(pattern,'#'));
+</script>
+</body>
+</html>
