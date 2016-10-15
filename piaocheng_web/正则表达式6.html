@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>正则表达式</title>
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+   /*var pattern = /[1-9][0-9]{5}/;
+    var str = "this is 420000 !";
+    alert(pattern.test(str));
+
+    var pattern = /^[\w]+\.[zip|gz|rar]/;
+    var str = '123.zip';
+    alert(pattern.test(str));
+
+    var pattern = /\s/g;
+    var str = "111 222 333 555";
+    alert(str.replace(pattern,''));
+
+    var pattern = /^\s+/;
+    var str = '    goo   gle     ';
+    var result = str.replace(pattern,'');
+    var pattern2 = /\s+$/;
+    result = result.replace(pattern2,'');
+    alert("|" + result + "|");
+
+    var pattern = /^\s+/;
+    var str = '    goo   gle     ';
+    var result = str.replace(pattern,'');
+    var pattern2 = /\s+$/;
+    result = result.replace(pattern2,'');
+    alert("|" + result + "|");
+
+    var pattern = /^\s+(.+?)\s+$/;//非贪婪模式
+    var str = "    goo   gle         ";
+    var result = pattern.exec(str)[1];
+    alert("|" +result +"|");
+
+    var pattern = /^\s+(.+?)\s+$/;//非贪婪模式
+    var str = "    goo   gle         ";
+    //var result = pattern.exec(str)[1];
+    var result = str.replace(pattern,'$1');
+    alert("|" +result +"|");
+    */
+
+    var pattern = /^([\w\.\-]+)@([\w\-]+)\.([a-zA-Z]{2,4})$/;
+    var str = 'yc60.com@gmail.com';
+    var result = pattern.test(str);
+    alert(result);
+
+</script>
+</body>
+</html>
