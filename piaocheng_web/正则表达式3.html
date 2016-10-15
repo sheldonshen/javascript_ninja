@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>正则表达式</title>
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+    /*var pattern = /g..gle/;// .符号表示匹配除了换行符外的任意字符
+    var str = 'google';
+    alert(pattern.test(str));
+
+     var pattern = /g.?gle/;//* 次数>=0; + 字数>=1 ? 0次或者1次
+     var str = "gbbgle";
+     alert(pattern.test(str));
+
+
+     var pattern = /go{2,4}gle/;//* 次数>=0; + 字数>=1 ? 0次或者1次
+     var str = "goooogle";
+     alert(pattern.test(str));
+
+     var pattern = /go{3,}gle/;//* 次数>=0; + 字数>=1 ? 0次或者1次
+     var str = "goooogle";
+     alert(pattern.test(str));
+
+     var pattern = /[a-zA-Z0-9]oogle/;
+     var str = ',oogle';
+     alert(pattern.test(str));
+
+     var pattern = /[^0-9]oogle/;
+     var str = 'boogle';
+     alert(pattern.test(str));
+
+     var pattern = /^[0-9]+oogle/;
+     var str = '44oogle';
+     alert(pattern.test(str));
+    */
+
+    var pattern = /\Woogle/;//
+    var str = '$oogle';
+    alert(pattern.test(str));
+</script>
+</body>
+</html>
