@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>正则表达式2</title>
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+    /*
+     var pattern = /Box/ig;
+     var str = "this is a box,this is a box!";
+     alert(str.match(pattern));
+
+     var pattern = /Box/i;
+     var str = "this is a box,this is a box!";
+     alert(str.match(pattern));
+
+     var pattern = /Box/i;
+     var str = "this is a box,this is a box!";
+     alert(typeof str.match(pattern));
+     alert(Array.isArray(str.match(pattern)));
+
+     var pattern = /Box/i;
+     var str = "this is a box,this is a box!";
+     alert(str.search(pattern));//search返回第一个匹配的位置
+
+
+     var pattern = /Box/ig;
+     var str = "this is a box,this is a box!";
+     alert(str.replace(pattern,"King"));//search返回第一个匹配的位置
+     alert(str);
+
+
+     var pattern = / /ig;
+     var str = "this is a box,this is a box!";
+     alert(str.split(pattern));//search返回第一个匹配的位置
+     alert(str.split(pattern).length);//search返回第一个匹配的位置
+     //alert(str);
+
+
+     var pattern = /google/i;
+     var str = 'This is a google,This is a google!';
+     pattern.test(str);
+     //    alert(RegExp.input);;
+     //    alert(RegExp.leftContext);
+     //    alert(RegExp.rightContext);
+     //    alert(RegExp.lastMatch);
+     alert(RegExp.lastParen);//分组
+     alert(RegExp.multiline);//false
+
+    *
+    * */
+    var pattern = /google/gim;
+    alert(pattern.global);//true
+    alert(pattern.ignoreCase);//false
+    alert(pattern.multiline);//
+    alert(pattern.source);
+</script>
+</body>
+</html>
