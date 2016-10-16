@@ -138,10 +138,108 @@
    /*alert(Array.prototype.sort);
    alert(String.prototype.substring);*/
 
-   String.prototype.addstring=function(){//内置引用类型的功能扩展
+  /* String.prototype.addstring=function(){//内置引用类型的功能扩展
        return  this + "被添加了!";
    };
-   alert("Lee".addstring())
+   alert("Lee".addstring())*/
+
+   //原型的缺点
+  function Box(){}
+   Box.prototype={
+       constructor:Box,
+       name:'Lee',
+       age:100,
+       family:['哥哥','姐姐','妹妹'],
+       run:function(){
+           return this.name + this.age + "运行中...";
+       }
+    };
+
+   var box1 = new Box();
+   //alert(box1.run());
+    box1.family.push('弟弟');
+    alert(box1.family);
+    var box2 = new Box();
+    //alert(box2.run());
+    alert(box2.family);
+
+    //为了解决构造传参和共享的问题,可以组合构造函数+原型模式,
+    function Box(name,age){//保持独立的用构造函数
+        this.name = name;
+        this.age = age;
+        this.family=['哥哥','姐姐','妹妹'];
+    }
+    Box.prototype={//保持共享的用原型
+        constructor:Box,
+        run:function(){
+            return this.name + this.age + "运行中...";
+        }
+    };
+    var box1 = new Box('Lee',100);
+    alert(box1.run());
+    box1.family.push('弟弟');
+    alert(box1.family);
+    var box2 = new Box('Jack',200);
+    alert(box2.run());
+    alert(box2.family);
+
+    //动态原型模式
+    function Box(name,age){//保持独立的用构造函数
+        this.name = name;
+        this.age = age;
+        this.family=['哥哥','姐姐','妹妹'];
+        if(typeof this.run != 'function'){
+            alert("once");
+            /*Box.prototype={
+                constructor:Box,
+                run:function(){
+                    return this.name + this.age + "运行中...";
+                }
+            };*/
+            Box.prototype.run= function(){
+                    return this.name + this.age + "运行中...";
+                };
+            //Box.flag=true;
+        }
+    }
+   var box1 = new Box('Lee',100);
+    alert(box1.run());
+    box1.family.push('弟弟');
+    alert(box1.family);
+    var box2 = new Box('Jack',200);
+    alert(box2.run());
+    alert(box2.family);
+
+
+    //寄生构造函数=工厂模式+构造函数
+    function Box(name,age){
+        var obj = new Object();
+        obj.name = name;
+        obj.age = age;
+        obj.run=function(){
+            return this.name + this.age + "运行中...";
+        };
+        return obj;
+    }
+    var box1 = new Box('Lee123',100);
+    alert(box1.run());
+    var box2 = new Box('Jack234',200);
+    alert(box2.run());
+
+    //稳妥构造函数
+    function Box(name,age){
+        var obj = new Object();
+        obj.name = name;
+        obj.age = age;
+        obj.run=function(){
+            return this.name + this.age + "运行中...";
+        };
+        return obj;
+    }
+    var box1 = Box('Lee123',100);
+    alert(box1.run());
+    var box2 = Box('Jack234',200);
+    alert(box2.run());
 </script>
 </body>
 </html>
