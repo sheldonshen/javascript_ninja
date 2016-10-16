@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>块级作用域</title>
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+    //块级作用域(私有作用域)
+  /*  function  box(){
+        for(var i=0;i<5;i++){//块级作用域(JS没有这个东西)
+
+        }
+        //var i=0;
+        alert(i);
+    }
+    box();*/
+
+  /*function box(){
+      (function(){//包含自我执行的匿名函数，就可以实现私有作用域
+          for(var i=0;i<5;i++){
+               alert(i);
+          }
+      })();
+      //alert(i); //不认识了
+  }
+  box();*/
+
+  //私有变量
+ /* function box(){
+      var age = 100;//私有变量
+  }
+  box();*/
+
+ /*function Box(){
+     this.age = 100;//属性，公有的
+     this.run=function(){//方法,公有的
+         return "运行中......";
+     };
+ }
+
+ var box = new Box();
+ alert(box.age);
+ alert(box.run());*/
+
+/* function Box(){
+     var age = 100;//私有属性
+     function run() {
+         return " 运行中......";
+     };
+     this.publicGo = function(){//对外可见的公共接口,特权方法
+         return age + run();
+     };
+     this.getAge=function(){//对外可见的公共接口,特权方法
+         return age;
+     }
+ }
+ var box = new Box();
+/!* alert(box.age);
+ alert(box.run());*!/
+alert(box.publicGo());
+alert(box.getAge());*/
+
+//通过构造函数传参
+/*function Box(value){
+    var user = value;
+    this.getUser=function(){
+         return user;
+    };
+    this.setUser = function(value){
+        user = value;
+    }
+}
+var box = new Box(100);
+alert(box.getUser());
+box.setUser(200);
+alert(box.getUser());*/
+/*    (function(){
+        var user = '';//私有变量
+        Box = function(value){
+            user = value;
+            this.getUser = function(){
+                return user;
+            }
+        };
+    })();//全局,构造函数
+    var box = new Box('Lee');
+    alert(box.getUser());
+    var box2 = new Box('LLL');
+    alert(box.getUser());*/
+
+
+    (function(){
+        var user = '';//私有变量
+        Box = function(value){
+            user = value;
+        };
+        Box.prototype.getUser=function(){
+            return user;
+        }
+    })();//全局,构造函数
+    var box = new Box('Lee');
+    alert(box.getUser());
+    var box2 = new Box('LLL');
+    alert(box.getUser());
+</script>
+</body>
+</html>
