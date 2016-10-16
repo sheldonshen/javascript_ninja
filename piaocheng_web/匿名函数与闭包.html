@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>匿名函数与闭包</title>
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+    //通过自我执行来执行匿名函数
+    /*alert(function(){
+        return "Lee";
+    }());
+    alert((function(){
+        return "Lee";
+    })());
+    //闭包:有状态的函数
+    //使用局部变量进行累加
+    function sum() {
+        var i = 0;
+        return function(){//使用匿名函数实现局部变量驻留内存中,从而实现累加
+            i++;
+            return i;//闭包
+        }
+    }
+    var cal = sum();//sum调用一次
+    alert(cal());//call调用多次
+    alert(cal());//call调用多次
+    alert(cal());//call调用多次
+    alert(cal());//call调用多次
+    alert(cal());//call调用多次
+    alert(cal());//call调用多次
+    //delete cal;无效
+    cal=null;//解除引用，等待垃圾回收
+    alert(cal);
+
+     //循环里的匿名函数的取值问题
+     function box(){
+     var arr=[];
+     for(var i =0;i<5;i++){
+     arr[i]=(function(m){
+     return m;
+     })(i);
+     }
+     return arr;
+     }
+     //alert(box());
+     var arr = box();
+     for(var i=0;i < arr.length;i++){
+     alert(arr[i]);
+     }
+    */
+
+    /*//循环里的匿名函数的取值问题
+    function box(){
+        var arr=[];
+        for(var i =0;i<5;i++){
+            arr[i]=(function(num){
+                return function(){
+                    return num;
+                };
+            })(i);
+        }
+        return arr;
+    }
+    //alert(box());
+    var arr = box();
+    for(var i=0;i < arr.length;i++){
+        alert(arr[i]());
+    }*/
+
+    /*function box(){
+        var arr=[];
+        for(var i =0;i<5;i++){
+            arr[i]=function(num){
+                return function(){
+                    return num;
+                };
+            }(i);
+        }
+        return arr;
+    }
+    //alert(box());
+    var arr = box();
+    for(var i=0;i < arr.length;i++){
+        alert(arr[i]());
+    }*/
+
+//    (function(){
+//        alert("hello");
+//    })();
+//
+//    var val = function(){
+//        alert("hello");
+//    }();
+
+
+ /*   //"use strict";
+    //关于this对象
+    var box = {
+        getThis:function(){
+            return function(){
+                return this;//非严格模式下,闭包中的this指向window,
+                            //严格模式下,闭包中的this指向undefined
+            };
+        }
+    };
+
+    alert(this);
+    alert(box.getThis()());*/
+
+ /*  //"use strict";
+   var user = "The Window";
+   var box = {
+       user : 'The Box',
+       getUser:function(){
+           //return this.user;
+             //var that = this;//this指向box
+             return function(){
+                 //return this.user;
+                 //return that.user;
+                 return this.user;
+             };
+       }
+   };
+
+   //alert(user);
+   //alert(box.getUser()());
+   //对象冒充
+   alert(box.getUser().call(box)) ;
+    alert(box.getUser().call(window)) ;*/
+
+
+</script>
+
+<div id="oDiv">Lee</div>
+
+<script type="text/javascript" charset="UTF-8">
+    //内存泄露
+    function box(){
+        var oDiv = document.getElementById('oDiv');
+        //alert(oDiv.innerHTML);
+        var text = oDiv.innerHTML;
+        oDiv.onclick=function(){
+          //alert(oDiv.innerHTML);
+          alert(text);//解除闭包的循环引用
+        };
+        //alert(oDiv);
+        oDiv=null;//解除引用,等待垃圾回收
+        alert(oDiv);
+    }
+    box();
+</script>
+</body>
+</html>
