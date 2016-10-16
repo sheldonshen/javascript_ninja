@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>面向对象与原型</title>
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+    //工厂模式创建对象
+    //工厂模式解决了重复实例化的问题,但是还有一个问题，那就是识别问题
+    //因为根本无法搞清楚他们到底是哪个对象的实例
+    /*function createObject(name,age){
+        var obj = new Object();
+        obj.name = name;
+        obj.age  = age;
+        obj.run =function(){
+           return this.name + ":" + this.age +" 运行中....";
+        };
+        return obj;
+    }
+    var box1 = createObject('Lee',100);
+    var box2 = createObject('Jack',200);
+    //alert(box1.run());
+    //alert(box2.run());
+    alert(typeof box1);
+    alert(typeof box2);
+    alert(box1 instanceof  Object);
+    alert(box2 instanceof  Object);*/
+
+
+
+    //构造函数创建对象
+
+   /* function runOut(){
+        return this.name + this.age + " 运行中.....";
+    }
+
+    function Box(name,age){
+        this.name = name;
+        this.age = age;
+        this.run = runOut;
+    }
+
+    /!*var obj = new Object();
+    Box.call(obj,'Jack',200);//对象冒充
+    alert(obj.run());*!/
+
+    var box1 = new Box('jack',200);
+    var box2 = new Box('jack',200);
+    alert(box1.run ==  box2.run);//false
+    alert(box1.run === box2.run);//false*/
+
+    //原型
+   /* function Box(){//实例属性,实例方法(独有,不共享)
+
+    }
+
+    Box.prototype.name ="Lee";//原型属性(共享)
+    Box.prototype.age = 100;  //原型属性(共享)
+    Box.prototype.run = function(){//原型方法(共享)
+        return this.name + this.age + " 运行中....";
+    };
+
+    var box1  = new Box();
+    var box2 = new  Box();
+    //alert(box1.run === box2.run);//true
+    //alert(box1.name === box2.name);//true
+    /!*alert(box.name);
+    alert(box.run());*!/
+    //alert(box1.prototype);//undefined,这个属性是一个对象，访问不到
+    //alert(box1.__proto__);//这个属性是一个指针,指向prototype原型对象
+    //alert(box1.constructor);//构造属性,可以获取构造函数本身，作用是被原型指针定位,然后得到构造函数本身,其实就是
+    //对象实例对应的原型对象的作用
+    alert(Box.prototype.isPrototypeOf(box1));
+    var obj = new Object();
+    alert(Object.prototype.isPrototypeOf(box1));
+    alert(Box.prototype.isPrototypeOf(obj));*/
+
+   /* function Box(){};
+    var box = new Box();
+    alert(box.prototype);//undefined,使用对象实例无法访问到prototype
+    alert(box.__proto__);//使用对象实例访问prototype的指针
+    alert(Box.prototype);//使用构造函数名(对象名)访问prototype*/
+
+  /* function Box(){}
+   //使用字面量的方式创建原型对象
+   //这里的{}就是对象,是Object,new Object()就相当于{}
+   Box.prototype={
+       constructor : Box,//强制指向Box
+       name:"Lee",
+       age:100,
+       run:function(){
+           return this.name + this.age + " 运行中...";
+       }
+   };
+
+    var box = new Box();
+    /!*alert(box.constructor);
+    alert(Box.prototype.constructor);*!/
+    alert(box.constructor == Object);
+    alert(box.constructor == Box);*/
+
+/*
+    function Box(){//实例属性,实例方法(独有,不共享)
+
+    }
+
+    Box.prototype.name ="Lee";//原型属性(共享)
+    Box.prototype.age = 100;  //原型属性(共享)
+    Box.prototype.run = function(){//原型方法(共享)
+        return this.name + this.age + " 运行中....";
+    };
+
+    var box = new Box();
+    alert(box.constructor);
+    alert(Box.prototype.constructor);*/
+
+    /*function Box(){}
+    //使用字面量的方式创建原型对象
+    //这里的{}就是对象,是Object,new Object()就相当于{}
+    Box.prototype={
+        constructor : Box,//强制指向Box
+        name:"Lee",
+        age:100,
+        run:function(){
+            return this.name + this.age + " 运行中...";
+        }
+    };
+
+    //重写了原型对象
+    Box.prototype={
+        age:200
+    };
+   var box = new Box();
+   alert(box.name);//undefine
+   alert(box.run());*/
+
+   /*alert(Array.prototype.sort);
+   alert(String.prototype.substring);*/
+
+   String.prototype.addstring=function(){//内置引用类型的功能扩展
+       return  this + "被添加了!";
+   };
+   alert("Lee".addstring())
+</script>
+</body>
+</html>
