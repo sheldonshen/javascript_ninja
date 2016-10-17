@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BOM</title>
+</head>
+<body>
+<dl id="drink-menu" style="border:solid 1px #ccc;padding:6px;">
+    <dt>摩卡</dt>
+    <dd>热摩卡咖啡</dd>
+    <dt>酸奶</dt>
+    <dd>北京老酸奶</dd>
+    <dt>果汁</dt>
+    <dd>鲜榨苹果汁</dd>
+</dl>
+</body>
+</html>
+<script type="text/javascript" charset="UTF-8">
+    //window对象不但充当全局作用域,而且表示浏览器窗口
+    //alert(window.innerWidth + ":" + window.innerHeight);
+    //alert(window.outerWidth + ":" + window.outerHeight);
+    //navigator对象表示浏览器的信息
+    "use strict";
+    alert('appName = ' + navigator.appName + '\n' +
+            'appVersion = ' + navigator.appVersion + '\n' +
+            'language = ' + navigator.language + '\n' +
+            'platform = ' + navigator.platform + '\n' +
+            'userAgent = ' + navigator.userAgent);
+    //screen对象表示屏幕的信息
+    //alert(screen.width + ":" + screen.height);
+    //location对象表示当前页面的URL信息
+    /*if(confirm('重新加载当前页:' + location.href + "?")){
+     location.reload(true);
+     }else{
+     location.assign("https://www.baidu.com");
+     }*/
+    //document表示当前页面
+    //由于HTML在浏览器中以DOM形式表示为树形结构,
+    //document对象就是整个DOM树的根节点
+    //alert(document.title);
+   /* var menu = document.getElementById('drink-menu');
+    var drinks = document.getElementsByTagName('dt');
+    var i, s, menu, drinks;
+
+    menu = document.getElementById('drink-menu');
+    menu.tagName; // 'DL'
+
+    drinks = document.getElementsByTagName('dt');
+    s = '提供的饮料有:';
+    for (i=0; i<drinks.length; i++) {
+        s = s + drinks[i].innerHTML + ',';
+    }
+    alert(s);*/
+
+    alert(document.cookie);
+    //为了确保安全，服务器端在设置Cookie时，应该始终坚持使用httpOnly
+    //设定了httpOnly的Cookie将不能被JavaScript读取
+
+    //history对象保存了浏览器的历史记录
+    //任何情况，你都不应该使用history这个对象了。
+</script>
