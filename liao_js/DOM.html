@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DOM</title>
+</head>
+<body>
+<!-- HTML结构 -->
+<!--<p id="js">JavaScript</p>-->
+<div id="list">
+    <p id="java">Java</p>
+    <p id="python">Python</p>
+<!--    <p id="scheme">Scheme</p>-->
+</div>
+</body>
+</html>
+<script type="text/javascript" charset="UTF-8">
+
+   //1 appendChild
+   /* var
+            list = document.getElementById('list'),
+            haskell = document.createElement('p');
+    haskell.id = 'haskell';
+    haskell.innerText = 'Haskell';
+    list.appendChild(haskell);
+
+    var d = document.createElement("style");
+    d.setAttribute('type','text/css');
+    d.innerHTML='p{color:red}';
+    document.getElementsByTagName("head")[0].appendChild(d);*/
+
+   //2 insertBefore
+  /* var list = document.getElementById("list");
+   var ref = document.getElementById('python');
+   var haskell = document.createElement('p');
+   haskell.id="haskell";
+   haskell.innerText="haskell";
+   list.insertBefore(haskell,ref);*/
+
+   /*var i,c,list =document.getElementById('list');
+   for(i=0;i<list.children.length;i++){
+       c = list.children[i];
+       alert(c.innerHTML);//拿到第i个子节点.
+   }*/
+
+   //3删除DOM(注意到删除后的节点虽然不在文档树中了，但其实它还在内存中，可以随时再次被添加到别的位置)
+  /* var self = document.getElementById('java');//拿到待删除的节点
+   var parent = self.parentElement;//拿到父节点
+   var removed = parent.removeChild(self);
+   alert(removed === self);*/
+
+   //删除多个节点时，要注意children属性时刻都在变化
+   var parent = document.getElementById('list');
+   parent.remove(parent.children[0]);
+   parent.remove(parent.children[1]);
+</script>
