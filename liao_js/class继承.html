@@ -48,6 +48,185 @@ alert(student.myGrade());
 
 //更多关于es6 class的知识
 //https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes
+    
+//以下内容来自MDN
+//function declarations(hoist) class declarations(not hoist)
+//function expressions(not hoist)   class expressions(not hoist)
+/*class Polygon{
+    constructor(height,width){
+        this.height=height;
+        this.width = width;
+    }
+}*/
+//Hoisting
+//class declarations
+/*class Polygon{}
+var p = new Polygon();*/
+
+
+//class expressions
+//unnamed
+/*var Polygon = class{
+    constructor(height,weight){
+        this.weight=weight;
+        this.height=height;
+    }
+};
+//named
+var Polygon = class Polygon{
+    constructor(height,weight){
+        this.weight=weight;
+        this.height=height;
+    }
+};*/
+
+/*"use strict";
+var Car = class Car{
+    constructor(model){
+        this.model = model;
+    }
+};
+//var carNew = new car('ferrari');
+var carNew  = new Car('ferrari');
+console.log(carNew);
+console.log(carNew.constructor == Car);*/
+
+/*const Foo = class Self{
+  static greetingPrefix(){
+      return "Hello, ";
+  }
+  greeting(){
+      return Self.greetingPrefix() + "World";
+  }
+};
+const foo = new Foo();
+console.log(foo.greeting());*/
+//console.log(Self);
+
+/*class Polygon{
+    constructor(height,weight){
+        this.weight = weight;
+        this.height = height;
+    }
+    get area(){
+        return this.calcArea();
+    }
+    //prototype method
+    calcArea(){
+        return this.weight * this.height;
+    }
+}
+
+const square = new Polygon(10,10);
+console.log(square.area);*/
+
+//static method
+/*class Point{
+    constructor(x,y){
+        this.x = x;
+        this.y = y;
+    }
+
+    static distance(a,b){
+        const dx = a.x - b.x;
+        const dy = a.y - b.y;
+        return Math.sqrt(dx * dx,dy * dy);
+    }
+}
+
+const p1 = new Point(5,5);
+const p2 = new Point(10,10);
+console.log(Point.distance(p1,p2));*/
+
+//sub classing with extends
+/*class Animal{
+    constructor(name){
+        this.name = name;
+    }
+    speak(){
+        console.log(this.name + " makes a noise");
+    }
+}
+
+class Dog extends Animal{
+    speak(){
+        console.log(this.name + " barks.");
+    }
+}
+
+var dog = new Dog("HBM");
+dog.speak();*/
+
+/*function Animal(name){
+    this.name = name;
+}
+Animal.prototype.speak=function(){
+    console.log(this.name + " makes a noise");
+}
+
+class Dog extends Animal{
+    speak(){
+        super.speak();
+        console.log(this.name + " barks");
+    }
+}
+
+var dog =new Dog('wangcai');
+dog.speak();*/
+
+/*var Animal = {
+    speak(){
+        console.log(this.name + " makes a noise");
+    }
+};
+
+
+class Dog{
+    constructor(name){
+        this.name = name;
+    }
+    speak(){
+        super.speak();
+        console.log(this.name + " barks.");
+    }
+}
+Object.setPrototypeOf(Dog.prototype,Animal);
+
+var d = new Dog("HBM");
+d.speak();*/
+
+//species
+/*class MyArray extends Array{
+    //overwrite species to the parent Array constructor
+    static get [Symbol.species](){
+        return Array;
+    }
+}
+
+var a = new MyArray(1,2,3);
+var mapped = a.map(x => x * x);
+console.log(mapped instanceof MyArray);//false
+console.log(mapped instanceof Array);//true*/
+
+//super class calls with super
+/*class Cat{
+    constructor(name){
+        this.name = name;
+    }
+
+    speak(){
+        console.log(this.name + " makes a noise");
+    }
+}
+
+class Lion extends Cat{
+    speak(){
+        super.speak();
+        console.log(this.name + " roars.");
+    }
+}*/
+
+//Mix-in    
 </script>
 </body>
 </html>
