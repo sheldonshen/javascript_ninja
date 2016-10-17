@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>class继承</title>
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+/*function Student(name){
+    this.name  = name;
+}
+Student.prototype.hello = function(){
+     alert("Hello, " + this.name + "!");
+};
+
+var student = new Student('zhangsan');
+student.hello();*/
+
+//新的关键字class从ES6开始正式被引入到javascript中,class的目的就是让定义类更简单
+class Student{
+    constructor(name){
+        this.name = name;
+    }
+    hello(){
+        alert("Hello, " + this.name + "!");
+    }
+}
+/*var student = new Student('zhangsan es6');
+student.hello();*/
+
+//class继承
+class PrimaryStudent extends Student{
+    constructor(name,grade){
+        super(name);
+        this.grade = grade;
+    }
+    myGrade(){
+        return "I'm "+this.name+" at grade " + this.grade;
+    }
+}
+
+var student = new PrimaryStudent('lisi',6);
+alert(student.myGrade());
+
+//ES6引入的class和原有的JavaScript原型继承有什么区别呢？实际上它们没有任何区别，
+// class的作用就是让JavaScript引擎去实现原来需要我们自己编写的原型链代码。简而言之，
+// 用class的好处就是极大地简化了原型链代码
+
+//更多关于es6 class的知识
+//https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes
+</script>
+</body>
+</html>
