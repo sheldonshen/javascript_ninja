@@ -19,6 +19,8 @@ http://www.javascriptcn.com/                              javascript中文网<br
 http://eloquentjavascript.net/     Eloquent JavaScript<br>
 https://addyosmani.com/resources/essentialjsdesignpatterns/book/   Learning JavaScript Design Patterns<br>
 http://speakingjs.com/   Speaking JavaScript<br>
+http://exploringjs.com/   Exploring ES6: Upgrade to the next version of JavaScript<br>
+http://es6.ruanyifeng.com/    ECMAScript 6入门(阮一峰开源电子书)<br>
 #books
 ##初级读物：
 《JavaScript高级程序设计》：一本非常完整的经典入门书籍，被誉为JavaScript圣经之一，详解的非常详细，最新版第三版已经发布了，建议购  买。<br>
