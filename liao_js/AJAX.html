@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AJAX</title>
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+    //表单发送请求
+    //javascript(ajax发送请求)
+    "use strict";
+    function success(text){
+        var textarea = document.getElementById('test-response-text');
+        textarea.value=text;
+    }
+    function fail(code){
+        var textarea = document.getElementById('test-response-text');
+        textarea.value="Error code: " + code;
+    }
+    var request;
+    if(window.XMLHttpRequest){
+        request= new XMLHttpRequest();//新建XMLHttpRequest对象
+    }else{
+        request = new ActiveXObject('Microsoft.XMLHTTP');//新建Microsoft.XMLHTTP对象
+    }
+    request.onreadystatechange=function(){
+        if(request.readyState === 4){//成功完成
+            //判断响应结果
+            if(request.status === 200){
+                 //成功,根据responseText拿到响应文本
+            }else{
+                //失败,根据响应码判断失败原型
+                fail(request.status);
+            }
+        }else{
+            //HTTP请求还在继续
+        }
+    };
+    //发送请求
+    request.open('GET','/api/categories');
+    request.send();
+    alert("请求已发送,请等待响应...");
+    //XMLHttpRequest API
+    //https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
+
+    //安全限制,浏览器的同源策略
+    //1 一是通过Flash插件发送HTTP请求，这种方式可以绕过浏览器的安全限制，但必须安装Flash，并且跟Flash交互
+    //2 二是通过在同源域名下架设一个代理服务器来转发
+    //3 第三种方式称为JSONP，它有个限制，只能用GET请求，并且要求返回JavaScript。
+    // 这种方式跨域实际上是利用了浏览器允许跨域引用JavaScript资源(跨域加载数组)
+    function getPrice(){
+        var js = document.createElement('script');
+        var head = document.getElementsByTagName('head')[0];
+        js.src='http://api.money.126.net/data/feed/0000001,1399001?callback=refreshPrice';
+        head.appendChild(js);//完成跨域加载资源
+    }
+    function refreshPrice(data) {
+        var p = document.getElementById('test-jsonp');
+        p.innerHTML = '当前价格：' +
+                data['0000001'].name +': ' +
+                data['0000001'].price + '；' +
+                data['1399001'].name + ': ' +
+                data['1399001'].price;
+    }
+    //CORS(新的跨域策略):Cross-Origin Resource Sharing,是HTML5规范定义的如何跨域访问资源
+    //如果浏览器支持HTML5，那么就可以一劳永逸地使用新的跨域策略：CORS了
+    //跨域能否成功，取决于对方服务器是否愿意给你设置一个正确的Access-Control-Allow-Origin，决定权始终在对方手中
+    
+</script>
+</body>
+</html>
