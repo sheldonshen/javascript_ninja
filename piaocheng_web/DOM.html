@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DOM</title>
+</head>
+<body>
+<diV id="div" value="NodeValue">
+    测试div
+    <em>倾斜</em>
+    结尾
+</diV>
+<div id="pox">1</div>
+
+
+<script type="text/javascript" charset="UTF-8">
+    //DOM原型链(非常重要)
+    //HTMLDivElement-->HTMLElement(innerHTML,innerText)-->Element(tagName)-->Node(nodeName,nodeType,nodeValue)-->EventTarget
+     /*var box = document.getElementById("div");
+     for(var i=0;i<box.childNodes.length;i++){
+         var node = box.childNodes[i];//NodeList-->Text,HTMLElement,Text
+         alert(node);
+         if(node.nodeType===3){//文本节点
+             alert(node.nodeValue);
+         }else{//元素节点
+             alert(node.nodeName);
+         }
+     }*/
+    //
+    var pox = document.getElementById("pox");
+    pox.childNodes[0].nodeValue="<strong>nodeValue</strong>";
+   /* for(var attr in pox){
+        document.write(attr +"<br>");
+    }*/
+    //pox.innerHTML="测试<strong>POX</strong>";
+    //pox.nodeValue="测试<strong>POX</strong>";
+</script>
+</body>
+</html>
