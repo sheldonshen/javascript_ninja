@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>函数</title>
+    <script type="text/javascript" charset="UTF-8" src="../lib/underscore.js"></script>
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+    //因为underscore本来就是为了充分发挥JavaScript的函数式编程特性，所以也提供了大量JavaScript本身没有的高阶函数
+    /*'use strict';
+
+    console.log('Hello, world!');
+    // 输出'Hello, world!'
+
+    var log = console.log;
+    log('Hello, world!');
+    // Uncaught TypeError: Illegal invocation*/
+
+    /*"use strict";
+    var log = console.log;
+    //调用call并传入console对象作为this
+    log.call(console,"Hello,World");*/
+
+    //bind()可以帮我们把console对象直接绑定在log()的this指针上，以后调用log()就可以直接正常调用了：
+    "use strict";
+    var log = _.bind(console.log,console);
+    log("welcome");
+
+    //partial(偏函数:它固定住了原函数的第一个参数（始终为2）)
+    "use strict";
+    var pow2N = _.partial(Math.pow,2);
+    console.log(pow2N(3));
+    console.log(pow2N(5));
+    console.log(pow2N(10));
+    //如果我们不想固定第一个参数，想固定第二个参数怎么办？
+    //比如，希望创建一个偏函数cube(x)，计算x3，可以用_作占位符，固定住第二个参数
+    var cube = _.partial(Math.pow,_,3);
+    console.log(cube(3));
+    console.log(cube(5));
+    console.log(cube(10));
+    //创建偏函数的目的是将原函数的某些参数固定住，可以降低新函数调用的难度
+
+    //memoize
+    "use strict";
+    var factorial = _.memoize(function(n){
+        console.log('start calculate ' + n + '!...');
+        var s = 1, i = n;
+        while (i > 1) {
+            s = s * i;
+            i --;
+        }
+        console.log(n + '! = ' + s);
+        return s;
+    });
+    // 第一次调用:
+    factorial(10); // 3628800
+    // 注意控制台输出:
+    // start calculate 10!...
+    // 10! = 3628800
+
+    // 第二次调用:
+    factorial(10); // 3628800
+    // 控制台没有输出
+    //对于相同的调用，比如连续两次调用factorial(10)，第二次调用并没有计算，而是直接返回上次计算后缓存的结果
+
+    //递归
+    var factorial = _.memoize(function(n) {
+        console.log('start calculate ' + n + '!...');
+        if (n < 2) {
+            return 1;
+        }
+        return n * factorial(n - 1);
+    });
+    factorial(10); // 3628800
+    // 输出结果说明factorial(1)~factorial(10)都已经缓存了:
+    // start calculate 10!...
+    // start calculate 9!...
+    // start calculate 8!...
+    // start calculate 7!...
+    // start calculate 6!...
+    // start calculate 5!...
+    // start calculate 4!...
+    // start calculate 3!...
+    // start calculate 2!...
+    // start calculate 1!...
+
+    factorial(9); // 362880
+    // console无输出
+
+    //once
+    "use strict";
+    var register=_.once(function(){
+        alert("register OK!");
+    });
+    //测试
+    register();
+    register();
+    register();
+
+    //delay
+    var log = _.bind(console.log,console);
+    _.delay(log,2000,'hello','underscore');
+</script>
+</body>
+</html>
