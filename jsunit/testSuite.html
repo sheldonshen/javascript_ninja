@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>testSuite</title>
+    <script type="text/javascript" charset="UTF-8" src="app/jsUnitCore.js"></script>
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+    //测试套件名一定为suite
+    function suite(){
+        var testSuite = new top.jsUnitTestSuite();
+        //增加的测试页面的路径是相对于测试运行器(testRunner.html)的路径，而不是当前页面
+        testSuite.addTestPage('test1.html');
+        testSuite.addTestPage('test2.html');
+        return testSuite;
+    }
+</script>
+</body>
+</html>
