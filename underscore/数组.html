@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数组</title>
+    <script type="text/javascript" charset="UTF-8" src="../lib/underscore.js"></script>
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+    //undersocre为Array提供了许多工具类方法,可以方便快捷的操作Array
+    //first/last
+    "use strict";
+    var arr = [2,4,6,8];
+    console.log(_.first(arr));
+    console.log(_.last(arr));
+
+    //flatten
+    "use strict";
+    console.log(_.flatten([1, [2], [3, [[4], [5]]]]));
+
+    //zip/unzip
+    "use strict";
+    var names=['Adam','Lisa','Bart'];
+    var scores=[85,92,59];
+    console.log(_.zip(names,scores));
+
+    var namesAndScores=[["Adam", 85], ["Lisa", 92], ["Bart", 59]];
+    console.log(_.unzip(namesAndScores));
+
+    //object
+    var names=['Adam','Lisa','Bart'];
+    var scores=[85,92,59];
+    console.log(_.object(names,scores));
+
+    //range
+    "use strict";
+    //从0开始小于10:
+    console.log(_.range(10));
+    //从1开始小于11：
+    console.log(_.range(1,11));
+    //从0开始小于30，步长5:
+   console.log(_.range(0,30,5));
+    //从0开始大于-10，步长-1:
+    console.log(_.range(0,-10,-1));
+</script>
+</body>
+</html>
