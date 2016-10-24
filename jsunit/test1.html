@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test1</title>
+    <script type="text/javascript" charset="UTF-8" src="jsUnitCore.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="test1.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+
+    var count=0;
+
+    //此函数只执行一次(在页面加载后),类似JUnit4.x中的@BeforeClass
+    //注意:并没有与@AfterClass对应的函数存在
+    function setUpPage(){
+          alert("setUpPage invoked!");
+          //这行代码必须放在setUpPage函数的最后一行,告诉JSUnit,setUpPage函数已经执行完毕
+          setUpPageStatus="complete";
+    }
+
+    function setUp(){
+        //alert("setUp");
+        //alert(count++);//0,1,2
+    }
+    function tearDown(){
+         //alert("tearDown");
+    }
+    //以下为测试函数(Test Function)
+    function testAdd(){
+        var result = add(1,2);
+        assertEquals(3,result);
+    }
+    function testSubtract(){
+        var result = subtract(1,2);
+        assertEquals(-1,result);
+    }
+    function testMultiply(){
+        var result = multiply(1,2);
+        assertEquals(2,result);
+    }
+</script>
+</body>
+</html>
