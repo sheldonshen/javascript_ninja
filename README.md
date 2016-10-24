@@ -51,7 +51,8 @@ Qunit<br>
 Mocha<br>
 #函数式编程
 underscore<br>
-
+#更多javascript的库(package manager,build system,compiler and so on)
+https://www.javascripting.com/
 
 
 
