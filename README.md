@@ -49,6 +49,8 @@ coffeescript<br>
 jsunit<br>
 Qunit<br>
 Mocha<br>
+#函数式编程
+underscore<br>
 
 
 
