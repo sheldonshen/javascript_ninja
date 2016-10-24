@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test2</title>
+    <script type="text/javascript" charset="UTF-8" src="app/jsUnitCore.js"></script>
+    <script type="text/javascript" charset="UTF-8">
+        function addNumbers(){
+            var v1 = document.getElementById("value1").value;
+            var v2 = document.getElementById("value2").value;
+            v1= parseInt(v1);
+            v2= parseInt(v2);
+            var v3 = v1 + v2;
+            document.getElementById("value3").value=v3;
+            return v3;
+        }
+
+        function setUp(){
+            document.getElementById("value1").value=2;
+            document.getElementById("value2").value=3;
+        }
+
+        function testAddNumbers(){
+            addNumbers();
+            var actual = document.getElementById("value3").value;
+            assertEquals("5",actual);
+        }
+
+        function tearDown(){
+            //恢复到测试的最开始的状态
+            document.getElementById("value1").value="";
+            document.getElementById("value2").value="";
+            document.getElementById("value3").value="";
+        }
+    </script>
+</head>
+<body>
+<input type="text" id="value1"><br>
+<input type="text" id="value2"><br>
+<input type="text" id="value3"><br>
+
+<input type="button" value="Add" onclick="addNumbers();">
+</body>
+</html>
