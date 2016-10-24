@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Collections</title>
+    <script type="text/javascript" charset="UTF-8" src="../lib/underscore.js"></script>
+
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+    //javascript函数式编程
+    "use strict";
+    var a1 = [1,4,9,16];
+    var a2 = a1.map(Math.sqrt);
+    //console.log(a2);
+    var a3 = a2.filter((x)=>{
+        return x % 2 === 0;
+    });
+    //alert(a3);
+    //underscore则提供了一套完善的函数式编程的接口,让我们更方便的在javascript中实现函数式编程
+    "use strict";
+    alert(_.map([1,2,3],(x)=>x*x));
+    alert(_.map({a:1,b:2,c:3},(v,k)=>k+"="+v));
+
+
+     "use strict";
+     //map/filter
+     var obj = {
+         name:"bob",
+         school:'No.1 middle school',
+         address:'xuyuan road'
+     };
+     var upper = _.mapObject(obj,function(value,key){
+         return {key:value.toUpperCase()};
+     });
+     //alert(JSON.stringify(upper));
+
+     //every/some
+     "use strict";
+     //所有元素都大于0?
+     console.log(_.every([1,4,7,-3,-9],(x)=> x > 0));//false
+     //至少一个元素大于0
+     console.log(_.some([1,4,9,-3,-9],(x)=> x > 0));//true
+     //当集合是Object时,
+     "ues strict";
+     var obj = {
+         name:'bob',
+         school:'No.1 middle school',
+         address:'xuyuan road'
+     };
+     //判断key,value是否全部小写
+     var r1 = _.every(obj,function(key,value){
+         return key.toLowerCase()===key && value.toLowerCase()===value;
+     });
+     var r2 = _.some(obj,function(key,value){
+         return key.toLowerCase()===key && value.toLowerCase()===value;
+     });
+     //alert('every key-value are lowercase: ' + r1 + '\nsome key-value are lowercase: ' + r2);
+
+     //max/min
+     "use strict";
+     var arr=[3,5,7,9];
+     console.log(_.max(arr));
+     console.log(_.min(arr));
+     console.log(_.max([]));
+     console.log(_.min([]));
+     //如果集合是Object，max()和min()只作用于value，忽略掉key：
+     console.log(_.max({a:1,b:2,c:3}));
+
+     //groupBy
+     "use strict";
+     var scores=[20, 81, 75, 40, 91, 59, 77, 66, 72, 88, 99];
+     var groups=_.groupBy(scores,function(x){
+         if(x < 60){
+             return "C";
+         }else if(x < 80){
+             return "B";
+         }else{
+             return "A";
+         }
+     });
+     console.log(groups);
+
+     //shuffle/sample
+     "use strict";
+     console.log(_.shuffle([1,2,3,4,5,6]));
+     //sample则是随机选择一个或者多个
+     console.log(_.sample([1,2,3,4,5,6]));
+     console.log(_.sample([1,2,3,4,5,6]));
+</script>
+</body>
+</html>
