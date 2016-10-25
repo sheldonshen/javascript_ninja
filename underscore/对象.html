@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>对象</title>
+    <script type="text/javascript" charset="UTF-8" src="../lib/underscore.js"></script>
+</head>
+<body>
+<script type="text/javascript" charset="UTF-8">
+    //和Array类似，underscore也提供了大量针对Object的函数
+
+    //keys/allKeys
+    "use strict";
+    function Student(name,age){
+        this.name = name;
+        this.age = age;
+    }
+    Student.prototype.school="No.1 Middle School";
+
+    var xiaoming = new Student("小明",20);
+    //alert(_.keys(xiaoming));//不包含从原型链上继承下来的属性
+    //alert(_.allKeys(xiaoming));//包含从原型链上继承下来的属性
+
+    //values
+    var obj = {
+       name:'小明',
+       age:20
+    };
+    //alert(_.values(obj));
+    //注意没有allValues(),原因不明
+
+    //mapObject
+    "use strict";
+    var obj = {a:1,b:2,c:3};
+    //注意传入的函数签名,value在前,key在后
+    console.log(_.mapObject(obj,(v,k)=>100+v));
+
+    //invert
+    "use strict";
+    var obj = {
+        Adam:90,
+        Lisa:85,
+        Bart:59
+    };
+    console.log(_.invert(obj));
+
+    //extend/extendOwn(忽略从原型链上继承下来的属性)
+    "use strict";
+    var a = {name:'Bob',age:20};
+    console.log(_.extend(a,{age:15},{age:88,city:"BeiJing"}));
+    console.log(a);
+
+    //clone
+    "use strict";
+    var source = {
+        name:"小明",
+        age:28,
+        skills:['JavaScript','CSS','HTML']
+    };
+    var copied =_.clone(source);
+    console.log(copied);
+    //注意:clone是"浅复制",所谓的"浅复制"就是说:两个对象相同的key所引用的value其实是同一个对象：
+    console.log(source.skills === copied.skills);//true
+    //也就是说:修改source.skills会影响copied.skills
+
+    //isEqual
+    "use strict";
+    var o1 = {name:'Bob',skills:{Java:90,JavaScript:99}};
+    var o2 = {name:'Bob',skills:{JavaScript:99,Java:90}};
+    console.log(o1 === o2);//false
+    console.log(_.isEqual(o1,o2));//true
+
+    //isEqual其实对Array也可以比较
+    "use strict";
+    var o1 = ["Bob",{skills:['Java','JavaScript']}];
+    var o2 = ['Bob',{skills:["Java",'JavaScript']}];
+    console.log(o1 === o2);//false
+    console.log(_.isEqual(o1,o2));//true
+</script>
+</body>
+</html>
