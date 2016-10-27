@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>helloworld</title>
+    <script type="text/javascript" charset="UTF-8">
+        //window浏览器对象
+        window.alert("hello,javascript");
+        //文档对象
+        document.write("我是第一个程序!");
+        console.info("hello,js");
+    </script>
+    <!--延迟执行:defer,可以延迟执行代码(当页面都加载完毕以后,window.onload)-->
+    <script type="text/javascript" charset="UTF-8" src="../common/001.js" defer="defer"></script>
+    <script type="text/javascript" charset="UTF-8">
+        alert("我是最后的代码");
+    </script>
+</head>
+<body>
+</body>
+</html>
