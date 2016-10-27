@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>statement</title>
+    <script type="text/javascript" charset="UTF-8">
+       var a1 = 10;
+       var a2 = 10.0;
+       if(a1 == a2){
+           alert("a1==a2");
+       } else{
+           alert("a1!=a2");
+       }
+       //js数据自动转换机制
+        var a3 = "1";
+        var a4 = true;
+        if(a3 == a4){//==，可以经过自动转换,比较的是数值
+            alert("a3 == a4");
+        }else{
+            alert("a3!=a4");
+        }
+        if(a3 === a4){//===，先比较值,在比较类型
+            alert("a3 === a4");
+        }else{
+            alert("a3 !== a4");
+        }
+
+        //死循环
+        for(;;){
+            alert('执行体');
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>
