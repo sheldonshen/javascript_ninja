@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>variable</title>
+    <script type="text/javascript" charset="UTF-8">
+
+        //全局变量,局部变量
+        /*var a = 3;//number 全局变量
+        //变量一共有2种,全局变量,局部变量
+        function test(){
+            var b = 2;//局部变量
+            alert(a);
+            c = 4;//全局变量
+        }
+        test();
+        //alert(b);//b is not defined*/
+
+        //Number类型,整数和小数
+        var a1 =10;
+        var a2 = 10.5;
+        var a3 = NaN;
+        var a4 = 1/0;//正无穷
+        //alert(a4);
+
+        var a5 = 070;//8进制和16进制
+        //alert(a5);//56
+        var a6=0.1;
+        var a7=0.2;
+        //alert(a6+a7);//0.30000000004
+
+        var a8 = parseInt("aaabbbccc");//NaN
+        //alert(a8);
+
+        var a9 = parseInt("123bbbccc");
+        //alert(a9);//123
+
+        var a10 = parseInt("a23bbbccc");
+        //alert(a10);//NaN
+
+        //undefined数据类型,他的值只有一个undefined,表示变量声明了,但是没有被赋值
+        var b1;
+        //alert(b1);//undefined
+        //alert(b2);//b2 is not defined
+
+        //Null空值
+        var b2 = null;
+        //alert(b2);//null
+
+        //String类型
+        var str1 = "我是字符串";
+        //alert(str1);
+
+        //javascript是弱类型变量的脚本语言，根据赋值决定变量的类型
+
+        //Boolean
+        var flag1 = false;
+        var flag2 = true;
+
+        //基本数据类型(String,Number,Boolean,Undefined,Null)和引用数据类型(Object类型:比如对象,数组,RegExp,Date)
+        //引用数据类型
+        var arr = [1,2,3,4];
+        var dates = new Date();
+        var obj = {};//空对象
+
+        //typeof 操作符
+        var a = 10;
+        var b = 10.3;
+        var c = true;
+        var d = 'abcd';
+        var e = new Date();
+        var f = NaN;
+        var g = [1,2,3];
+        var h = null;//表示一个空对象的引用
+        alert(h);
+    </script>
+</head>
+<body>
+
+</body>
+</html>
