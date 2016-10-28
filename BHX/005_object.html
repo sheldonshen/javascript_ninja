@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>object</title>
+    <script type="text/javascript" charset="UTF-8">
+        //Object 所有类的基础类
+        "use strict";
+        //var obj = new Object();
+        var obj = {};//实例化对象
+        obj.sex='男';
+        //g给对象设置属性
+        /*obj.name='zhang3';
+        obj.sex='男';
+        obj.age=20;
+        obj.say=function(){
+            alert("hello world!");
+        };
+        //访问对象属性或者方法
+        alert(obj.name);
+        alert(obj.age);
+        obj.say();
+        //delete操作符,删除对象的属性或者方法
+        delete obj.age;
+        alert(obj.age);//undefined
+
+        //遍历对象：for...in...
+        for(var attr in obj){
+            alert(attr+"="+obj[attr]);
+        }*/
+
+        //constructor：保存对象的创建函数
+        alert(obj.constructor);
+        var arr = [];
+        alert(arr.constructor);
+        alert(obj.hasOwnProperty('sex'));
+        alert(obj.hasOwnProperty("constructor"));
+
+        //isPrototypeOf(Object)检测原型
+        alert(obj.propertyIsEnumerable("sex"));
+        alert(obj.propertyIsEnumerable("constructor"));//检测属性是否可以被枚举(for...in...);
+        alert(obj.toLocaleString());
+        alert(obj.toString());
+        alert(obj.valueOf());
+    </script>
+</head>
+<body>
+</body>
+</html>
