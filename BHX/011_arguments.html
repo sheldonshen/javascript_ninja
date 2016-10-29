@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>arguments</title>
+    <script type="text/javascript" charset="UTF-8">
+        //function参数
+        //形参列表
+        //js中函数的参数：形参,实参(arguments对象,只能在函数内部使用)
+        /*function test(a,b,c,d){
+            alert(arguments.callee);//指代test函数本身
+            //alert(arguments.caller);
+            alert(test.length);//形参个数
+            alert(arguments.length);//实参个数
+            alert(arguments[0]);
+            alert(arguments[1]);
+            if(arguments.callee.length === arguments.length){
+                return a + b;
+            }else{
+                return '参数不正确';
+            }
+        }
+        alert(test(10,20));*/
+
+        //arguments对象,用的最多的,还是递归操作,arguments.callee指代函数本身
+
+        //关于程序的严谨性
+        function fact(num){
+            if(num <= 1){
+                return 1;
+            }else{
+                return num * arguments.callee(num-1);
+            }
+        }
+
+        var F = fact;
+        fact = null;
+        alert(F(10));
+    </script>
+</head>
+<body>
+
+</body>
+</html>
