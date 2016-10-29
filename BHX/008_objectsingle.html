@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>object single</title>
+    <script  type="text/javascript" charset="UTF-8">
+        //Global 全局的,终极的,兜底的对象(不存在)
+        //encodeURI,encodeURIComponent
+        var uri="http://www.bjsxt.com cn";
+        var str1 = encodeURI(uri); //uri(:,//)不会进行编码
+        var str2 = encodeURIComponent(uri);//常用的方法(任何不标准的文字都会进行编码)
+        /*alert(str1);
+        alert(str2);*/
+        //decodeURI,decodeURIComponent
+        /*alert(decodeURI(str1));
+        alert(decodeURIComponent(str2));*/
+
+        //eval：无形的javascript解析器
+        /*var str1 = eval("var a =10; var b =20");
+        alert(a+b);*/
+        /*var  strobject="{name:'z3',age:20}";
+        var obj = eval("("+strobject+")");//()表示封闭的执行空间
+        alert(obj.name);
+        alert(obj.age);*/
+
+        //parseInt,parseFloat
+        /*var num1 = parseInt('20');
+        var num2 = parseFloat("20.5");
+        alert(typeof num1);
+        alert(typeof num2);*/
+
+        //escape,unescape
+        /*var str1 = "尚学堂";
+        var str2 = escape(str1);
+        alert(unescape(str2));*/
+
+        //isNaN
+        /*var str1="10";
+        alert(isNaN(str1));*/
+
+        //在js中,只有NaN是自己不等于自己本身
+        /*if(NaN == NaN){
+            alert("equal");
+        }else{
+            alert("not equal");
+        }*/
+
+        //Date
+        /*var date = new Date();
+        var year = date.getFullYear();
+        alert(year);
+        var month = date.getMonth()+1;
+        alert(month);
+        var day = date.getDate();
+        alert(day);
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+        var secondes = date.getSeconds();
+        alert(hours);
+        alert(minutes);
+        alert(secondes);*/
+        /*var date = new Date();
+        alert(date.getDay());//星期*/
+        /*var date = new Date();
+        alert(date.getTime());*/
+    </script>
+</head>
+<body>
+</body>
+</html>
