@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>remove duplicate</title>
+    <script type="text/javascript" charset="UTF-8">
+
+        //去掉数组中的重复元素(js对象的特性,在js对象中key是永远不会重复的)
+        //1 把数组转成一个js对象
+        //2 把数组中的值,变成js对象中的key
+        //3 把这个对象在还原成数组
+        var arr = [5,2,1,4,3,,,4,3,2,1];
+
+        //把数组转成对象
+        function toObject(arr){
+            var obj = {};//私有对象
+            /*arr.forEach(function(val){
+             alert(val);
+             obj[val]=true;
+             });*/
+            for(var i=0;i<arr.length;i++){
+                //alert(arr[i]);
+                obj[arr[i]]=true;
+            }
+            return obj;
+        }
+
+
+        //把对象转成数组
+        function toArray(obj){
+            var arr=[];//私有对象
+            for(var attr in obj){
+                if(obj.hasOwnProperty(attr)){
+                    arr.push(attr);
+                }
+            }
+            return arr;
+        }
+
+        //去掉数组中的重复项
+        function removeDuplicate(arr){
+            return toArray(toObject(arr));
+        }
+
+        alert(removeDuplicate(arr));
+    </script>
+</head>
+<body>
+</body>
+</html>
