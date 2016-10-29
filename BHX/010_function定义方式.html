@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>function定义方式</title>
+    <script type="text/javascript" charset="UTF-8">
+        /* //3中方式定义函数
+
+         //1 function语句式
+        function test1(){
+            alert("我是函数执行体");
+        }
+
+        //2 函数直接量ecmascript
+        var test2 = function(){
+            alert("我是函数执行体");
+        }
+
+        //3 Function构造函数式
+        var test3 = new Function("alert('我是函数执行体3');");
+        test3();*/
+
+
+        //2种函数定义方式的效率对比
+        /*var d1 = new Date();
+        var t1 = d1.getTime();
+        for(var i=0;i<100000;i++){
+            //function test1(){}//function语句式
+            var test2 = new Function();//funcion构造函数式
+        }
+        var d2 = new Date();
+        var t2 = d2.getTime();
+        alert(t2-t1);*/
+
+
+        //3 函数声明提升(解析顺序问题)
+        //对于function语句式的函数,javascript解析器会优先的解析
+        //
+        /*test1();
+        function test1(){
+            alert("test1");
+        }*/
+        //test2();
+        //alert(test2);//undefined,表示变量声明了,但是没有被赋值
+        /*var test2 = function(){
+            alert("test2");
+        };*/
+
+
+        //4 测试,javascript引擎对3种定义方式的解析顺序
+        /*function f(){//对于function语句式的函数,javascript解析器会优先的解析
+            return 1;
+        }
+        alert(f());//4
+
+        var f = new Function("return 2");
+        alert(f());//2 覆盖4
+
+        var f = function(){
+            return 3;//覆盖2
+        };
+        alert(f());//3
+
+        function f(){//对于function语句式的函数,javascript解析器会优先的解析
+            return 4;//覆盖1的声明
+        }
+        alert(f());//3
+
+        var f = new Function("return 5;");
+        alert(f());//覆盖3
+
+        var f = function(){
+            return 6;//覆盖5
+        };
+        alert(f());*/
+
+        //5 函数作用域的概念
+        var k =1;//全局变量
+        function t1(){
+            var k = 2;//局部变量
+            //function test(){return k};//2 function语句 函数作用域
+            //var test = function(){return k};//2 函数直接量 函数作用域
+            var test = new Function("return k");//1 构造函数式 顶级作用域
+            alert(test());
+        }
+        t1();
+    </script>
+</head>
+<body>
+</body>
+</html>
