@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>function1</title>
+    <script type="text/javascript" charset="UTF-8">
+          /*function test(a,b){
+              return a+b;
+          }
+          alert(test(3,4));
+          alert(typeof test);//function,函数也是一种数据类型(function类型)*/
+
+          /*function test(aa){//函数作为参数
+              aa();
+          }
+
+          test(function(){
+              alert("hello world");
+          })*/
+
+          /*var test = new Function("a","b","return a + b");
+          alert(test(3,4));*/
+
+          function test3(){
+              function test4(){//js中,函数是可以嵌套定义的,尽量不要这样做,意义不大
+                  alert("test4");
+              }
+              test4();
+          }
+
+          test3();
+    </script>
+</head>
+<body>
+</body>
+</html>
