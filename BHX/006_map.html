@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>map</title>
+    <script type="text/javascript" charset="UTF-8">
+        //利用对象模拟java中的Map
+        function Map(){
+            //private
+            var obj = {};//空的对象容器,承装键值对
+
+            this.put=function(key,value){
+                obj[key]=value;//把key,value绑定到obj对象上
+            };
+            this.get=function(key){
+                /*if(obj[key]){//不全面,有bug
+                    return obj[key];
+                }else{
+                    return null;
+                }*/
+                if(key in obj){//best practice
+                    return obj[key];
+                }else{
+                    return null;
+                }
+            };
+            this.remove=function(key){
+                delete obj[key];
+            };
+            this.size=function(){
+                 var count=0;
+                 for(var attr in obj){
+                     count++;
+                 }
+                 return count;
+            };
+            this.eachMap=function(fn){
+                for(var attr in obj){
+                    fn(attr,obj[attr]);
+                }
+            }
+        }
+        var map = new Map();
+        map.put('congliu',NaN);
+        map.put('sheldonshen','168');
+        map.put('simon','189');
+        alert(map.size());
+        alert(map.get('congliu'));
+        map.remove('congliu');
+        alert(map.get('congliu'));
+        map.eachMap(function(key,value){
+            alert(key +":"+value);
+        });
+    </script>
+</head>
+<body>
+</body>
+</html>
