@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>oop1</title>
+    <script type="text/javascript" charset="UTF-8">
+
+        /*var obj = new Object();
+        obj.name = "zhangsan";
+        obj.sex = 'man';
+        obj.sayName=function(){
+            alert("我是张三");
+        };*/
+
+        //类的概念
+        //第一种形式,工厂模型
+        /*function createPerson(name,age,sex){
+             var obj = new Object();
+             obj.name = name;
+             obj.age = age;
+             obj.sex = sex;
+             obj.sayName=function(){
+                 alert(this.name);
+             };
+             return obj;
+        }
+
+        var p1 = createPerson('zhangsan',25,'man');
+        var p2 = createPerson('lisi',26,'woman');
+        p1.sayName();*/
+
+        //第二种形式:构造函数式
+        //函数名s首字母大写,表示类的模板
+        function Person(name,age,sex){
+            this.name = name;
+            this.age = age;
+            this.sex = sex;
+            this.sayName=function(){
+                alert(this.name);
+            };
+        }
+
+        /*var p1 = new Person('z3',25,'man');
+        var p2 = new Person('l4',28,'woman');
+        p1.sayName();
+        alert(p1.constructor === Person);
+        alert(p2.constructor === Person);
+        alert(p1.constructor === p2.constructor);
+        alert(p1 instanceof  Person);
+        alert(p1 instanceof Object);
+        alert(p1 instanceof Function);*/
+
+        //创建对象的方式
+        //1当做构造函数去使用
+        var p1 = new Person('z3',24,'man');
+        //2作为普通函数去调用
+        Person('xiao2',25,'man');//在全局环境里定义属性并赋值,直接定义在window上
+        //alert(name);
+        //3在另一个对象的作用域中调用call,apply
+        var obj = new Object();
+        Person.call(obj,'xxx',234,'xxman');
+        obj.sayName();
+    </script>
+</head>
+<body>
+</body>
+</html>
