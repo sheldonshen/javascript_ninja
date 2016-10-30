@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>闭包</title>
+    <script type="text/javascript" charset="UTF-8">
+         //"use strict";
+         /*var name = 'xiao A';
+         var obj = {
+             name:"xiao B",
+             getName:function(){
+                 //alert(this);
+                 var that = this;
+                 return function(){
+                     alert(this);
+                     return that.name;
+                 };
+             }
+         };
+         var k = obj.getName();//全局作用域
+         alert(k());*/
+
+         //闭包:一个函数可以访问例外一个函数作用域中的变量
+         //封闭性: private 起到一个保护变量的作用
+         function f(x){
+             var temp = x;
+             return function(y){
+                 temp+=y;//temp又被使用了
+                 return temp;
+             };
+         }
+         var a = f(50);
+         alert(a(20));
+         alert(a(30))
+         alert(a(50));
+    </script>
+</head>
+<body>
+</body>
+</html>
