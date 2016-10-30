@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>常用方法</title>
+    <script type="text/javascript" charset="UTF-8">
+           //Object.getPrototypeOf();//根据实例对象获得原型对象
+           function Person(name){
+               this.name = name;
+           }
+
+           //Person.prototype.name = 'z3';
+           Person.prototype.age = 20;
+           Person.prototype.sayName=function(){
+               alert("我是原型对象的方法");
+           };
+           var p1 = new Person('w5');
+           //p1.name="w5";
+
+          /* var p1 = new Person();
+           alert(p1.name);
+           alert(Object.getPrototypeOf(p1)===Person.prototype);//true*/
+           //alert(Object.getPrototypeOf(p1).constructor);
+
+           /*var proto = {};
+           var obj = Object.create(proto);
+           alert(Object.getPrototypeOf(obj) === proto);*/
+
+           /*var p2 = new Person();
+           p2.name = 'w5';
+           alert(p2.name);
+           delete p2.name;
+           //alert(Object.getPrototypeOf(p2).name);
+           alert(p2.name);*/
+
+           //判断一个对象属性是属于原型属性,还是属于实例属性
+           /*function checkProps(object,prop){
+               if(!object.hasOwnProperty(prop) && (prop in object)){
+                   return "原型属性";
+               }else{
+                   return "实例属性";
+               }
+           }
+           alert(checkProps(p1,'name'));*/
+
+           alert(Object.keys(p1));
+           alert(Object.keys(Person.prototype));
+           alert(Object.getOwnPropertyNames(p1));
+           alert(Object.getOwnPropertyNames(Person.prototype));
+    </script>
+</head>
+<body>
+</body>
+</html>
