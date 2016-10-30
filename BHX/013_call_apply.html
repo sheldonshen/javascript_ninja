@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>call,apply</title>
+    <script type="text/javascript" charset="UTF-8">
+        //call,apply简单的用法：绑定一些函数,用于传递参数，调用
+        /*function sum(x,y){
+            return x + y;
+        }
+        function call1(num1,num2){
+              return sum.call(this,num1,num2);
+        }
+
+        function apply1(num1,num2){
+              return sum.apply(this,[num1,num2]);
+        }
+
+        alert(call1(10,20));
+        alert(apply1(10,20));*/
+
+        //call,apply扩充函数的作用域
+        /*window.color='red';
+        var obj = {color:'blue'};
+        function showColor(){
+            alert(this.color);
+        }
+
+        //showColor();//window.showColor();this指代window
+        showColor.call(window);
+        showColor.call(this);
+        showColor.call(obj);*/
+
+        //call,apply方法的简单实现
+        function test1(a,b){//function方法
+             alert(a + b);
+        }
+
+        function Obj(x,y){//自定义的对象
+            this.x = x;
+            this.y = y;
+        }
+
+        var obj = new Obj(10,20);
+        obj.method=test1;
+        obj.method(obj.x,obj.y);
+        delete obj.method;
+
+        //test1.call(obj,obj.x,obj.y);
+
+        //call from MDN
+
+        //1 using call to chain constructors for an object
+        /*function Product(name,price){
+            this.name = name;
+            this.price = price;
+            if(price < 0){
+                throw new RangeError("can't create product " + this.name + " with a negative price");
+            }
+        }
+
+        function Food(name,price){
+            Product.call(this,name,price);
+            //alert(this.name);
+            this.category = 'food';
+        }
+
+        function Toy(name,price){
+            Product.call(this,name,price);
+            //alert(this.name);
+            this.category='toy';
+        }
+
+        var cheese = new Food('feta',5);
+        var fun = new Toy('robot',40);*/
+
+
+        //2 using call to invoke an anonymous function
+        /*var animals=[{
+            species:'Lion',name:'King'
+        },{
+            species:'Whale',name:'Fail'
+        }];
+
+        for(var i=0; i < animals.length;i++){
+            (function(i){
+                this.print = function(){
+                   console.log('#'+i+" " + this.species + ":" + this.name);
+                };
+                this.print();
+            }).call(animals[i],i);
+        }*/
+
+
+        //3 using call to invoke a function and specifying the context for 'this'
+        /*function greet(){
+            var reply = [this.person,'is an awesome',this.role].join(' ');
+            alert(reply);
+        }
+
+        var i = {
+            person:'Douglas Crockford',
+            role:'Javascript Developer'
+        };
+        greet.call(i);*/
+
+        /*
+         thisArg
+         The value of this provided for the call to fun. Note that this may not be the actual value seen by the method:
+         if the method is a function in non-strict mode code, null and undefined will be replaced with the global object
+         and primitive values will be converted to objects.
+         */
+
+         //apply from MDN
+         //using apply to chain constructors
+         /*Function.prototype.construct=function(aArgs){
+             alert(this);
+             alert(this.prototype);
+             var oNew = Object.create(this.prototype);
+             this.apply(oNew,aArgs);
+             return oNew;
+         };*/
+
+         /*Function.prototype.construct=function(aArgs){
+             var fConstructor = this;
+             var fNewConstr=function(){
+                 fConstructor.apply(this,aArgs);
+             };
+             fNewConstr.prototype = fConstructor.prototype;
+             return new fNewConstr();
+         };
+
+         function MyConstructor(){
+             for(var nProp = 0; nProp < arguments.length;nProp++){
+                 this['property'+nProp]=arguments[nProp];
+             }
+         }
+
+         var myArray = [4,'Hello world!',false];
+         var myInstance = MyConstructor.construct(myArray);
+
+         alert(myInstance.property1);
+         alert(myInstance instanceof  MyConstructor);
+         alert(myInstance.constructor);
+
+         //using apply and built-in functions
+         var numbers = [5,6,2,3,7];
+         var max = Math.max.apply(null,numbers);
+         var min = Math.min.apply(null,numbers);
+         alert(max);
+         alert(min);
+
+        //using apply in "monkey-patching"
+        var originalfoo = someobject.foo;
+        someobject.foo = function() {
+            // Do stuff before calling function
+            console.log(arguments);
+            // Call the function as it would have been called normally:
+            originalfoo.apply(this, arguments);
+            // Run stuff after, here.
+        }*/
+    </script>
+</head>
+<body>
+</body>
+</html>
