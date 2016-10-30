@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>给Array扩展自定义方法实现遍历多维数组</title>
+    <script type="text/javascript" charset="UTF-8">
+         //Array each方法
+         //ecma5 forEach循环遍历数组的每一项(只适合遍历一维数组)
+         /*var arr = [1,2,3,[4,[5]]];
+         arr.forEach(function(val,index,array){
+             alert(val);
+         });*/
+
+         //自己实现一个Array each方法,能够遍历多维数组
+         var arr = [1,2,3,[4,[5,[6]]]];
+         Array.prototype.each = function(fn){
+                 try{
+                    //1 目的:遍历数组的每一项
+                    this.i || (this.i = 0);//计数器,记录当前遍历的元素位置,比var i=0这种方式更严谨,避免变量名冲突
+                    if(this.length>0 &&  fn.constructor === Function){//严谨的判断
+                        while(this.i<this.length){//循环遍历数组的每一项
+                            var element = this[this.i];//获取当前元素
+                            if(element && element.constructor === Array){//当前元素为数组
+                                element.each(fn);//继续递归操作
+                            }else{
+                                fn.call(element,element);
+                            }
+                            this.i++;
+                        }
+                        this.i = null;//释放内存,垃圾回收机制回收变量
+                    }
+                 } catch(ex){
+                     //do something
+                 }
+                 return this;
+         };
+
+         alert(arr.each(function(item){
+             alert(item);
+         }));
+    </script>
+</head>
+<body>
+</body>
+</html>
