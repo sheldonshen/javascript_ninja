@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>执行环境和作用域链</title>
+    <script type="text/javascript" charset="UTF-8">
+         //执行环境(window对象,最上层的执行环境)
+        var color1='blue';
+        function changeColor(){//每一个函数都有一个执行环境(环境变量)
+            var color2='red';
+            function swapColor(){//这个函数又产生一个执行环境
+                //c3 3级作用域,c2 2级作用域 c1 1级作用域
+                var color3 = color2;
+                color2 = color1;
+                color1 = color3;
+                //这里可以访问color1,color2,color3
+            }
+            swapColor();//这里可以访问color1,color2
+        }
+        alert(color1);//这里可以访问color1
+        changeColor();//作用域window(第一个作用域)
+        alert(color1);
+    </script>
+</head>
+<body>
+</body>
+</html>
