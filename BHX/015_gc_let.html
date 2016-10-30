@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>垃圾收集和块级作用域的概念</title>
+    <script type="text/javascript" charset="UTF-8">
+           //垃圾收集:方法1，标记方法 方法2,引用计数法
+          /* function test(){
+               var a = 10;//被使用  count=1
+               var b = 20;//被使用  count=1
+           }
+
+           test();//执行完毕,之后a,b又被标记了一次:没有被使用*/
+
+          //高级程序语言(java if for)块级作用域的概念,而javascript没有块级作用域的概念
+          /*function test(){
+              for(var i =0;i<5;i++){
+                  alert("inner="+i);
+              }
+              alert("outter="+i);
+          }
+          test();*/
+
+          //js :()表示执行
+           /*(function(){
+               for(var i =0;i<5;i++){
+                   alert("inner="+i);
+               }
+               alert("outter="+i);
+           })();*/
+
+           /*function test(){
+               (function(){
+                   for(var i =0;i<5;i++){
+                       alert("inner="+i);
+                   }
+               })();
+               alert("outter="+i);// error
+           }
+           test();*/
+
+           (function(){
+               alert("我执行了");
+           })();
+    </script>
+</head>
+<body>
+</body>
+</html>
