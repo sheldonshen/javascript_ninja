@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>this</title>
+    <script type="text/javascript" charset="UTF-8">
+        //this对象是在运行时基于函数的执行环境绑定的,在全局函数中,this等于window,
+        //而当函数被作为某个对象的方法调用时,this等于那个对象,也就是说this关键字总是指代调用者
+        var k = 10;
+        function test(){
+            this.k = 20;
+        }
+        alert(k);//10 window.k
+        test();//window.test(),this指代window对象(this总是指向调用者),覆盖k=10的值,变成20
+        alert(k);//20 window.k
+    </script>
+</head>
+<body>
+</body>
+</html>
