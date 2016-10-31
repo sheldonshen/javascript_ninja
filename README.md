@@ -6,6 +6,7 @@ https://msdn.microsoft.com/en-us/library/d1et7k7c%28v=vs.94%29.aspx  MSDN(javasc
 http://www.liaoxuefeng.com/wiki/001434446689867b27157e896e74d51a89c25cc8b43bdb3000 廖雪峰JavaScript教程<br>
 http://www.cnblogs.com/TomXu/archive/2011/12/15/2288411.html    汤姆大叔深入理解JavaScript系列<br>
 http://www.ruanyifeng.com/blog/javascript/                阮一峰javascript系列文章<br>
+http://javascript.ruanyifeng.com/                         阮一峰JavaScript 标准参考教程（alpha）<br>
 http://javascript.crockford.com/                          douglas crockford<br>
 http://javascript.info/                                   The JavaScript Tutorial<br>
 #video
@@ -40,19 +41,22 @@ http://es6.ruanyifeng.com/    ECMAScript 6入门(阮一峰开源电子书)<br>
 《Learning JavaScript Design Patterns》 A book by Addy Osmani Volume 1.6.2,介绍js世界中的有关设计模式.非常值得仔细阅读<br>
 
 ##更多javascript图书
-https://search.jd.com/Search?keyword=javascript&enc=utf-8&suggest=1.rem.1.coverage&wq=javasc&pvid=jasjkyti.vcj4pe jd搜索
+https://search.jd.com/Search?keyword=javascript&enc=utf-8&suggest=1.rem.1.coverage&wq=javasc&pvid=jasjkyti.vcj4pe jd搜索<br>
 
 #糖语言
 typescript<br>
 coffeescript<br>
+
 #单元测试
 jsunit<br>
 Qunit<br>
 Mocha<br>
+
 #函数式编程
 underscore<br>
+
 #更多javascript的库(package manager,build system,compiler and so on)
-https://www.javascripting.com/
+https://www.javascripting.com/ <br>
 
 
 
