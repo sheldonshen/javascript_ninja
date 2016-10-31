@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>简单原型</title>
+    <script type="text/javascript" charset="UTF-8">
+          //简单原型
+          /*function Person(){
+
+          }
+
+          Person.prototype={
+              //constructor:Person,//还原原型对象的构造函数
+              name:'z3',
+              age:20,
+              job:'程序员',
+              say:function(){
+                  alert("我是原型函数");
+              }
+          };
+
+          //Object.defineProperty()给原型对象重新设置构造器的方法
+          Object.defineProperty(Person.prototype,"constructor",{
+              value:Person,
+              enumerable:false
+          })
+
+          /!*Person.prototype.name="z3";
+          Person.prototype.age=20;
+          Person.prototype.job="程序员";
+          Person.prototype.say=function(){
+              alert("我是原型函数");
+          };*!/
+
+          var p1 = new Person();
+          /!*alert(p1.name);
+          p1.say();*!/
+          alert(Person.prototype.constructor);
+
+          for(var attr in p1){
+              alert(attr);//constructor变得可以枚举
+          }*/
+
+
+          //原型的动态特性
+          function Person(){
+
+          }
+          var p1 = new Person();
+
+          /*Person.prototype.say=function(){
+              alert("我是原型对象的方法");
+          };*/
+
+          Person.prototype={
+              constructor:Person,
+              say:function(){
+                  alert("我是原型对象的方法");
+              }
+          };
+
+          //alert(Person.prototype.constructor);
+          //注意简单原型使用的顺序(实例对象必须在原型对象之后创建)
+          p1.say();//error,原型对象里没有任何属性和方法
+    </script>
+</head>
+<body>
+</body>
+</html>
