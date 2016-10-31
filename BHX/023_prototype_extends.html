@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>继承</title>
+    <script type="text/javascript" charset="UTF-8">
+          //js中如何去实现继承：采用原型链的概念
+          //构造函数,原型对象,实例对象
+          //构造函数.prototype=原型对象
+          //原型对象.constructor=构造函数
+          //原型对象=Object.getPrototypeOf(实例对象),原型对象=Object.isPrototypeOf(实例对象);
+          //构造函数,实例对象(类和对象的关系)
+
+          //父类构造函数 Super
+          function Super(name){
+              this.name = name;
+          }
+
+          //父类的原型对象
+          Super.prototype={
+              constructor:Super,
+              sayName:function(){
+                  alert(this.name);
+              }
+          };
+
+          //子类构造函数
+          function Sub(age){
+              this.age = age;
+          }
+
+          //如果我们让原型对象等于另一个类型的实例,结果会怎样
+          Sub.prototype=new Super('z3');//继承的关键语句,重点理解
+
+          var sub = new Sub(25);
+          sub.sayName();
+    </script>
+</head>
+<body>
+</body>
+</html>
