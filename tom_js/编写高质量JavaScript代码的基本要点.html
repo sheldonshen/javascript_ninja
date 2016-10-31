@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>深入理解JavaScript系列（1）：编写高质量JavaScript代码的基本要点</title>
+    <script type="text/javascript" charset="UTF-8">
+          //"use strict";
+          //书写可维护的代码(Writing Maintainable Code )
+          //最小全局变量(Minimizing Globals)
+          myglobal='hello';//不推荐写法
+          console.log(myglobal);
+          console.log(window.myglobal);
+          console.log(window['myglobal']);
+          console.log(this.myglobal);
+          //全局变量的问题
+          function sum(x,y){
+              //result = x + y; //不推荐写法,隐式全局变量(result)
+              var result = x + y;//经验法则是始终使用var声明变量
+          }
+          sum(1,2);
+          //console.log(window.result);
+          //反例,勿使用
+          function foo(){
+              //另一个创建隐式全局变量的反例就是使用任务链进行部分var声明
+              var a=b=20;//a为局部变量,b为全局变量
+              alert(a);
+              /*b=20;
+              var a = b;*/
+          }
+          foo();
+          console.log(window.b);//20
+          console.log(window.a);
+          function foo(){
+              var a,b;//链分配(best practice)
+              //...a=b=0;//两个均为局部变量
+          }
+
+          //忘记var的副作用(Side Effects When Forgetting var)
+          /*
+           隐式全局变量和明确定义的全局变量间有些小的差异，就是通过delete操作符让变量未定义的能力
+             通过var创建的全局变量（任何函数之外的程序中创建）是不能被删除的。
+             无var创建的隐式全局变量（无视是否在函数中创建）是能被删除的。
+           */
+          //定义3个全局变量
+          var global_var = 1;
+          global_novar=2;//反面教材
+          (function(){
+              global_fromfunc = 3;//反面教材
+          }());
+
+          //试图删除
+          console.log(delete global_var);//false
+          console.log(delete global_novar);//true
+          console.log(delete global_fromfunc);//true
+          //测试删除
+          console.log(typeof global_var);//"number"
+          console.log(typeof  global_novar);//"undefined"
+          console.log(typeof  global_fromfunc);//"undefined"
+
+          //访问全局对象(Access to the Global Object)
+          var global = (function(){
+              return this;
+          }());
+          console.log(global);//window
+
+          //单var形式（Single var Pattern）
+          function func(){
+              var a=1,
+                  b=2,
+                  sum = a + b,
+                  myobject={},
+                  i,
+                  j;
+              //function body.....
+          }
+
+          function updateElement(){
+              var e1 = document.getElementById("result"),
+              style = e1.style;
+              // 使用el和style干点其他什么事...
+          }
+
+          //预解析(hoist)：var散布的问题(Hoisting: A Problem with Scattered vars)
+          //反例
+          myname = 'global';//全局变量
+          function func(){
+              console.log(myname);//"undefined"
+              var myname = "local";
+              console.log(myname);
+          }
+          func();
+          //最好是预先声明你想使用的全部变量。
+          function func(){
+              var myname;//等同于->var myname = undefined;
+              //alert(myname);
+              myname="local";
+              //alert(myname);
+          }
+
+          //for循环(for Loops)
+          //次佳的循环,这种形式的循环的不足在于每次循环的时候数组的长度都要去获取下
+          /*for(var i = 0; i < myarray.length;i++){
+              //使用myarray[i]做点什么
+          }
+          //缓存数组(或集合)的长度是比较好的形式
+          for(var i=0,max = myarray.length; i < max;i++){
+              //使用myarray[i]做点什么
+          }
+          //第一种变化的形式：
+
+          var i, myarray = [];
+          for (i = myarray.length; i–-;) {
+              // 使用myarray[i]做点什么
+          }
+
+          //第二种使用while循环：
+
+          var myarray = [],
+                  i = myarray.length;
+          while (i–-) {
+              // 使用myarray[i]做点什么
+          }*/
+
+
+          //for-in循环(for-in Loops)
+          //所以最好是数组使用正常的for循环,对象使用for...in循环
+          var man = {//对象
+              hands:2,
+              legs:2,
+              heads:1
+          }
+          // 在代码的某个地方
+          // 一个方法添加给了所有对象
+          if(typeof Object.prototype.clone === "undefined"){
+              //alert("undefined");
+              Object.prototype.clone=function(){};
+          }
+
+          //1 for-in 循环
+          //反面例子:
+          for(var attr in man){
+              console.log(attr+":"+man[attr]);
+          }
+
+          for(var attr in man){
+              if(man.hasOwnProperty(attr)){//过滤从原型链上继承的属性
+                  console.log(attr+"="+man[attr]);
+              }
+          }
+
+
+          //（不）扩展内置原型((Not) Augmenting Built-in Prototypes)
+
+          //switch模式(switch Pattern)
+
+          //避免隐式类型转换(Avoiding Implied Typecasting )
+
+          //避免(Avoiding) eval()
+
+          //parseInt()下的数值转换(Number Conversions with parseInt())
+
+          //编码规范(Coding Conventions)
+
+          //缩进(Indentation)
+
+          //花括号{}(Curly Braces)
+
+          //左花括号的位置(Opening Brace Location)
+
+          //空格(White Space)
+
+          //分隔单词(Separating Words)
+
+          //其它命名形式(Other Naming Patterns)
+
+          //注释(Writing Comments)
+    </script>
+</head>
+<body>
+</body>
+</html>
