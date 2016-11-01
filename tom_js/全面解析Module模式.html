@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>全面解析Module模式</title>
+</head>
+<body>
+<span id="eq">原来</span>
+</body>
+</html>
+<script type="text/javascript" charset="UTF-8">
+    /* 首先我们来看看Module模式的基本特征：
+     模块化，可重用
+     封装了变量和function，和全局的namaspace不接触，松耦合
+     只暴露可用public的方法，其它私有方法全部隐藏*/
+
+    //基本用法
+    var Calculator = function(eq){
+        //这里可以声明私有变量
+
+        var eqCtrl = document.getElementById(eq);
+        return {
+            //暴露公开的成员
+            add:function(x,y){
+                var val = x +y;
+                eqCtrl.innerHTML=val;
+            }
+        };
+    };
+
+    var calculator = new Calculator("eq");
+    calculator.add(1,200);
+
+    //匿名闭包
+    (function(){
+        // ... 所有的变量和function都在这里声明，并且作用域也只能在这个匿名闭包里
+        // ...但是这里的代码依然可以访问外部全局的对象
+    }());
+
+    (function () {
+        /* 内部代码 */
+    })();
+
+    //引用全局变量
+    /*(function($,YAHOO){
+       //这里，我们的代码就可以使用全局的jQuery对象了，YAHOO也是一样
+    }(jQuery,YAHOO));//现在很多类库里都有这种使用方式，比如jQuery源码。*/
+    var blogModule = (function(){
+        var my = {},privateName="博客园";
+        function privateAddTopic(data){
+            //这里是内部处理代码
+        }
+        my.Name = privateName;
+        my.topic = function(data){
+            privateAddTopic(data);
+        };
+        return my;
+    }());
+    alert(blogModule.Name);
+    alert(blogModule.topic);
+
+    //高级用法
+    //扩展
+    var blogModule = (function(my){
+        my.addPhoto = function(){
+            //添加内部代码
+            alert("添加内部代码");
+        };
+        return my;
+    }(blogModule));
+
+    blogModule.addPhoto();
+
+    //松耦合扩展
+    var blogModule = (function(my){
+        //添加一些功能
+        return my;
+    }(blogModule || {}))
+
+    //紧耦合扩展
+    var blogModule = (function(my){
+        var oldAddPhotoMethod = my.addPhoto;
+        my.addPhoto=function(){
+            //重载方法,依然可以通过oldAddPhotoMethod调用旧的方法
+        };
+        return my;
+    }(blogModule));
+
+    //克隆与继承
+    var blogModule = (function(old){
+         var my = {},
+             key;
+         for(key in old){
+             if(old.hasOwnProperty(key)){
+                 my[key] = old[key];
+             }
+         }
+
+        var oldAddPhotoMethod = old.addPhoto;
+        my.addPhoto=function(){
+            // 克隆以后，进行了重写，当然也可以继续调用oldAddPhotoMethod
+        };
+    }(blogModule));
+
+    //跨文件共享私有对象
+    var blogModule = (function(my){
+        var _private  = my._private = my._private || {},
+            _seal = my._seal = my._seal || function(){
+                  delete my._private;
+                  delete my._seal;
+                  delete my._unseal;
+            },
+            _unseal = my._unseal = my._unseal || function(){
+                  my._private = _private;
+                  my._seal = _seal;
+                  my._unseal = _unseal;
+            };
+        return my;
+    }(blogModule || {}));
+
+    //子模块
+    blogModule.createSubModule=(function(){
+        var my = {};
+        //...
+        return my;
+    }());
+
+    //总结
+</script>
