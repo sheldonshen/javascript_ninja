@@ -20,6 +20,8 @@ http://www.75team.com/                                    奇虎75Team<br>
 http://stackoverflow.com/tags/javascript/info             stackoverflow javascript<br>
 http://javascriptweekly.com/                              javascript weekly<br>
 https://jslive.com/                                       jslive<br>    
+#article
+http://www.cnblogs.com/rubylouvre/tag/javascript/         司徒正美javascript文章<br> 
 #online ebook(在线电子书)
 http://eloquentjavascript.net/     Eloquent JavaScript<br>
 https://addyosmani.com/resources/essentialjsdesignpatterns/book/   Learning JavaScript Design Patterns<br>
