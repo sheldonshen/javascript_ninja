@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>揭秘命名函数表达式</title>
+    <script type="text/javascript" charset="UTF-8">
+        //函数表达式和函数声明
+        /*
+        * 　函数声明:
+
+         　　function 函数名称 (参数：可选){ 函数体 }
+
+         　　函数表达式：
+
+         　　function 函数名称（可选）(参数：可选){ 函数体 }
+        * */
+        function foo(){}//声明,因为他是程序的一部分
+        var bar = function foo(){
+            console.log("表达式");
+        };//表达式,因为它是赋值表达式的一部分
+
+        bar();
+
+        new function bar(){};//表达式,因为它是new表达式
+
+        (function(){
+            function bar(){}//声明,因为它是函数体的一部分
+        })();
+
+        function foo(){}//函数声明
+        (function foo(){});//函数表达式:包含在分组操作符内
+        try{
+            //(var x = 5);//分组操作符,只能包含表达式而不能包含语句：这里的var就是语句
+        } catch(err){
+            //syntax error
+            console.log("syntax error");
+        }
+
+        /*try{
+            { "x": 5 }; // "{" 和 "}" 做解析成代码块
+        }catch(err){
+            console.log("syntax error");
+        }
+        console.log(({"x" : 5}));//分组操作符强制将"{" 和 "}"作为对象字面量来解析*/
+
+        console.log(fn());
+        function fn(){
+            return "hello world";
+        }
+
+        // 千万别这样做！
+        // 因为有的浏览器会返回first的这个function，而有的浏览器返回的却是第二个
+        if(true){
+            function foo(){
+                return "first";
+            }
+        }else{
+            function foo(){
+                return "second";
+            }
+        }
+
+        //alert(foo());
+
+        // 相反，这样情况，我们要用函数表达式
+        var foo;
+        if(true){
+            foo = function(){
+                return "first";
+            };
+        }else{
+            foo = function(){
+                return "second";
+            }
+        }
+        //alert(foo());
+
+
+        //函数语句
+        if(true){
+            function foo(){
+                return 1;
+            }
+        }else{
+            function foo(){
+                return 2;
+            }
+        }
+
+        //alert(foo());
+        // 注：其它客户端会将foo解析成函数声明
+        // 因此，第二个foo会覆盖第一个，结果返回2，而不是1
+
+        // 此刻，foo还没用声明
+        //alert(typeof test); // "undefined"
+        if (true) {
+            // 进入这里以后，foo就被声明在整个作用域内了
+            function test(){ return 1; }
+        }
+        else {
+            // 从来不会走到这里，所以这里的foo也不会被声明
+            function test(){ return 2; }
+        }
+        //alert(typeof test); // "function"
+        //下面这样的符合标准的代码来模式上面例子中的函数语句
+        var foo;
+        if (true) {
+            foo = function foo(){ return 1; };
+        }
+        else {
+            foo = function foo() { return 2; };
+        }
+
+        if(true){
+            function foo(){return 1};
+        }
+        //alert(String(foo));//function foo() { return 1; }
+
+        //命名函数表达式
+        var f = function bbb(){
+            return typeof bbb;//bbb是在内部作用域有效
+        };
+        //alert(typeof bbb);//bbb在外部使用是不可见的,undefined
+        //alert(f());//function
+        /*
+         正如我们开头所说：给它一个名字就是可以让调试过程更方便，因为在调试的时候，
+         如果在调用栈中的每个项都有自己的名字来描述，那么调试过程就太爽了，感受不一样嘛
+        * */
+
+        //调试器中的函数名
+        function foo(){
+            return bar();
+        }
+        function bar(){
+            return baz();
+        }
+
+        function baz(){
+            console.log("log");
+            debugger;
+        }
+
+        foo();
+        // 这里我们使用了3个带名字的函数声明
+        // 所以当调试器走到debugger语句的时候，Firebug的调用栈上看起来非常清晰明了
+        // 因为很明白地显示了名称(命名函数表达式)
+
+        //JScript的Bug
+        var f = function g(){};
+        alert(typeof g); // "function"
+
+        //JScript的内存管理
+
+        //SpiderMonkey的怪癖
+
+        //WebKit的displayName
+
+        //未来考虑
+    </script>
+</head>
+<body>
+</body>
+</html>
