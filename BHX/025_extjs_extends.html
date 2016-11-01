@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>模拟extjs底层继承方式</title>
+    <script type="text/javascript" charset="UTF-8">
+
+        //混合继承:原型继承和借用构造函数继承
+        //3件事:继承了2次父类的模板(缺点),继承了一次父类的原型对象
+        /*function Person(name,age){
+            this.name = name;
+            this.age = age;
+        }
+
+        Person.prototype={
+            sayHello:function(){
+                alert("hello world");
+            }
+        };
+
+        function Boy(name,age,sex){
+            Person.call(this,name,age);
+            this.sex = sex;
+        }
+
+        Boy.prototype = new Person('w5');
+
+        var boy = new Boy('z3',20,'男');
+        alert(boy.name);
+        delete boy.name;
+        alert(boy.name);*/
+
+
+
+        function Person(name,age){
+            this.name = name;
+            this.age = age;
+        }
+
+        Person.prototype={
+            //constructor:Person,
+            sayHello:function(){
+                alert("hello,world");
+            }
+        };
+
+        function Boy(name,age,sex){
+            //Person.call(this,name,age);
+            Boy.superClass.constructor.call(this,name,age);//保存一下父类的原型对象:一方面方便解耦
+            this.sex = sex;
+        }
+
+        //原型继承方式:既继承了父类的模板,又继承了父类的原型对象
+        //Boy.prototype = new Person('w5');
+
+        //extends方法,2件事:继承一次父类的原型对象
+        function extend (Child,Parent){
+            //function F(){}
+            var F = new Function();//1 创建一个空函数(F构造函数),目的:空函数进行中转
+            F.prototype = Parent.prototype;//2 实现空函数的原型对象和超类的原型对象转换
+            Child.prototype = new F();//3原型继承
+            Child.prototype.constructor = Child;//4还原子类的构造器
+            //保存一下父类的原型对象:一方面方便解耦,里一方面方便获得父类的原型对象
+            Child.superClass = Parent.prototype;//自定义一个子类的静态属性,接受父类的原型对象
+            ////判断父类的原型对象的构造器(加保险)
+            if(Parent.prototype.constructor === Object.prototype.constructor){
+                Parent.prototype.constructor = Parent;//手动还原父类原型对象的构造器
+            }
+        }
+
+        extend(Boy,Person);
+
+        //给子类加了一个原型对象的方法
+        Boy.prototype.sayHello=function(){
+            alert("hello,javascript");
+        };
+
+        var boy = new Boy('z3',20,'男');
+        /*alert(boy.name);
+        delete boy.name;
+        alert(boy.name);*/
+        boy.sayHello();//hello,javascript
+        Boy.superClass.sayHello();//hello,world
+        Boy.superClass.sayHello.call(boy);//hello,world
+        /*alert(Boy.superClass.constructor);
+        alert(Person.prototype.constructor);*/
+    </script>
+</head>
+<body>
+</body>
+</html>
