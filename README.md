@@ -16,6 +16,10 @@ http://www.icoolxue.com/album/show/77                     韩顺平轻松搞定�
 http://www.kokojia.com/course-881.html                    JavaScript Ajax JQuery 教学视频教程(比较浅显)<br>
 #website
 http://www.javascriptcn.com/                              javascript中文网<br>
+http://www.75team.com/                                    奇虎75Team<br>
+http://stackoverflow.com/tags/javascript/info             stackoverflow javascript<br>
+http://javascriptweekly.com/                              javascript weekly<br>
+https://jslive.com/                                       jslive<br>    
 #online ebook(在线电子书)
 http://eloquentjavascript.net/     Eloquent JavaScript<br>
 https://addyosmani.com/resources/essentialjsdesignpatterns/book/   Learning JavaScript Design Patterns<br>
