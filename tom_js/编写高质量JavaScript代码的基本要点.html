@@ -137,41 +137,213 @@
           }
 
           //1 for-in 循环
-          //反面例子:
+          //反面例子:for...in loop without checking hasOwnProperty()
           for(var attr in man){
               console.log(attr+":"+man[attr]);
           }
 
-          for(var attr in man){
-              if(man.hasOwnProperty(attr)){//过滤从原型链上继承的属性
+          /*for(var attr in man){
+              //if(man.hasOwnProperty(attr)){//过滤从原型链上继承的属性
+              //好处在于在man对象重新定义hasOwnProperty情况下避免命名冲突。也避免了长属性查找对象的所有方法
+              //也可以使用局部变量来缓存它
+              if(Object.prototype.hasOwnProperty.call(man,attr)){
                   console.log(attr+"="+man[attr]);
+              }
+          }*/
+
+          var i,hasOwn = Object.prototype.hasOwnProperty;
+          for(i in man){
+              if(hasOwn.call(man,i)){//过滤
+                  console.log(i+"="+man[i]);
               }
           }
 
-
           //（不）扩展内置原型((Not) Augmenting Built-in Prototypes)
 
+          /*因此，不增加内置原型是最好的。你可以指定一个规则，仅当下面的条件均满足时例外：
+
+          可以预期将来的ECMAScript版本或是JavaScript实现将一直将此功能当作内置方法来实现。例如，
+          你可以添加ECMAScript 5中描述的方法，一直到各个浏览器都迎头赶上。这种情况下，你只是提前定义了有用的方法。
+          如果您检查您的自定义属性或方法已不存在——也许已经在代码的其他地方实现或已经是你支持的浏览器JavaScript引擎部分。
+          你清楚地文档记录并和团队交流了变化。*/
+          if(typeof Object.prototype.myMethod !== 'function'){
+              Object.prototype.myMethod = function(){
+                  //实现...
+              };
+          }
+
           //switch模式(switch Pattern)
+          var inspect_me = 0,
+              result = "";
+          switch(inspect_me){
+              case 0:
+                  result = "zero";
+                  break;
+              case 1:
+                  result = "one";
+                  break;
+              default:
+                  result = 'unknown';
+          }
+
+          /*这个简单的例子中所遵循的风格约定如下：
+
+          每个case和switch对齐（花括号缩进规则除外）
+          每个case中代码缩进
+          每个case以break清除结束
+          避免贯穿（故意忽略break）。如果你非常确信贯穿是最好的方法，
+          务必记录此情况，因为对于有些阅读人而言，它们可能看起来是错误的。
+          以default结束switch：确保总有健全的结果，即使无情况匹配。*/
 
           //避免隐式类型转换(Avoiding Implied Typecasting )
+          var zero = 0;
+          if(zero === false){
+              //不执行,因为zero为0,不是false
+              console.log("不执行,因为zero为0,不是false");
+          }
+          //反面示例
+          if(zero == false){
+              console.log("= 反面事例");
+          }
 
           //避免(Avoiding) eval()
+          //反面示例
+          /*var property = 'name';
+          console.log(eval("window.property"));
+          //更好的
+          var property = "name";
+          console.log(window['property']);
+
+          //反面示例
+          setTimeout("myFunc()",1000);
+          setTimeout("myFunc(1,2,3)",1000);
+
+          //更好的
+          setTimeout(myFunc,1000);
+          setTimeout(function () {
+              myFunc(1, 2, 3);
+          }, 1000);*/
+
+          console.log(typeof un);
+          console.log(typeof deux);
+          console.log(typeof trois);
+
+          var jsstring = "var un=1;console.log(un);";//var un=1为全局变量
+          eval(jsstring);//1
+
+          jsstring='var deux=2;console.log(deux);';//var deux=2是函数体中的语句,局部变量
+          new Function(jsstring)();//2
+
+          jsstring="var trois=3;console.log(trois);";
+          (function(){
+              eval(jsstring);//3
+          }());//()规定为局部作用域
+
+          console.log(typeof un);//number,un作为全局变量污染了命名空间
+          console.log(typeof deux);//undefined
+          console.log(typeof trois);//undefined
+
+          (function(){
+            var local = 1;
+            eval("local=3;console.log(local)");//3
+            console.log(local);//3
+          }());
+
+          (function(){
+              var local =1;
+              Function("console.log(typeof local);")();//undefined
+          }())
 
           //parseInt()下的数值转换(Number Conversions with parseInt())
+          var month = '06';
+          var year = '09';
+          month = parseInt(month,10);
+          year  = parseInt(year,10);
+          console.log(month);
+          console.log(year);
+          year = parseInt(year);
+          console.log(year);
+          console.log(Number("123"));
+          console.log(parseInt("123abc"));//123
+          console.log(parseInt("a23abc"));//NaN
 
           //编码规范(Coding Conventions)
 
           //缩进(Indentation)
 
           //花括号{}(Curly Braces)
+          // 坏
+          if (true)
+              alert(1);
+          else
+              alert(2);
+
+          // 好
+          if (true) {
+              alert(1);
+          } else {
+              alert(2);
+          }
 
           //左花括号的位置(Opening Brace Location)
+          function func(){
+              return
+              //下面的代码不执行
+              {
+                  name:'Batman'
+              };
+          }
+
+          function func(){
+              return {//总之，总是使用花括号，并始终把在与之前的语句放在同一行：
+                  name:'Batman'
+              };
+          }
+
+          alert(func());
 
           //空格(White Space)
+          // 宽松一致的间距
+          // 使代码更易读
+          // 使得更加“透气”
+          var d = 0, a = b + 1;
+          if (a && b && c) {
+              d = a % c;
+              a += d;
+          }
+
+          // 反面例子
+          // 缺失或间距不一
+          // 使代码变得疑惑
+          var d = 0,
+                  a = b + 1;
+          if (a&&b&&c) {
+              d=a % c;
+              a+= d;
+          }
 
           //分隔单词(Separating Words)
 
           //其它命名形式(Other Naming Patterns)
+          var person = {
+              getName:function(){
+                  return _getFirst() + " " + _getLast();
+              },
+              _getFirst:function(){
+                 //
+              },
+              _getLast:function(){
+                 //
+              }
+          };
+
+          /*
+          * 下面是一些常见的_private规范：
+
+           使用尾下划线表示私有，如name_和getElements_()
+           使用一个下划线前缀表_protected（保护）属性，两个下划线前缀表示__private （私有）属性
+           Firefox中一些内置的变量属性不属于该语言的技术部分，使用两个前下划线和两个后下划线表示，如：__proto__和__parent__。
+           * */
 
           //注释(Writing Comments)
     </script>
