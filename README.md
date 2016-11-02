@@ -64,6 +64,15 @@ underscore<br>
 #更多javascript的库(package manager,build system,compiler and so on)
 https://www.javascripting.com/ <br>
 
+#在线编程练习
+https://www.freecodecamp.cn/   freecodecamp<br>
+https://www.codecademy.com/    codecademy<br>
+http://www.hubwiz.com/         汇智网<br>
+http://codetank.alloyteam.com/  codetank<br>
+
+#在线直播编程
+http://livecoding.tv/ <br>
+
 
 
 
