@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>S.O.L.I.D五大原则之里氏替换原则LSP</title>
+    <script type="text/javascript" charset="UTF-8">
+        //开闭原则：
+        /*Subtypes must be substitutable for their base types.
+                派生类型必须可以替换它的基类型。*/
+        function Vehicle(my){
+            var my = my || {};
+            my.speed = 0;
+            my.running = false;
+
+            this.speed = function(){
+                return mmy
+            };
+            this.start = function(){
+                my.running = true;
+            };
+            this.stop = function(){
+                my.running = false;
+            };
+            this.accelerate=function(){
+                my.speed++;
+            };
+            this.decelerate=function(){
+                my.speed--;
+            };
+            this.state = function(){
+                if(!my.running){
+                    return "parked";
+                }else if(my.running && my.speed){
+                    return "moving";
+                }else if(my.running){
+                    return "idle";
+                }
+            };
+        }
+
+
+        function FastVehicle(my){
+            var my = my || {};
+            var that = new Vehicle(my);
+            that.accelerate = function(){
+                my.speed += 3;
+            };
+            return that;
+        }
+
+        var maneuver = function(vehicle) {
+            write(vehicle.state());
+            vehicle.start();
+            write(vehicle.state());
+            vehicle.accelerate();
+            write(vehicle.state());
+            write(vehicle.speed());
+            vehicle.decelerate();
+            write(vehicle.speed());
+            if (vehicle.state() != "idle") {
+                throw "The vehicle is still moving!";
+            }
+            vehicle.stop();
+            write(vehicle.state());
+        };
+
+        /*
+        * 根据上面的代码，我们看到抛出的异常是“The vehicle is still moving!”，
+        * 这是因为写这段代码的作者一直认为加速（accelerate）和减速（decelerate）的数字是一样的。
+        * 但FastVehicle的代码和Vehicle的代码并不是完全能够替换掉的。因此，FastVehicle违反了里氏替换原则
+        * */
+
+        //减少LSP妨碍
+
+        //契约（Contracts）
+
+        //避免继承
+
+        //与行为有关，而不是继承
+
+        //矩形例子
+        var rectangle = {
+            length:0,
+            width:0
+        };
+
+        /*
+        * var square = {
+            length:0,
+            width:0,
+            getLength:function(){return length;},
+            setLength:function(value){length=width=value},
+            getWidth:function(){return width;},
+            setWidth:function(value){length=width=value},
+          };
+        * */
+        var square = {};
+        (function(){
+            var length = 0,width = 0;
+            //注意defineProperty方式是262-5版的新特性
+            Object.defineProperty(square,"length",{
+                get:function(){return length;},
+                set:function(value){alert("length set");length = width = value;}
+            });
+            Object.defineProperty(square,"width",{
+                get:function(){return width;},
+                set:function(value){alert("width set");length=width=value;}
+            });
+        })();
+
+        var g = function(rectangle){
+            rectangle.length=3;
+            //console.log(rectangle.length * rectangle.width);//9
+            rectangle.width=4;
+            console.log(rectangle.length);//4
+            console.log(rectangle.width);//4
+            console.log(rectangle.length * rectangle.width);//16
+        };
+
+        g(square);
+        //总结
+        //里氏替换原则（LSP）表达的意思不是继承的关系，而是任何方法（只要该方法的行为能体会另外的行为就行）
+    </script>
+</head>
+<body>
+</body>
+</html>
