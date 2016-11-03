@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Object.defineProperty应用</title>
+</head>
+<body>
+<div>
+    <p>你好，<span id='nickName'></span></p>
+    <div id="introduce"></div>
+</div>　
+</body>
+</html>
+<script type="text/javascript" charset="UTF-8">
+    //Object.defineProperty实现数据和视图的联动
+
+    //Object.defineProperty语法
+    /*var o = {}; // 创建一个新对象
+    // Example of an object property added with defineProperty with a data property descriptor
+    Object.defineProperty(o, "a", {
+        value: 37,
+        writable: true,
+        enumerable: true,
+        configurable: true
+    });
+    // 对象o拥有了属性a，值为37
+
+    // Example of an object property added with defineProperty with an accessor property descriptor
+    var bValue;
+    Object.defineProperty(o, "b", {
+        get: function () {
+            return bValue;
+        },
+        set: function (newValue) {
+            bValue = newValue;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    o.b = 38;*/
+
+    //数据和视图联动
+    //前端获取数据后，需要根据数据操作dom，视图变化后，需要修改不少代码，有没有方法将数据和dom操作隔离
+
+    //视图控制器
+    var userInfo = {};
+    Object.defineProperty(userInfo,'nickName',{
+        get:function(){
+           return document.getElementById('nickName').innerHTML;//dom操作
+        },
+        set:function(nick){
+          document.getElementById('nickName').innerHTML=nick;//dom操作
+        }
+    });
+    Object.defineProperty(userInfo,'introduce',{
+        get:function(){
+            return document.getElementById('introduce').innerHTML;
+        },
+        set:function(introduce){
+            document.getElementById('introduce').innerHTML=introduce;
+        }
+    });
+
+    //数据
+    //todo 获取用户信息
+    userInfo.nickName='congliu';
+    userInfo.introduce="我是傻鸟!";
+    //设置userInfo的nickName属性时会调用set方法，更新dom节点的html
+</script>
