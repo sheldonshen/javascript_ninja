@@ -1,1 +1,1 @@
-#learn es6,es7新特性
+#learn es5,es6,es7新特性
