@@ -41,7 +41,7 @@
         alert(o.test === "456");*/
 
         //How Is It If We Do Not Define
-        var o = {};
+        /*var o = {};
         o.test = 123;
 
         Object.defineProperty(o,'test',{
@@ -49,7 +49,185 @@
             writable:true,
             enumerable:true,
             value:123
+        });*/
+         //using __proto__
+        /*var obj = {};
+        Object.defineProperty(obj,'key',{
+            __proto__:null,//no inherited properties
+            value:'static' //not enumerable
+                           //not configurable
+                           //not writable
+                           //as defaults
         });
+
+        //being explicit
+        Object.defineProperty(obj,'key',{
+            enumerable:false,
+            configurable:false,
+            writable:false,
+            value:'static'
+        });
+
+        //recycling same object
+        function withValue(value){
+            var d = withValue.d || (withValue.d = {
+                        enumerable:false,
+                        writable:false,
+                        configurable:false,
+                        value:null
+                    });
+            d.value = value;
+            return d;
+        }
+
+        //...and...
+        Object.defineProperty(obj,'key',withValue('static'));
+
+        // if freeze is available, prevents adding or
+        // removing the object prototype properties
+        // (value, get, set, enumerable, writable, configurable)
+        (Object.freeze || Object)(Object.prototype);*/
+
+
+
+        //Example
+        /*//1 Creating a property
+        var o = {};//create a new object
+        // Example of an object property added with defineProperty with a data property descriptor
+        Object.defineProperty(o,'a',{
+            value:37,
+            writable:true,
+            enumerable:true,
+            configurable:true
+        });
+
+        alert(o.a);
+        // Example of an object property added with defineProperty with an accessor property descriptor
+        var bValue = 38;
+        Object.defineProperty(o,'b',{
+            get:function(){alert("get");return bValue},
+            set:function(newValue){bValue = newValue},
+            enumerable:true,
+            configurable:true
+        });
+        alert(o.b);
+
+        //You cannot try to mix both:
+        Object.defineProperty(o,'conflict',{
+            value:0x9f91102,
+            get:function(){return 0x9f91102}
+        });
+        //// throws a TypeError: value appears only in data descriptors, get appears only in accessor descriptors
+        //alert(o.conflict);*/
+
+        //2 Modifying a property
+        /*//writable attribute
+        "use strict";
+        var o = {};//creating a new object
+        Object.defineProperty(o,'a',{
+            value:37,
+            writable:false
+        });
+
+        alert(o.a);//37
+        o.a = 37;//No error thrown (it would throw in strict mode, even if the value had been the same)
+        alert(o.a);//37,The assignment didn't work.*/
+
+        //Enumerable attribute
+       /* var obj = {};
+        Object.defineProperty(obj,'a',{value:1,enumerable:true});
+        Object.defineProperty(obj,'b',{value:2,enumerable:false});
+        Object.defineProperty(obj,'c',{value:3});//// enumerable defaults to false
+        obj.d = 4;//// enumerable defaults to true when creating a property by setting it
+        for(var attr in obj){
+            console.log(attr);
+        }
+        console.log(Object.keys(obj));
+        console.log(obj.propertyIsEnumerable('a'));
+        console.log(obj.propertyIsEnumerable('b'));
+        console.log(obj.propertyIsEnumerable('c'));
+        console.log(obj.propertyIsEnumerable('d'));*/
+
+        //Configurable
+       /* var o = {};
+        Object.defineProperty(o,'a',{
+            get:function(){return 1},
+            configurable:true
+        });
+        Object.defineProperty(o,'a',{configurable:true});
+        Object.defineProperty(o,'a',{enumerable:true});
+        Object.defineProperty(o,'a',{set:function(){}});
+        Object.defineProperty(o,'a',{get:function(){return 1}});
+        Object.defineProperty(o,'a',{value:2});
+        console.log(o.a);//1
+        delete o.a;//Nothing happen
+        console.log(o.a);//1*/
+        /*
+        * If the configurable attribute of o.a had been true,
+        * none of the errors would be thrown and the property would be deleted at the end
+        * */
+
+        //3 Adding properties and default values
+       /* var o = {};
+        o.a = 1;
+        //is equivalent to
+        Object.defineProperty(o,"a",{
+            value:1,
+            writable:true,
+            configurable:true,
+            enumerable:true
+        });
+
+        //on the other hand,
+        Object.defineProperty(o,'a',{value:1});
+        //is equivalent to
+        Object.defineProperty(o,'a',{
+            value:1,
+            writable:false,
+            configurable:false,
+            enumerable:false
+        });*/
+
+        //4 Custom Setters and Getters
+        /*function Archiver(){
+            var temperature = null;
+            var archive = [];
+            Object.defineProperty(this,'temperature',{
+                get:function(){
+                    console.log("get!");
+                    return temperature;
+                },
+                set:function(value){
+                    console.log("set!");
+                    temperature = value,
+                    archive.push({val:temperature});
+                }
+            });
+            this.getArchive = function(){return archive};
+        }
+
+        var arc = new Archiver();
+        alert(arc.temperature);
+        arc.temperature=11;
+        arc.temperature=13;
+        alert(arc.getArchive());*/
+
+        /*var pattern = {
+            get:function(){
+               return 'I always return this string, whatever you have assigned';
+            },
+            set:function(){
+               this.myname = 'this is my name string';
+            }
+        };
+
+        function TestDefineSetAndGet(){
+            Object.defineProperty(this,'myproperty',pattern);
+        }
+        var instance = new TestDefineSetAndGet();
+        instance.myproperty = 'test';
+        console.log(instance.myproperty);
+        console.log(instance.myname);*/
     </script>
 </head>
 <body>
