@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Object.defineProperty</title>
+    <script type="text/javascript" charset="UTF-8">
+        //Object.defineProperty es5新特性
+        /*var o = {};
+        Object.defineProperty(o,'test',{
+            configurable:true,
+            writable:false,
+            value:123
+        });
+        console.log(o.test);
+        o.test = 456;//no error at all
+        console.log(o.test);
+
+        Object.defineProperty(o,'test',{
+            writable:true,
+            value:456
+        });
+        console.log(o.test);
+        o.test = 789;//no error at all
+        console.log(o.test);
+        console.log(Object.getOwnPropertyDescriptor(o,'test').writable);*/
+
+        /*var o = Object.defineProperty({},'test',{
+            enumerable:false,
+            writable:false,
+            configurable:true,//note,it's false
+            value:123
+        });
+
+        Object.defineProperty(o,'test',{
+            enumerable:false,
+            writable:false,//note,this is false only now
+            configurable:true,
+            value:"456"//note,type and value is different now
+        });
+
+        alert(o.test === "456");*/
+
+        //How Is It If We Do Not Define
+        var o = {};
+        o.test = 123;
+
+        Object.defineProperty(o,'test',{
+            configurable:true,
+            writable:true,
+            enumerable:true,
+            value:123
+        });
+    </script>
+</head>
+<body>
+</body>
+</html>
