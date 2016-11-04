@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>__proto__</title>
+    <script type="text/javascript" charset="UTF-8">
+        //原型指针__proto__
+        /*var a = new Array();
+        alert(a.__proto__ === Array.prototype);//true
+        alert(a.__proto__.__proto__ === Object.prototype);//true
+        alert(a.__proto__.__proto__.__proto__ === null);//true
+        //所以说,javascript中对象,追根溯源都是来自一个null对象
+        //佛曰：万物皆空，善哉善哉。
+        //alert(Object.getPrototypeOf(a).constructor);*/
+
+        //原型对象prototype
+        //函数作为JavaScript中的一等公民，它既是函数又是对象，函数的原型指向的是Function.prototype
+        /*var Foo = function(){};//函数实例
+        var a = new Foo();//通过该函数构造出得新实例对象
+        alert(Foo.__proto__ === Function.prototype);
+        alert(a.__proto__ === Foo.prototype);//函数实例除了拥有__proto__属性之外,还拥有prototype属性
+        //通过该函数构造出得新的实例对象,其原型指针__proto__会指向该函数的prototype属性
+        //而函数的prototype属性,本身也是一个由Object构造的实例对象,
+        alert(Foo.prototype.__proto__ === Object.prototype);
+        alert(Foo.prototype.constructor === Foo);
+        alert(a.constructor === Foo);
+        alert(a.constructor === Foo.prototype.constructor);*/
+        //alert(Foo.prototype.constructor);//false
+        /*function Foo(){}
+        alert(Foo.__proto__ === Function.prototype);//true
+        var foo = new Foo();
+        alert(foo.__proto__ === Foo.prototype);//true
+        alert(foo.__proto__ === Function.prototype);//false*/
+
+        //原型链
+        //原型链作为实现继承的主要方法，其基本思想是利用原型让一个引用类型继承另一个引用类型的属性和方法。
+        //每个构造函数都有一个原型对象(prototype),原型对象都包含一个指向构造函数的指针(constructor),
+        //而实例都包含一个指向原型对象的内部指针(__proto__);
+
+        //亲子鉴定
+        /*var  Bar = function(){};
+        var    b = new Bar();
+        alert(b instanceof  Bar);
+        alert(Bar.prototype.isPrototypeOf(b));
+        alert(Object.prototype.isPrototypeOf(b));*/
+
+        //一张历史悠久的图
+        alert(Function.prototype.__proto__ === Object.prototype);
+        alert(Object.prototype.constructor.__proto__ === Function.prototype);
+        //这就产生了一种类「先有鸡还是先有蛋」的经典问题，到底是先有的Object还是先有的Function呢
+    </script>
+</head>
+<body>
+</body>
+</html>
