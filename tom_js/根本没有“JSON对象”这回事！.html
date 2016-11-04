@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>根本没有"JSON对象"这回事！</title>
+    <script type="text/javascript" charset="UTF-8">
+        //序列化与反序列化
+        //字面量
+
+        //何时是JSON，何时不是JSON？
+        //这是JSON字符串
+        var foo = '{"prop","val"}';
+        //这是对象字面量
+        var bar = {"prop":"val"};
+        //放到上下文里来看
+        //真正的JSON对象
+        //// 这是JSON字符串，比如从AJAX获取字符串信息
+        var my_json_string = '{"prop":"val"}';
+        //// 将字符串反序列化成对象
+        var my_obj = JSON.parse(my_json_string);
+        alert(my_obj.prop === 'val');
+        // 将对象序列化成JSON字符串
+        var my_other_json_string = JSON.stringify(my_obj);
+        alert(typeof my_other_json_string);
+    </script>
+</head>
+<body>
+</body>
+</html>
