@@ -9,6 +9,7 @@ http://www.ruanyifeng.com/blog/javascript/                阮一峰javascript系
 http://javascript.ruanyifeng.com/                         阮一峰JavaScript 标准参考教程（alpha）<br>
 http://javascript.crockford.com/                          douglas crockford<br>
 http://javascript.info/                                   The JavaScript Tutorial<br>
+http://www.quirksmode.org/js/contents.html                 js quirksmode<br>
 #video
 http://www.ycku.com/javascript/                           瓢城Web俱乐部JavaScript第一季150集(注重项目实战)<br>
 http://www.bjsxt.com/2014/down_1112/39.html               尚学堂科技_javascript视频教程_白贺翔<br>
@@ -54,6 +55,7 @@ https://search.jd.com/Search?keyword=javascript&enc=utf-8&suggest=1.rem.1.covera
 #糖语言
 typescript<br>
 coffeescript<br>
+
 #其他ECMAScript实现
 http://help.adobe.com/zh_CN/FlashPlatform/reference/actionscript/3/package-summary.html ActionScript<br>
 
@@ -64,6 +66,7 @@ Mocha<br>
 
 #函数式编程
 underscore<br>
+lodash<br>
 
 #更多javascript的库(package manager,build system,compiler and so on)
 https://www.javascripting.com/ <br>
