@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>执行上下文（Execution Contexts）</title>
+    <script type="text/javascript" charset="UTF-8">
+        //可执行代码类型
+        //1 全局代码
+
+        //2 函数代码
+        (function foo(bar){
+            if(bar){
+                return;
+            }
+            foo(true);
+        })();
+        // 第一次foo的激活调用
+        /*ECStack = [
+                <foo> functionContext
+        globalContext
+        ];*/
+        // foo的递归激活调用
+        /*ECStack = [
+                <foo> functionContext – recursively
+        <foo> functionContext
+        globalContext
+        ];*/
+
+        //3 Eval 代码
+        /*eval("var x = 10");
+        (function foo(){
+            eval("var y = 20");
+        })();
+        console.log(x);*/
+        //console.log(y);//y is not defined
+
+        function foo(){
+            var x = 1;
+            return function(){
+                alert(x);
+            };
+        }
+
+        var bar = foo();
+        bar();
+
+        eval('x = 2', bar); // 传入上下文，影响了内部的var x 变量
+
+        bar(); // 2
+        //4 结论
+    </script>
+</head>
+<body>
+</body>
+</html>
