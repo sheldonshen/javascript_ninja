@@ -41,7 +41,7 @@
 
 
         //构造函数(Constructor)
-        function Foo(y){
+        /*function Foo(y){
             //构造函数将会以特定模式创建对象：被创建的对象都会有"y"属性
             this.y = y;
         }
@@ -79,15 +79,148 @@
         console.log(b.prototype);//undefined
 
         //执行上下文栈(Execution Context Stack)
+        //在ECMASscript中的代码有三种类型：global, function和eval。
         function foo(bar){}
-        //
+        // 调用相同的function，每次都会产生3个不同的上下文
+        //（包含不同的状态，例如参数bar的值）
+        foo(10);
+        foo(20);
+        foo(30);*/
 
         //执行上下文(Execution Context)
+       /* var foo = 10;
+        function bar(){}//函数声明
+        (function baz(){});//函数表达式
+        console.log(this.foo == foo,window.bar == bar);*/
+        //console.log(baz);//baz is not defined
+
         //变量对象(Variable Object)
+
         //活动对象(activation object)
+
         //作用域链(Scope Chains)
+        /*var x = 10;
+        (function foo(){
+            var y = 20;
+            (function bar(){
+                //"x"和"y"是自由变量,
+                //会在作用域链的下一个对象中找到(函数"bar"的互动对象之后)
+                var z = 30;
+                console.log(x + y + z);
+            })();
+        })();*/
+
+        /*Object.prototype.x = 10;
+        var w = 20;
+        var y = 30;
+
+        // 在SpiderMonkey全局对象里
+        // 例如，全局上下文的变量对象是从"Object.prototype"继承到的
+        // 所以我们可以得到“没有声明的全局变量”
+        // 因为可以从原型链中获取
+        console.log(x);
+        (function foo(){
+            //"foo"是局部变量
+            var w = 40;
+            var x = 100;
+            // "x" 可以从"Object.prototype"得到，注意值是10哦
+            // 因为{z: 50}是从它那里继承的
+            with ({z: 50}) {//add scope chain
+                console.log(w, x, y , z); // 40, 10, 30, 50
+            }
+            // 在"with"对象从作用域链删除之后
+            // x又可以从foo的上下文中得到了，注意这次值又回到了100哦
+            // "w" 也是局部变量
+            console.log(x,w);
+
+            // 在浏览器里
+            // 我们可以通过如下语句来得到全局的w值
+            console.log(w);
+            console.log(window.w);
+        })();*/
+
         //闭包(Closures)
+        /*function foo(){
+            var x = 10;
+            return function bar(){
+                console.log(x);
+            };
+        }
+
+        // "foo"返回的也是一个function
+        // 并且这个返回的function可以随意使用内部的变量x
+        var returnedFunction = foo();*/
+
+        // 全局变量 "x"
+        /*var x = 10;
+
+        // 全局function
+        var foo = function () {
+            console.log(x);
+        };
+
+        (function (funArg) {
+
+            // 局部变量 "x"
+            var x = 20;
+
+            // 这不会有歧义
+            // 因为我们使用"foo"函数的[[Scope]]里保存的全局变量"x",
+            // 并不是caller作用域的"x"
+
+            funArg(); // 10, 而不是20
+
+        })(foo); // 将foo作为一个"funarg"传递下去*/
+
+        /*function baz(){
+            var x = 1;
+            return {
+                foo:function foo(){return ++x;},
+                bar:function bar(){return --x;}
+            };
+        }
+
+        var closures = baz();
+        console.log(closures.foo(),closures.bar());*/
+
+        /*var data = [];
+        for(var k = 0; k < 3; k++){
+            /!*data[k]=function(){
+                alert(k);
+            };*!/
+            data[k]=(function(x){
+                return function(){
+                    alert(x);
+                };
+            })(k);
+        }
+
+        data[0]();
+        data[1]();
+        data[2]();*/
+
         //This指针
+        // "foo"函数里的alert没有改变
+        // 但每次激活调用的时候this是不同的
+        function foo(){
+            console.log(this);
+        }
+
+        // caller 激活 "foo"这个callee，
+        // 并且提供"this"给这个 callee
+        foo();//全局对象
+        console.log(foo.prototype.constructor);
+        var bar = {
+            baz:foo
+        };
+        bar.baz();
+        (bar.baz = bar.baz)(); // 这是一个全局对象
+        (bar.baz, bar.baz)(); // 也是全局对象
+        (false || bar.baz)(); // 也是全局对象
+
+        var otherFoo = bar.baz;
+        otherFoo(); // 还是全局对象
+
         //总结(Conclusion)
     </script>
 </head>
