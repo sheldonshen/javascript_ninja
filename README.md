@@ -84,6 +84,9 @@ http://livecoding.tv/ <br>
 https://code.tutsplus.com/articles/33-developers-you-must-subscribe-to-as-a-javascript-junkie--net-18151 
 33 Developers you MUST Subscribe to as a JavaScript Junkie<br>
 
+#如何跟上前端开发的最新前沿
+https://uptodate.frontendrescue.org/zh/<br>
+
 
 
 
