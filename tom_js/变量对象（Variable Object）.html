@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>变量对象（Variable Object）</title>
+    <script type="text/javascript" charset="UTF-8">
+        //介绍
+        /*var a = 10;//全局上下文中的变量
+        (function(){
+            var b = 20;//function上下文中的局部变量
+        })();
+        alert(a);
+        //alert(b);//b is not defined
+
+        for(var k in {a:1,b:2}){
+            alert(k);
+        }
+        alert("outter=" + k);//outter=b
+
+        //数据声明
+        //如果变量与执行上下文相关，那变量自己应该知道它的数据存储在哪里，
+        //并且知道如何访问。这种机制称为变量对象(variable object)
+        /!*activeExecutionContext = {
+            VO: {
+                // 上下文数据（var, FD, function arguments)
+            }
+        };*!/
+
+        var a = 10;
+        function test(x){
+            var b = 20;
+        }
+        test(30);
+        //对应的变量对象是：
+       /!* // 全局上下文的变量对象
+        VO(globalContext) = {
+                    a: 10,
+                    test: <reference to function>
+        };
+
+        // test函数上下文的变量对象
+        VO(test functionContext) = {
+            x: 30,
+            b: 20
+        };*!/
+
+        //不同执行上下文中的变量对象
+        /!*抽象变量对象VO (变量初始化过程的一般行为)
+        ║
+        ╠══> 全局上下文变量对象GlobalContextVO
+        ║        (VO === this === global)
+        ║
+        ╚══> 函数上下文变量对象FunctionContextVO
+        (VO === AO, 并且添加了<arguments>和<formal parameters>)*!/
+
+        //全局上下文中的变量对象
+        /!*global = {
+        Math: <...>,
+        String: <...>
+        ...
+        ...
+        window: global //引用自身
+        };*!/
+        var a = new String('test');
+
+        alert(a); // 直接访问，在VO(globalContext)里找到："test"
+
+        alert(window['a']); // 间接通过global访问：global === VO(globalContext): "test"
+        alert(a === this.a); // true
+
+        var aKey = 'a';
+        alert(window[aKey]); // 间接通过动态属性名称访问："test"*/
+
+        //函数上下文中的变量对象
+        /*function foo(x,y,z){
+            // 声明的函数参数数量arguments (x, y, z)
+            alert(foo.length);
+            // 真正传进来的参数个数(only x, y)
+            alert(arguments.length);
+            // 参数的callee是函数自身
+            alert(arguments.callee === foo);
+            // 参数共享
+            alert(arguments[0] === x);
+            arguments[0]=20;
+            alert(arguments[0]);
+            x=30;
+            alert(arguments[0]);
+            //不过，没有传进来的参数z，和参数的第3个索引值是不共享的
+            z = 40;
+            alert(arguments[2]);
+            arguments[2]=50;
+            alert(z);
+        }
+        foo(10, 20);*/
+
+
+        //处理上下文代码的2个阶段
+        //1 进入执行上下文
+        //当进入执行上下文(代码执行之前)时，VO里已经包含了下列属性(前面已经说了)
+        //a 函数的所有形参(如果我们是在函数执行上下文中)
+        //b 所有函数声明(FunctionDeclaration, FD)
+        //c 所有变量声明(var, VariableDeclaration)
+       /* function test(a,b){
+            var c=10;
+            function d(){}
+            var e = function _e(){};
+            (function x(){});
+        }
+        test(10);*/
+        /*
+        * AO(test) = {
+         a: 10,
+         b: undefined,
+         c: undefined,
+         d: <reference to FunctionDeclaration "d">
+         e: undefined
+         };
+        * */
+
+        //2 代码执行
+        /*alert(x);//"function"
+
+        var x = 10;
+        alert(x);//10
+
+        x = 20;
+        function x(){}
+
+        alert(x);//20
+
+        if(true){
+            var a = 1;
+        }else{
+            var b = 2;
+        }
+        alert(a);//1
+        alert(b);//undefined,不是b没有声明，而是b的值是undefined*/
+
+        //关于变量
+        //任何时候，变量只能通过使用var关键字才能声明
+       /* alert(c);//undefined
+        alert(d);//'d'是没有声明
+        d=10;//这仅仅是给全局对象创建了一个新属性(但它不是变量)
+        var c=20;*/
+
+        /*alert(a);//undefined, 这个大家都知道，
+        b=10;
+        alert(b);//10,代码执行阶段创建
+        var a = 20;
+        alert(a);//20,代码执行阶段修改*/
+
+        //变量相对于简单属性来说，变量有一个特性(attribute)：{DontDelete},
+        //这个特性的含义就是不能用delete操作符直接删除变量属性。
+        /*a = 10;
+        alert(window.a);//10
+        alert(delete a);//true
+        alert(window.a);//undefined
+        var b = 20;
+        alert(window.b);//20
+        alert(delete b);//false
+        alert(window.b);//20*/
+
+        //但是这个规则在有个上下文里不起作用，那就是eval上下文，变量没有{DontDelete}特性。
+        /*eval("var a=10;");
+        alert(window.a);//10
+        alert(delete a);//true
+        alert(window.a);//undefined*/
+
+        //特殊实现: __parent__ 属性
+        /*var global = this;
+        var  a = 10;
+        function foo(){}
+        alert(foo.__parent__);//global
+        var VO = foo.__parent__;
+        alert(VO.a);//10
+        alert(VO === global);//true*/
+
+        var global = this;
+        var x = 10;
+
+        (function foo() {
+
+            var y = 20;
+
+            // "foo"上下文里的活动对象
+            var AO = (function () {}).__parent__;
+
+            alert(AO.y); // 20
+
+            // 当前活动对象的__parent__ 是已经存在的全局对象
+            // 变量对象的特殊链形成了
+            // 所以我们叫做作用域链
+            alert(AO.__parent__ === global); // true
+
+            alert(AO.__parent__.x); // 10
+
+        })();
+
+        //总结
+    </script>
+</head>
+<body>
+</body>
+</html>
