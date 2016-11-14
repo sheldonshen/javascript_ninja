@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>contest</title>
+    <script type="text/javascript" charset="UTF-8">
+        /*if (!("a" in window)) {
+            var a = 1;
+        }
+        alert(a);//undefined*/
+
+        /*var a = 1,
+                b = function a(x) {
+                    x && a(--x);
+                };
+        alert(a);//1*/
+
+        /*function value(){
+         return 1;
+         }
+         var value;
+         alert(typeof value);    //"function"*/
+
+        /*function a(x) {
+            return x * 2;
+        }
+        var a;
+        alert(a);*/
+
+        /*function b(x, y, a) {
+            arguments[2] = 10;
+            alert(a);
+        }
+        b(1, 2, 3);*/
+
+        /*function b(x, y, a) {
+            arguments[2] = 10;
+            alert(arguments[2]);
+        }
+        b(1, 2);*/
+
+        function a() {
+            alert(this);
+        }
+        a.call(null);
+
+        /*var object = {
+            method: function() {
+                alert(this === object);    //true
+            }
+        }
+        object.method();*/
+
+        /*function method() {
+            alert(this === window);    //true
+        }
+        method();*/
+
+        /*function method() {
+            alert(this === window);
+        }
+        method();    //true
+        method.call(document);   //false*/
+    </script>
+</head>
+<body>
+</body>
+</html>
