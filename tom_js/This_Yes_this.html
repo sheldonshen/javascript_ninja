@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>This? Yes,this!</title>
+    <script type="text/javascript" charset="UTF-8">
+         //介绍
+         //定义:this与上下文中可执行代码的类型有直接关系，this值在进入上下文时确定，并且在上下文运行期间永久不变。
+
+         //全局代码中的this
+          /* //显示定义全局对象的属性
+           this.a=10;//global.a=10
+           alert(a);
+           //通过赋值给一个无标示符隐式
+           b = 20;
+           alert(this.b);
+           //也是通过变量声明隐式声明的
+           //因为全局上下文的变量对象是全局对象自身
+           var c = 30;
+           alert(this.c);*/
+
+         //函数代码中的this
+         /*var foo = {x: 10};
+
+         var bar = {
+             x: 20,
+             test: function () {
+
+                 alert(this === bar); // true
+                 alert(this.x); // 20
+
+                 //this = foo; // 错误，任何时候不能改变this的值
+
+                 //alert(this.x); // 如果不出错的话，应该是10，而不是20
+
+             }
+
+         };
+
+         // 在进入上下文的时候
+         // this被当成bar对象
+         // determined as "bar" object; why so - will
+         // be discussed below in detail
+
+         bar.test(); // true, 20
+
+         foo.test = bar.test;
+
+         // 不过，这里this依然不会是foo
+         // 尽管调用的是相同的function
+
+         foo.test(); // false, 10*/
+
+         /*function foo(){
+             alert("invoked");
+             alert(this);
+         }
+         //foo();
+         alert(foo===foo.prototype.constructor);
+         alert(foo.prototype.constructor);
+         alert(foo.prototype.constructor());*/
+
+         /*var foo = {
+             bar:function(){
+                 alert(this);
+                 alert(this === foo);
+             }
+         };
+         foo.bar(); // foo, true
+         var exampleFunc = foo.bar;
+         alert(exampleFunc === foo.bar);
+         // 再一次，同一个function的不同的调用表达式，this是不同的
+         exampleFunc();*/
+
+         //引用类型（Reference type）
+         function foo() {
+             alert(this.bar);
+         }
+
+         var x = {bar: 10};
+         var y = {bar: 20};
+
+         x.test = foo;
+         y.test = foo;
+
+         x.test(); // 10
+         y.test(); // 20
+
+         //函数调用和非引用类型
+
+         //引用类型和this为null
+
+         //作为构造器调用的函数中的this
+
+         //函数调用中手动设置this
+
+         //结论
+
+    </script>
+</head>
+<body>
+</body>
+</html>
