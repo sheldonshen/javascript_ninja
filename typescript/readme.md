@@ -8,3 +8,7 @@ http://blog.csdn.net/jilongliang/article/category/2830715  TypeScript系列文�
 #book
 http://search.jd.com/Search?keyword=typescript&enc=utf-8&wq=typescript&pvid=uytyrivi.ravz7m jd搜索"typescript"<br>
 https://www.google.com/#q=typescript&tbm=bks&start=0                                        google book搜索"typescript"<br>
+https://basarat.gitbooks.io/typescript/content/                                             TypeScript Deep Dive(gitbook)
+#MOOC
+https://www.edx.org/course/introduction-typescript-microsoft-dev201x-1                      Introduction to TypeScript(edx)<br>
+https://www.udemy.com/understanding-typescript/                                             Understanding TypeScript(udemy)<br>
