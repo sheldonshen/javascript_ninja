@@ -1,6 +1,7 @@
 ##official
 https://www.typescriptlang.org/ official site<br>
 http://www.typescriptlang.org/docs/tutorial.html  official  tutorials<br>
+https://zhongsp.gitbooks.io/typescript-handbook/content/     official handbook(chinese)<br>
 #video
 https://channel9.msdn.com/Search?term=TypeScript#ch9Search&lang-zh-cn=zh-cn  channel9<br>
 #csdn
