@@ -88,6 +88,10 @@ https://code.tutsplus.com/articles/33-developers-you-must-subscribe-to-as-a-java
 #如何跟上前端开发的最新前沿
 https://uptodate.frontendrescue.org/zh/<br>
 
+#web开发最前沿
+https://developers.google.com/web/   gooogle web<br>
+https://code.facebook.com/web/       facebook web<br>
+
 
 
 
