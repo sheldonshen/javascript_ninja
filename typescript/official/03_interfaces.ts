@@ -101,14 +101,105 @@ function createSquare(config:SquareConfig):{color:string,area:number}{
 }
 
 //函数类型
+interface SearchFunc{
+    (source:string,subString:string):boolean;
+}
+let mySearch:SearchFunc;
+mySearch = function(src:string,sub:string){
+    let result = src.search(sub);
+    if(result === -1){
+        return false;
+    }else{
+        return true;
+    }
+};
 
 //可索引的类型
+//这个索引签名表示了当用number去索引StringArray时会得到string类型的返回值。
+interface StringArray{
+    [index:number]:string;
+}
+let myArray: StringArray;
+myArray=["Bob","Freed"];
+let myStr = myArray[0];
+console.log(myStr);
+
+class Animal{
+    name:string;
+}
+class Dog extends Animal{
+    breed:string;
+}
+
+//Error: indexing with a 'string' will sometimes get you a Dog!
+/*interface NotOkay{
+    [x:number]:Animal;
+    [x:string]:Dog;
+}*/
+interface NumberDictionary{
+    [index:string]:number;
+    length:number;//// Error: indexing with a 'string' will sometimes get you a Dog!
+    //name:string//// 错误，`name`的类型不是索引类型的子类型
+}
+/*interface  ReadonlyStringArray{
+    readonly [index:number]:string;
+}
+let myarray : ReadonlyStringArray = ["Alice","Bob"];
+myArray[2]="CongBird";//error,你不能设置myArray[2]，因为索引签名是只读的。*/
+
 
 //类类型
-
 //实现接口
+/*interface ClockInterface{
+    currentDate:Date;
+    setTime(d:Date);
+}*/
+
+/*class Clock implements ClockInterface{
+    currentDate:Date;
+    setTime(d:Date){
+        this.currentDate = d;
+    }
+    constructor(h:number,m:number){}
+}*/
+//接口描述了类的公共部分，而不是公共和私有两部分。 它不会帮你检查类是否具有某些私有成员
 
 //类静态部分与实例部分的区别
+/*interface ClockConstructor{
+    new (hour: number,minute:number);
+}
+
+class Clock implements ClockConstructor{
+    currentTime:date;
+    //constructor(h:number,m:number);
+}*/
+interface ClockConstructor{
+    new (hour: number,minute: number):ClockInterface;
+}
+interface ClockInterface{
+    tick();
+}
+
+function createClock(ctor:ClockConstructor,hour:number,minute:number):ClockInterface{
+    return new ctor(hour,minute);
+}
+
+class DigitalClock implements ClockInterface{
+    constructor(h:number,m:number){}
+    tick(){
+        console.log("beep beep");
+    }
+}
+
+class AnalogClock implements ClockInterface{
+    constructor(h:number,m:number){}
+    tick(){
+        console.log("tick tock");
+    }
+}
+
+var digital = createClock(DigitalClock,12,17);
+var analog  = createClock(AnalogClock,7,32);
 
 //扩展接口
 
