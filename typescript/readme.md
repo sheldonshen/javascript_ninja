@@ -1,5 +1,6 @@
 ##official
 https://www.typescriptlang.org/ official site<br>
+https://blogs.msdn.microsoft.com/typescript/  official blog<br>
 http://www.typescriptlang.org/docs/tutorial.html  official  tutorials<br>
 https://zhongsp.gitbooks.io/typescript-handbook/content/     official handbook(chinese)<br>
 #video
