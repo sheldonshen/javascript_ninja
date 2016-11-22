@@ -66,10 +66,39 @@ function createSquare(config:SquareConfig):{color:string,area:number}{
 let mySquare = createSquare({color:"black"});
 
 //只读属性
+interface Point{
+     readonly x:number;
+     readonly y:number;
+}
+let p1: Point = {x:10,y:20};
+console.log(p1.x);
+console.log(p1.y);
+p1.x = 5;//error
+
+//ReadonlyArray<T>类型,与Array<T>,它与Array<T>相似,只是把可变方法去掉,
+//因此可以确保数组被创建后再也不能被修改
+let a: number[] = [1,2,3,4];
+let ro : ReadonlyArray<number> = a;
+//alert(a);
+//alert(ro);
+ro[0]=12;//error
+ro.push(5);//error
+ro.length = 100;//error
+a = ro;//error
+a = ro as number[];//使用类型断言重写,ok
 
 //readonly vs const
+//变量使用const
+//属性使用readonly
 
 //额外的属性检查
+interface SquareConfig{
+    color?:string;
+    width?:number;
+}
+function createSquare(config:SquareConfig):{color:string,area:number}{
+    //return {};
+}
 
 //函数类型
 
