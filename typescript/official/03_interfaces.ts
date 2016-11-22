@@ -202,9 +202,80 @@ var digital = createClock(DigitalClock,12,17);
 var analog  = createClock(AnalogClock,7,32);
 
 //扩展接口
+//类一样，接口也可以相互扩展。 这让我们能够从一个接口里复制成员到另一个接口里，可以更灵活地将接口分割到可重用的模块里
+/*interface Shape{
+    color:string;
+}
+
+interface Square extends Shape{
+    sideLength:number;
+}
+
+let square = <Square>{};
+square.color = "blue";
+square.sideLength = 10;
+console.log(square.color);
+console.log(square.sideLength);*/
+//一个接口可以继承多个接口，创建出多个接口的合成接口
+interface Shape{
+    color:string;
+}
+interface PenStroke{
+    penWidth:number;
+}
+
+interface Square extends Shape,PenStroke{
+    sideLength:number;
+}
+
+let square = <Square>{};
+square.color = "red";
+square.penWidth = 10;
+square.sideLength = 5.5;
+console.log(square.color);
+console.log(square.penWidth);
+console.log(square.sideLength);
 
 //混合类型
+interface Counter{
+    (start:number):string;
+    interval:number;
+    reset():void;
+}
+//一个对象可以同时做为函数和对象使用，并带有额外的属性
+function getCounter():Counter{
+    let counter = <Counter>function(start: number){console.log(start);};
+    counter.interval = 123;
+    counter.reset = function(){console.log("reset");};
+    return counter;
+}
+let c = getCounter();
+c(10);
+c.reset();
+c.interval=100.01;
+console.log(c.interval);
 
 //接口继承类
+class Control{
+    private state: any;
+}
 
-//https://zhongsp.gitbooks.io/typescript-handbook/content/doc/handbook/Interfaces.html
+interface SelectableControl extends Control{
+    select():void;
+}
+
+class Button extends Control{
+    select(){}
+}
+
+class TextBox extends Control{
+    select(){}
+}
+
+class Image1{
+    select(){}
+}
+
+class Location1{
+    select(){}
+}
