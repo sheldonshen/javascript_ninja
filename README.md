@@ -85,6 +85,7 @@ http://livecoding.tv/ <br>
 #js大牛集锦
 https://code.tutsplus.com/articles/33-developers-you-must-subscribe-to-as-a-javascript-junkie--net-18151 
 33 Developers you MUST Subscribe to as a JavaScript Junkie<br>
+http://caibaojian.com/some-fe 一些前端开发大牛(国内)<br>
 
 #如何跟上前端开发的最新前沿
 https://uptodate.frontendrescue.org/zh/<br>
