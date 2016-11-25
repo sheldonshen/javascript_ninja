@@ -25,6 +25,7 @@ http://www.echojs.com/                                    echojs(Hacker News JS 
 #article
 http://www.cnblogs.com/rubylouvre/tag/javascript/         司徒正美javascript文章<br> 
 https://www.phodal.com/blog/tag/javascript/               phodal javascript文章<br>
+http://justjavac.com/categories.html#javascript-ref       justjavac文章<br>
 #online ebook(在线电子书)
 http://eloquentjavascript.net/     Eloquent JavaScript<br>
 https://addyosmani.com/resources/essentialjsdesignpatterns/book/   Learning JavaScript Design Patterns<br>
