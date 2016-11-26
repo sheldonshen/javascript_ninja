@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JS游戏_别踩白块(2)框架搭建</title>
+    <style>
+        #main{
+            width:  400px;
+            height: 400px;
+            background: gray;
+            border: 2px solid green;
+            margin: 0 auto;
+        }
+        #container{
+            width: 100%;
+            height: 400px;
+        }
+        .row{
+            width: 100%;
+            height: 100px;
+        }
+        .cell{
+            width: 100px;
+            height: 100px;
+            float: left;
+        }
+        .black{
+            background: black;
+        }
+    </style>
+</head>
+<body>
+    <!-- <div id="main">
+          <div id="container">
+              <div class="row">
+                  <div class="cell black"></div>
+                  <div class="cell"></div>
+                  <div class="cell"></div>
+                  <div class="cell"></div>
+              </div>
+              <div class="row">
+                  <div class="cell"></div>
+                  <div class="cell black"></div>
+                  <div class="cell"></div>
+                  <div class="cell"></div>
+              </div>
+              <div class="row">
+                  <div class="cell"></div>
+                  <div class="cell"></div>
+                  <div class="cell black"></div>
+                  <div class="cell"></div>
+              </div>
+              <div class="row">
+                  <div class="cell"></div>
+                  <div class="cell"></div>
+                  <div class="cell"></div>
+                  <div class="cell black"></div>
+              </div>
+          </div>
+     </div>-->
+
+     <div id="main">
+         <div id="container">
+         </div>
+     </div>
+     <script type="text/javascript" charset="UTF-8">
+         //创建div.row
+         function createRow(){
+             var row = createDiv("row");
+             var classes = createSn();
+             for(var i=0; i < 4; i++){
+                 row.appendChild(createDiv(classes[i]));
+             }
+             $("container").appendChild(row);
+         }
+
+         //创建div,className是其类名
+         function createDiv(className){
+             var div = document.createElement("div");
+             div.className = className;
+             return div;
+         }
+
+         /*
+         * 返回一个数组,随机其中一个单元,值为"cell black",其他3个,皆为cell
+         * */
+         function createSn(){
+               var arr = ['cell','cell','cell','cell'];
+               var index = Math.floor(Math.random()*4);
+               arr[index] = "cell black";
+               return arr;
+         }
+
+         //按id获取对象
+         function $(id){
+             var element =  document.getElementById(id);
+             return element;
+         }
+
+         function init(){
+             for(var i=0;i < 3; i++){
+                 createRow();
+             }
+         }
+
+         init();
+     </script>
+</body>
+</html>
