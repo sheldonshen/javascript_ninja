@@ -173,27 +173,140 @@
         };
 
         //3 字符串的解构赋值
-        /*window.onload = function(){
+        window.onload = function(){
+            //const [a,b,c,d,e] = 'hello';
+            const [a, b, c, d, e] = 'hello';
+            console.log(a);
+            console.log(b);
+            console.log(c);
+            console.log(d);
+            console.log(e);
+            let {length: len}='hello';
+            console.log(len);
 
-        };*/
+            /*var _hello = 'hello', len = _hello.length;
+            console.log(len);*/
+
+        };
         //4 数值和布尔值的解构赋值
-        /*window.onload = function(){
+        window.onload = function(){
+            let {toString: s} = 123;
+             console.log(s === Number.prototype.toString);
+             let {toSring: ss} = true;
+             console.log(ss === Boolean.prototype.toString);
+           /* var _ = 123,
+                    s = _.toString;
 
-        };*/
+            console.log(s === Number.prototype.toString);
+            var _true = true,
+                    ss = _true.toSring;
+
+            console.log(ss === Boolean.prototype.toString);*/
+            let {prop: x} = undefined;
+            let {prop: y} = null;
+            //var x = undefined.prop;
+            //var _ref = null,
+            //        y = _ref.prop;
+        };
         //5 函数参数的解构赋值
-        /*window.onload = function(){
+        window.onload = function(){
+            function add([x,y]){
+                return x + y;
+            }
+            console.log(add([1,2]));
 
-        };*/
+            [[1,2],[3,4]].map(([a,b])=> a + b);
+
+            function move({x = 0, y = 0} = {}){
+                return [x,y];
+            }
+
+            move({x:3,y:8});//[3,8]
+            move({x:3});//[3,0]
+            move({});//[0,0]
+            move()//[0,0]
+
+            function move({x,y} = {x: 0, y: 0}){
+                 return [x,y];
+            }
+            move({x:3,y:8});//[3,8]
+            move({x:3});//[3,undefined]
+            move({});//[undefined,undefined]
+            move();//[0,0]
+
+            [1,undefined,3].map((x = 'yes') => x);
+        };
+
         //6 圆括号问题
-        /*window.onload = function(){
-
-        };*/
+         window.onload = function(){
+             //1 不能使用圆括号的情况
+             //2 可以使用圆括号的情况
+         };
         //7 用途
-        /*window.onload = function(){
+        window.onload = function(){
+            //1 交换变量的值
+            [x,y] = [y,x];
+            //2 从函数返回多个值
+            function example(){
+                return [1,2,3];//返回一个数组
+            }
+            var [a,b,c]=example();
+            function example(){
+                return {
+                    foo:1,
+                    bar:2
+                };
+            }
+            var {foo,bar}= example();
+            //3 函数参数的定义
+              //参数是一组有次序的值
+              function f([x,y,z]){//...
+                  //
+              }
+              f([1,2,3]);
+              //参数是一组无次序的值
+              function f({x,y,x}){
+                  //
+              }
+              f({z:3,y:2,x:1});
+            //4 提取JSON数据
+            var jsonData = {
+                id:42,
+                status:"OK",
+                data:[867,5309]
+            };
 
-        };*/
+            let {id,status,data:number} = jsonData;
+            console.log(id,status,number);
+            //5 函数参数的默认值
+            /*jQuery.ajax = function (url, {
+                    async = true,
+                    beforeSend = function () {},
+                    cache = true,
+                    complete = function () {},
+                    crossDomain = false,
+                    global = true,
+                    // ... more config
+            }) {
+                // ... do stuff
+            };*/
 
-        //http://es6.ruanyifeng.com/#docs/destructuring
+            //6 遍历Map结构
+            var map = new Map();
+            map.set('first','hello');
+            map.set("second",'world');
+            for(let [key,value] of map){
+                console.log(key + ' is ' + value);
+            }
+            for(let [key] of map){
+                console.log("key=" + key);
+            }
+            for(let [,value] of map){
+                console.log("value =" + value);
+            }
+            //7 输入模块的指定方法
+            //const { SourceMapConsumer, SourceNode } = require("source-map");
+        };
     </script>
 </head>
 <body>
