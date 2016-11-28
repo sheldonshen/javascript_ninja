@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>let和const命令</title>
+    <script type="text/javascript" charset="UTF-8">
+        //1 let命令
+          //基本用法
+        {//{}代码块
+            let a = 10;
+            var b = 1;
+        }
+        //console.log(a);//a is not defined
+        console.log(b);//1
+        for(let i=0;i < 10; i++){}
+        //console.log(i);i is not defined
+
+        //变量i是var声明的，在全局范围内都有效。所以每一次循环，新的i值都会覆盖旧值，
+        //导致最后输出的是最后一轮的i的值
+        var a = [];
+        for(var i = 0; i < 10; i++){
+            a[i]=function(){
+                console.log(i);
+            };
+        }
+        a[6]();//10
+
+        //变量i是使用let声明的,当前的i只在本轮循环有效,所以每次循环的i其实都是一个新的变量
+        var a = [];
+        for(var i = 0; i < 10; i++){
+            a[i]=function(){
+                console.log(i);
+            };
+        }
+        a[6]();//6
+           //不存在变量提升
+           console.log(foo);//输出undefined
+           //console.log(bar);//输出ReferenceError
+        var foo = 2;
+        let bar = 2;//let不像var那样会发生“变量提升”现象。所以，变量一定要在声明后使用，否则报错
+           //暂时性死区
+           var tmp = 123;
+           if(false){//只要在块级作用域内存在let命令,它所声明的变量就绑定(binding)这个区域
+                    //不在受外界影响
+               //tmp = 'abc';//tmp is not defined
+               let tmp;//绑定if这个块级作用域
+           }
+           if(true){
+               //TDZ开始
+               //tmp = 'abc';
+               //console.log(tmp);
+
+               let tmp;//TDZ结束
+               console.log(tmp);
+
+               tmp = 123;
+               console.log(tmp);
+           }
+           //typeof m;
+           //let m;
+            console.log(typeof undeclared_variable);//undefined
+
+        function func1(x = y, y =2){
+            return [x,y];
+        }
+        //func1();
+        function func2(x = 2, y = x){
+            return [x,y];
+        }
+        func2();
+        /*
+        * 总之，暂时性死区的本质就是，只要一进入当前作用域，所要使用的变量就已经存在了，
+        * 但是不可获取，只有等到声明变量的那一行代码出现，才可以获取和使用该变量
+        * */
+
+           //不许重复声明
+           function test1(){
+               let a = 10;
+               var a = 20;
+           }
+           //test1();
+           function test2(){
+               let a = 10;
+               let a = 20;
+           }
+           //test2();
+           function test3(arg){
+               let arg;
+           }
+           //test3();
+
+           function test4(arg){
+               {
+                   let arg;//不报错
+               }
+           }
+           test4();
+
+        //2 块级作用域
+            //为什么需要块级作用域(ES5只有全局作用域和函数作用域,没有块级作用域)
+            var tmp = new Date();
+            function f(){
+                //原因在于变量提升，导致内层的tmp变量覆盖了外层的tmp变量
+                console.log(tmp);//undefined
+                if(false){
+                    var tmp = "hello,world";
+                }
+            }
+            f();
+            var s = "hello";
+            for(var i = 0; i < s.length; i++){
+                console.log(s[i]);
+            }
+            console.log(i);//计数变量i泄露为全局变量
+
+            //ES6的块级作用域
+            function f1(){
+                let  n = 50;
+                if(true){
+                    let n = 10;
+                }
+                console.log(n);//50
+            }
+            f1();
+            //ES6允许块级作用域的任意嵌套
+            {{{{{let insane = 'Hello World';console.log(insane);}}}}};
+        {{{{
+            {let insane = "welcome";}
+            //console.log(insane);外层作用域无法读取内层作用域的变量
+        }}}}
+            //内层作用域可以定义外层作用域的同名变量。
+        {{{{
+            {let insane = "welcome";}
+            let insane = "hello";
+        }}}}
+            //块级作用域的出现，实际上使得获得广泛应用的立即执行匿名函数（IIFE）不再必要了
+        //IIFE写法
+        (function(){
+            var tmp;
+            //...
+        }());
+        //块级作用域写法
+        {
+            let tmp;
+            //...
+        }
+        //"use strict";
+            //块级作用域与函数申明
+            /*if(true){
+                function f(){}
+            }
+
+            try{
+                function f(){}
+            }catch(e){
+            }*/
+         function f(){
+             console.log("I am outside!");
+         }
+        (function(){
+            //var f = undefined;
+            if(false){
+                function f(){
+                    console.log("I an insider");
+                }
+            }
+            //f();//f is not function
+        }())
+        //函数声明语句
+        {
+            let  a = "secret";
+            function f(){
+                return a;
+            }
+        }
+        //函数表达式
+        {
+            let a = "secret";
+            let f = function(){
+                return a;
+            };
+        }
+        /*"use strict";
+        if(true){
+            function f(){}
+        }
+        if(true)
+            function f(){}*/
+
+        //3 const命令
+        const PI = 3.1415;
+        console.log(PI);
+        //PI = 3;
+        //const foo;//Missing initializer in const declaration
+        if(true){
+            const MAX = 5;
+        }
+        //console.log(MAX);//MAX is undefined
+        if(true){
+            //console.log(MAX);//MAX is undefined
+            const MAX = 5;
+        }
+        var message = "hello";
+        let age = 25;
+        //const message = "welcome";
+        //const age = 100;
+        //对于复合类型的变量，变量名不指向数据，而是指向数据所在的地址。const命令只是保证变量名指向的地址不变，
+        //并不保证该地址的数据不变，所以将一个对象声明为常量必须非常小心
+        const foo1 = {};
+        foo1.prop = 123;
+        console.log(foo1.prop);
+        //foo1 = {};
+        const ab = [];
+        ab.push("hello");
+        ab.length = 0;
+        //ab = ['welcome'];
+        const constObj = Object.freeze({});
+        // 常规模式时，下面一行不起作用；
+        // 严格模式时，该行会报错
+        constObj.prop = 123;
+        console.log(constObj.prop);//对象冻结,添加属性不起作用.undefined
+        //冻结整个对象包括属性
+        var constantize = (obj) => {
+            Object.freeze(obj);
+            Object.keys(obj).forEach((key,value) => {
+                if(typeof obj[key] === 'object'){
+                    constantize(obj[key]);
+                }
+            });
+        };
+        //4 顶层对象的属性
+        //顶层对象，在浏览器环境指的是window对象，在Node指的是global对象。
+        //ES5之中，顶层对象的属性与全局变量是等价的.
+        window.a = 1;
+        console.log(a);
+        a = 2;
+        console.log(window.a);
+        //var命令和function命令声明的全局变量，依旧是顶层对象的属性；另一方面规定，let命令、const命令、
+        //class命令声明的全局变量，不属于顶层对象的属性。也就是说，从ES6开始，全局变量将逐步与顶层对象的属性脱钩
+        var a = 123;
+        // 如果在Node的REPL环境，可以写成global.a
+        // 或者采用通用方法，写成this.a
+        console.log(window.a);
+        const bb = 12345;
+        console.log(window.bb);//undefined,bb依然是全局变量,只是不再是window全局对象的属性了
+        console.log(bb);
+
+        //5 顶层对象
+        /*浏览器里面，顶层对象是window，但Node和Web Worker没有window。
+        浏览器和Web Worker里面，self也指向顶层对象，但是Node没有self。
+        Node里面，顶层对象是global，但其他环境都不支持。*/
+        //同一段代码为了能够在各种环境，都能取到顶层对象
+        //方法1
+        (typeof window !== 'undefined' ? window:(typeof process === 'object'
+         && typeof require === 'function' && typeof global === 'object')?global:this);
+        //方法2
+        var getGlobal = function(){
+            if(typeof self !== undefined){
+                return self;
+            }
+            if(typeof window !== 'undefined'){
+                return window;
+            }
+            if(typeof global !== 'undefined'){
+                return global;
+            }
+            throw new Error("unable to locate global object");
+        };
+    </script>
+</head>
+<body>
+</body>
+</html>
