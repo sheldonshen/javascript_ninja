@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>变量的结构赋值</title>
+    <script type="text/javascript" charset="UTF-8">
+        //1 数组的解构赋值
+        window.onload = function(){
+            //ES6允许按照一定模式，从数组和对象中提取值，对变量进行赋值，这被称为解构（Destructuring）
+            var a = 1;
+            var b = 2;
+            var c = 3;
+            //es6
+            var [a,b,c] = [1,2,3];//从数组中提取值，按照对应位置，对变量赋值
+            //本质上，这种写法属于“模式匹配”
+            let [foo,[[bar],baz]] = [1,[[2],3]];
+            console.log(foo);//1
+            console.log(bar);//2
+            console.log(baz);//3
+            let [,,third] = ['foo','bar','baz'];
+            console.log(third);//baz
+            let [x,,y]=[1,2,3];
+            console.log(x);//1
+            console.log(y);//3
+            let [head, ...tail]=[1,2,3,4];
+            console.log(head);//1
+            console.log(tail);//[2,3,4]
+            let [m,n,...k] = ['a'];
+            console.log(m);//a
+            console.log(n);//undefined
+            console.log(k);//[]
+            var [foo1] = [];
+            var [a1,a2] = [1];
+            console.log(foo1);//undefined
+            console.log(a2);//undefined
+            let [e,f] = [1,2,3];
+            console.log(e);
+            console.log(f);
+            let [o,[p],q] = [1,[2,3],4];
+            console.log(o);//1
+            console.log(p);//2
+            console.log(q);//4
+            // 报错
+            //let [fooe] = 1;
+            /*let [fooe] = false;
+             let [fooe] = NaN;
+             let [fooe] = undefined;
+             let [fooe] = null;
+             let [fooe] = {};*/
+            //解构赋值不仅适用于var命令，也适用于let和const命令。
+            /* var [v1, v2, ..., vN ] = array;
+             let [v1, v2, ..., vN ] = array;
+             const [v1, v2, ..., vN ] = array;*/
+            let [v1,v2,v3] = new Set(['a','b','c']);
+            console.log(v1);
+            console.log(v2);
+            console.log(v3);
+            //事实上，只要某种数据结构具有Iterator接口，都可以采用数组形式的解构赋值
+            function* fibs(){
+                var a = 0;
+                var b = 1;
+                while(true){
+                    yield a;
+                    [a,b]=[b,a + b];
+                }
+            }
+            var [first, second, , fourth, fifth, sixth] = fibs();
+            console.log(second);//1
+            //fibs是一个Generator函数，原生具有Iterator接口。解构赋值会依次从这个接口获取值
+            //默认值(解构赋值可以指定默认值)
+            var [test1 = true] = [];
+            console.log(test1);
+            [test2,test3='b']=['a'];
+            console.log(test2);
+            console.log(test3);
+            var [test4 = 1] = [undefined];
+            var [test5 = 1] = [null];
+            console.log(test4);//1
+            console.log(test5);//null
+            function f1(){
+                console.log("aaa");
+            }
+            let [v5 = f1()] = [1234];
+            console.log(v5);
+            /*let [x = 1, y = x] = [];     // x=1; y=1
+             let [x = 1, y = x] = [2];    // x=2; y=2
+             let [x = 1, y = x] = [1, 2]; // x=1; y=2
+             let [x = y, y = 1] = [];     // ReferenceError*/
+            //上面最后一个表达式之所以会报错，是因为x用到默认值y时，y还没有声明。
+        };
+
+        //2 对象的解构赋值
+        window.onload = function(){
+            var {bar,foo,baz} = {foo:'aaa',bar:'bbb'};
+            console.log(foo);//aaa
+            console.log(bar);//bb
+            console.log(baz);
+            var {foo: baz} = {foo:'aaa',bar:'bbb'};
+            console.log(baz);//aaa
+            let obj = {first:'hello',last:'world'};
+            let {first : f,last: l} = obj;
+            console.log(f);
+            console.log(l);
+            var {foo123:baz} = {foo123:'aaa',bar:'bbb'};
+            console.log(baz);
+            //console.log(foo123);//foo123 is not defined
+            //let foog;
+            //let {foog} = {foog: 1}; // SyntaxError: Duplicate declaration "foo"
+
+            //let bazz;
+            //let {bar: bazz} = {bar: 1}; // SyntaxError: Duplicate declaration "baz"
+            let fooo;
+            ({fooo}={fooo:1});
+            console.log(fooo);
+            let bazz;
+            ({bar:bazz}={bar:1});
+            console.log(bazz);
+            //let命令下面一行的圆括号是必须的，否则会报错。因为解析器会将起首的大括号，
+            //理解成一个代码块，而不是赋值语句
+            var obj123 = {
+                p:[
+                  "hello1",
+                    {y:'world1'}
+                ]
+            };
+            var {p:[x,{y}]} = obj123;
+            console.log(x);
+            console.log(y);
+            //这时p是模式，不是变量，因此不会被赋值。
+            var node = {
+                loc:{
+                    start:{
+                        line:1,
+                        column:5
+                    }
+                }
+            };
+            var {loc:{start:{line}}} = node;
+            //上面代码中，只有line是变量，loc和start都是模式，不会被赋值
+            console.log(line);
+            //嵌套赋值的例子
+            let object = {};
+            let arr    = [];
+            ({foo:object.prop,bar:arr[0]}={foo:123,bar:true});
+            console.log(object);
+            console.log(arr[0]);
+            //对象的解构也可以指定默认值
+            var {x = 3} = {};
+            console.log(x);
+            var {x,y=3}={x:1};
+            console.log(x);
+            console.log(y);
+            var {x:y=3} = {};
+            console.log(y);
+            var {x:y=3} = {x:5};
+            console.log(y);
+            var {message: msg = "something went wrong"} = {};
+            console.log(msg);
+            //默认值生效的条件是，对象的属性值严格等于undefined。
+            var {x = 3} = {x:undefined};
+            console.log(x);//3
+            var {x = 3} = {x:null};
+            console.log(x);//null
+            //如果解构失败，变量的值等于undefined。
+            //var {foo} = {bar:'baz'};
+            //console.log(foo);//undefined
+            //var {foo:{bar}} = {baz:'baz'};
+            //由于数组本质是特殊的对象，因此可以对数组进行对象属性的解构
+            var array = [1,2,3];
+            var {0: first,[array.length-1]:last} = array;
+            console.log(first);
+            console.log(last);
+        };
+
+        //3 字符串的解构赋值
+        /*window.onload = function(){
+
+        };*/
+        //4 数值和布尔值的解构赋值
+        /*window.onload = function(){
+
+        };*/
+        //5 函数参数的解构赋值
+        /*window.onload = function(){
+
+        };*/
+        //6 圆括号问题
+        /*window.onload = function(){
+
+        };*/
+        //7 用途
+        /*window.onload = function(){
+
+        };*/
+
+        //http://es6.ruanyifeng.com/#docs/destructuring
+    </script>
+</head>
+<body>
+</body>
+</html>
