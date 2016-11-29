@@ -1,0 +1,177 @@
+<!DOCTYPE html><html lang="en"><head>    <meta charset="UTF-8">    <title>字符串的扩展</title>    <!--垫片库-->    <script type="text/javascript" charset="UTF-8" src="at.js"></script>    <script type="text/javascript" charset="UTF-8">        //字符的Unicode表示法        //codePointAt()        var s = "𠮷";    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>字符串的扩展</title>
+    <!--垫片库-->
+    <script type="text/javascript" charset="UTF-8" src="at.js"></script>
+    <script type="text/javascript" charset="UTF-8">
+        //字符的Unicode表示法
+        //codePointAt()
+        var s = "𠮷";
+        console.log(s.charAt(0));
+        console.log(s.charAt(1));
+        console.log(s.charCodeAt(0));
+        console.log(s.charCodeAt(1));
+        var s = "𠮷a";
+        console.log(s.codePointAt(0));
+        console.log(s.codePointAt(1));
+        console.log(s.charCodeAt(2));
+        //String.fromCodePoint()
+        console.log(String.fromCharCode(0x20BB7));
+        console.log(String.fromCodePoint(0x20BB7));
+        console.log(String.fromCodePoint(0x78, 0x1f680, 0x79) === 'x\uD83D\uDE80y');
+         //fromCodePoint方法定义在String对象上,而codePointAt方法定义在字符串的实例对象上
+
+        //字符串的遍历器接口
+        for(let codePoint of "foo"){
+            console.log(codePoint);
+        }
+
+        var text = String.fromCodePoint(0x20BB7);
+
+        for (let i = 0; i < text.length; i++) {
+            console.log(text[i]);
+        }
+
+        for (let i of text) {
+            console.log(i);
+        }
+        // "𠮷"
+
+        //at()
+        console.log('abc'.charAt(0)); // "a"
+        console.log('𠮷'.charAt(0)); // "\uD842"
+        console.log('abc'.at(0)); // "a"
+        console.log('𠮷'.at(0)); // "𠮷"
+        //normalize()
+        //includes(), startsWith(), endsWith()
+        var s = "Hello world!";
+        console.log(s.startsWith("Hello"));
+        console.log(s.endsWith("!"));
+        console.log(s.includes("o"));
+        console.log(s.startsWith("world",6));
+        console.log(s.endsWith("Hello",5));
+        console.log(s.includes("Hello",6));//false
+        //repeat()
+        console.log("x".repeat(3));
+        console.log("abc".repeat(3.5));
+        //console.log("x".repeat(-1));
+        //console.log("x".repeat(Infinity));
+        console.log("x".repeat(-0.9));//0
+        console.log("x".repeat(NaN));//0
+        console.log("x".repeat("NA"));//0
+        console.log("x".repeat("3"));//0
+        //padStart()，padEnd()
+        /*'x'.padStart(5, 'ab') // 'ababx'
+        'x'.padStart(4, 'ab') // 'abax'
+        'x'.padEnd(5, 'ab') // 'xabab'
+        'x'.padEnd(4, 'ab') // 'xaba'*/
+        //模板字符串
+                // 普通字符串
+                `In JavaScript '\n' is a line-feed.`;
+
+               // 多行字符串
+                `In JavaScript this is
+                 not legal.`;
+
+                 console.log(`string text line 1
+                             string text line 2`);
+
+        // 字符串中嵌入变量
+        var name = "Bob", time = "today";
+        console.log(`Hello ${name}, how are you ${time}?`);
+
+        var x = 1;
+        var y = 2;
+
+        console.log(`${x} + ${y} = ${x + y}`);
+         // "1 + 2 = 3"
+        console.log(`${x} + ${y * 2} = ${x + y * 2}`);
+        // "1 + 4 = 5"
+
+        var obj = {x: 1, y: 2};
+        console.log(`${obj.x + obj.y}`);
+        // 3
+        function fn(){
+            return "Hello World";
+        }
+        console.log(`foo ${fn()} bar`);
+        //var msg = `Hello,${place}`;//变量place没有声明
+        console.log(`Hello, ${'world'}`);
+        const tmpl = addrs => `
+  <table>
+  ${addrs.map(addr => `
+    <tr><td>${addr.first}</td></tr>
+    <tr><td>${addr.last}</td></tr>
+  `).join('')}
+  </table>
+`;
+        const data = [
+            { first: '<Jane>', last: 'Bond' },
+            { first: 'Lars', last: '<Croft>' },
+        ];
+
+        console.log(tmpl(data));
+
+        let str = 'return ' + '`Hello,${name}`';
+        let func = new Function('name',str);
+        console.log(func('jack'));
+
+        let str1 = '(name)=>`Hello,${name}`';
+        let func1 = eval.call(null,str1);
+        console.log(func1("Jacl"));
+
+        //实例：模板编译
+       /* function compile(template){
+            var evalExpr = /<%=(.+?)%>/g;
+            var expr = /<%([\s\S]+?)%>/g;
+
+            template = template
+                    .replace(evalExpr, '`); \n  echo( $1 ); \n  echo(`')
+                    .replace(expr, '`); \n $1 \n  echo(`');
+
+            template = 'echo(`' + template + '`);';
+
+            var script =
+                    `(function parse(data){
+    var output = "";
+
+    function echo(html){
+      output += html;
+    }
+
+    ${ template }
+
+    return output;
+  })`;
+
+            return script;
+        }
+        var parse = eval(compile(template));
+        console.log(parse({ supplies: [ "broom", "mop", "cleaner" ] }));*/
+
+        //标签模板
+        var a = 5;
+        var b = 10;
+
+        function tag(s, v1, v2) {
+            console.log(s[0]);
+            console.log(s[1]);
+            console.log(s[2]);
+            console.log(v1);
+            console.log(v2);
+
+            return "OK";
+        }
+
+        tag`Hello ${ a + b } world ${ a * b}`;
+
+        //String.raw()
+
+        //模板字符串的限制
+    </script>
+</head>
+<body>
+</body>
+</html>    console.log(s.charAt(0));        console.log(s.charAt(1));        console.log(s.charCodeAt(0));        console.log(s.charCodeAt(1));        var s = "𠮷a";        console.log(s.codePointAt(0));        console.log(s.codePointAt(1));        console.log(s.charCodeAt(2));        //String.fromCodePoint()        console.log(String.fromCharCode(0x20BB7));        console.log(String.fromCodePoint(0x20BB7));        console.log(String.fromCodePoint(0x78, 0x1f680, 0x79) === 'x\uD83D\uDE80y');         //fromCodePoint方法定义在String对象上,而codePointAt方法定义在字符串的实例对象上        //字符串的遍历器接口        for(let codePoint of "foo"){            console.log(codePoint);        }        var text = String.fromCodePoint(0x20BB7);        for (let i = 0; i < text.length; i++) {            console.log(text[i]);        }        for (let i of text) {            console.log(i);        }        // "𠮷"        //at()        console.log('abc'.charAt(0)); // "a"        console.log('𠮷'.charAt(0)); // "\uD842"        console.log('abc'.at(0)); // "a"        console.log('𠮷'.at(0)); // "𠮷"        //normalize()        //includes(), startsWith(), endsWith()        var s = "Hello world!";        console.log(s.startsWith("Hello"));        console.log(s.endsWith("!"));        console.log(s.includes("o"));        console.log(s.startsWith("world",6));        console.log(s.endsWith("Hello",5));        console.log(s.includes("Hello",6));//false        //repeat()        console.log("x".repeat(3));        console.log("abc".repeat(3.5));        //console.log("x".repeat(-1));        //console.log("x".repeat(Infinity));        console.log("x".repeat(-0.9));//0        console.log("x".repeat(NaN));//0        console.log("x".repeat("NA"));//0        console.log("x".repeat("3"));//0        //padStart()，padEnd()        /*'x'.padStart(5, 'ab') // 'ababx'        'x'.padStart(4, 'ab') // 'abax'        'x'.padEnd(5, 'ab') // 'xabab'        'x'.padEnd(4, 'ab') // 'xaba'*/        //模板字符串                // 普通字符串                `In JavaScript '\n' is a line-feed.`;               // 多行字符串                `In JavaScript this is                 not legal.`;                 console.log(`string text line 1                             string text line 2`);        // 字符串中嵌入变量        var name = "Bob", time = "today";        console.log(`Hello ${name}, how are you ${time}?`);        var x = 1;        var y = 2;        console.log(`${x} + ${y} = ${x + y}`);         // "1 + 2 = 3"        console.log(`${x} + ${y * 2} = ${x + y * 2}`);        // "1 + 4 = 5"        var obj = {x: 1, y: 2};        console.log(`${obj.x + obj.y}`);        // 3        function fn(){            return "Hello World";        }        console.log(`foo ${fn()} bar`);        //var msg = `Hello,${place}`;//变量place没有声明        console.log(`Hello, ${'world'}`);        const tmpl = addrs => `  <table>  ${addrs.map(addr => `    <tr><td>${addr.first}</td></tr>    <tr><td>${addr.last}</td></tr>  `).join('')}  </table>`;        const data = [            { first: '<Jane>', last: 'Bond' },            { first: 'Lars', last: '<Croft>' },        ];        console.log(tmpl(data));        let str = 'return ' + '`Hello,${name}`';        let func = new Function('name',str);        console.log(func('jack'));        let str1 = '(name)=>`Hello,${name}`';        let func1 = eval.call(null,str1);        console.log(func1("Jacl"));        //实例：模板编译       /* function compile(template){            var evalExpr = /<%=(.+?)%>/g;            var expr = /<%([\s\S]+?)%>/g;            template = template                    .replace(evalExpr, '`); \n  echo( $1 ); \n  echo(`')                    .replace(expr, '`); \n $1 \n  echo(`');            template = 'echo(`' + template + '`);';            var script =                    `(function parse(data){    var output = "";    function echo(html){      output += html;    }    ${ template }    return output;  })`;            return script;        }        var parse = eval(compile(template));        console.log(parse({ supplies: [ "broom", "mop", "cleaner" ] }));*/        //标签模板        var a = 5;        var b = 10;        function tag(s, v1, v2) {            console.log(s[0]);            console.log(s[1]);            console.log(s[2]);            console.log(v1);            console.log(v2);            return "OK";        }        tag`Hello ${ a + b } world ${ a * b}`;        //String.raw()        //模板字符串的限制    </script></head><body></body></html>
