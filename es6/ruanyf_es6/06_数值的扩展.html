@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数值的扩展</title>
+    <script type="text/javascript" charset="UTF-8">
+        //1二进制和八进制表示法
+        //ES6提供了二进制和八进制数值的新的写法，分别用前缀0b（或0B）和0o（或0O）表示
+        //0b111110111 === 503 // true
+        //0o767 === 503 // true
+        // 非严格模式
+        (function(){
+            console.log(0o11 === 011);//true
+        })(); // true
+
+        // 严格模式
+        (function(){
+            //'use strict';
+            //console.log(0o11 === 011);
+        })();
+        console.log(Number("0b111"));
+        console.log(Number("0o10"));
+
+        //2Number.isFinite(), Number.isNaN()
+        console.log(Number.isFinite(15)); // true
+        console.log(Number.isFinite(0.8)); // true
+        console.log(Number.isFinite(NaN)); // false
+        console.log(Number.isFinite(Infinity)); // false
+        console.log(Number.isFinite(-Infinity)); // false
+        console.log(Number.isFinite('foo')); // false
+        console.log(Number.isFinite('15')); // false
+        console.log(Number.isFinite(true)); // false
+        //ES5可以通过下面的代码，部署Number.isFinite方法。
+        (function (global) {
+            var global_isFinite = global.isFinite;
+
+            Object.defineProperty(Number, 'isFinite', {
+                value: function isFinite(value) {
+                    return typeof value === 'number' && global_isFinite(value);
+                },
+                configurable: true,
+                enumerable: false,
+                writable: true
+            });
+        })(this);
+
+        console.log(Number.isNaN(NaN)); // true
+        console.log(Number.isNaN(15)); // false
+        console.log(Number.isNaN('15')); // false
+        console.log(Number.isNaN(true)); // false
+        console.log(Number.isNaN(9/NaN)); // true
+        console.log(Number.isNaN('true'/0)); // true
+        console.log(Number.isNaN('true'/'true')); // true
+        //ES5通过下面的代码，部署Number.isNaN()。
+        (function (global) {
+            var global_isNaN = global.isNaN;
+
+            Object.defineProperty(Number, 'isNaN', {
+                value: function isNaN(value) {
+                    return typeof value === 'number' && global_isNaN(value);
+                },
+                configurable: true,
+                enumerable: false,
+                writable: true
+            });
+        })(this);
+
+        //它们与传统的全局方法isFinite()和isNaN()的区别在于，传统方法先调用Number()将非数值的值转为数值，
+        //再进行判断，而这两个新方法只对数值有效，非数值一律返回false。
+        console.log(isFinite(25)); // true
+        console.log(isFinite("25")); // true
+        console.log(Number.isFinite(25)); // true
+        console.log(Number.isFinite("25")); // false
+
+        console.log(isNaN(NaN)); // true
+        console.log(isNaN("NaN")); // true
+        console.log(Number.isNaN(NaN)); // true
+        console.log(Number.isNaN("NaN")); // false
+
+        //3Number.parseInt(), Number.parseFloat()
+        // ES5的写法
+        console.log(parseInt('12.34')); // 12
+        console.log(parseFloat('123.45#')); // 123.45
+
+        // ES6的写法
+        console.log(Number.parseInt('12.34')); // 12
+        console.log(Number.parseFloat('123.45#')); // 123.45
+        //这样做的目的是,逐步减少全局性的方法,使得语言逐步模块化
+        console.log(Number.parseInt === parseInt);//true
+        console.log(Number.parseFloat === parseFloat);//true
+
+        //4Number.isInteger()
+        //在JavaScript内部，整数和浮点数是同样的储存方法，所以3和3.0被视为同一个值
+        console.log(Number.isInteger(25)); // true
+        console.log(Number.isInteger(25.0)); // true
+        console.log(Number.isInteger(25.1)); // false
+        console.log(Number.isInteger("15")); // false
+        console.log(Number.isInteger(true)); // false
+        //ES5可以通过下面的代码，部署Number.isInteger()。
+        (function (global) {
+            var floor = Math.floor,
+                    isFinite = global.isFinite;
+
+            Object.defineProperty(Number, 'isInteger', {
+                value: function isInteger(value) {
+                    return typeof value === 'number' && isFinite(value) &&
+                            value > -9007199254740992 && value < 9007199254740992 &&
+                            floor(value) === value;
+                },
+                configurable: true,
+                enumerable: false,
+                writable: true
+            });
+        })(this);
+
+        //5Number.EPSILON
+        //ES6在Number对象上面，新增一个极小的常量Number.EPSILON。
+        //引入一个这么小的量的目的，在于为浮点数计算，设置一个误差范围
+        console.log(Number.EPSILON);
+        // 2.220446049250313e-16
+        console.log(Number.EPSILON.toFixed(20));
+        // '0.00000000000000022204'
+        console.log(0.1 + 0.2);
+        // 0.30000000000000004
+
+        console.log(0.1 + 0.2 - 0.3);
+        // 5.551115123125783e-17
+
+        console.log(5.551115123125783e-17.toFixed(20));
+        // '0.00000000000000005551'
+        console.log(5.551115123125783e-17 < Number.EPSILON);
+        function withinErrorMargin (left, right) {
+            return Math.abs(left - right) < Number.EPSILON;
+        }
+        console.log(withinErrorMargin(0.1 + 0.2, 0.3));
+        // true
+        console.log(withinErrorMargin(0.2 + 0.2, 0.3));
+        // false
+        //6安全整数和Number.isSafeInteger()
+        //Number.isSafeInteger()则是用来判断一个整数是否落在这个范围之内。
+        Math.pow(2, 53) // 9007199254740992
+
+        9007199254740992  // 9007199254740992
+        9007199254740993  // 9007199254740992
+
+        Math.pow(2, 53) === Math.pow(2, 53) + 1
+        Number.MAX_SAFE_INTEGER === Math.pow(2, 53) - 1
+        // true
+        Number.MAX_SAFE_INTEGER === 9007199254740991
+        // true
+
+        Number.MIN_SAFE_INTEGER === -Number.MAX_SAFE_INTEGER
+        // true
+        Number.MIN_SAFE_INTEGER === -9007199254740991
+        // true
+        Number.isSafeInteger('a') // false
+        Number.isSafeInteger(null) // false
+        Number.isSafeInteger(NaN) // false
+        Number.isSafeInteger(Infinity) // false
+        Number.isSafeInteger(-Infinity) // false
+
+        Number.isSafeInteger(3) // true
+        Number.isSafeInteger(1.2) // false
+        Number.isSafeInteger(9007199254740990) // true
+        Number.isSafeInteger(9007199254740992) // false
+
+        Number.isSafeInteger(Number.MIN_SAFE_INTEGER - 1) // false
+        Number.isSafeInteger(Number.MIN_SAFE_INTEGER) // true
+        Number.isSafeInteger(Number.MAX_SAFE_INTEGER) // true
+        Number.isSafeInteger(Number.MAX_SAFE_INTEGER + 1) // false
+        Number.isSafeInteger = function (n) {
+            return (typeof n === 'number' &&
+            Math.round(n) === n &&
+            Number.MIN_SAFE_INTEGER <= n &&
+            n <= Number.MAX_SAFE_INTEGER);
+        }
+        Number.isSafeInteger(9007199254740993)
+        // false
+        Number.isSafeInteger(990)
+        // true
+        Number.isSafeInteger(9007199254740993 - 990)
+        // true
+        9007199254740993 - 990
+        // 返回结果 9007199254740002
+        // 正确答案应该是 9007199254740003
+        console.log("log=" + (9007199254740993 === 9007199254740992));
+        function trusty (left, right, result) {
+            if (
+                    Number.isSafeInteger(left) &&
+                    Number.isSafeInteger(right) &&
+                    Number.isSafeInteger(result)
+            ) {
+                return result;
+            }
+            throw new RangeError('Operation cannot be trusted!');
+        }
+
+        trusty(9007199254740993, 990, 9007199254740993 - 990)
+        // RangeError: Operation cannot be trusted!
+
+        trusty(1, 2, 3)
+        // 3
+
+        //7Math对象的扩展
+
+        //8指数运算符
+        console.log(2 ** 3);
+        console.log(2 ** 2);
+        let a = 2;
+        a **= 2;
+        // 等同于 a = a * a;
+
+        let b = 3;
+        b **= 3;
+        // 等同于 b = b * b * b;
+    </script>
+</head>
+<body>
+</body>
+</html>
