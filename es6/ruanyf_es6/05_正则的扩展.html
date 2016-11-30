@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>正则的扩展</title>
+    <script type="text/javascript" charset="UTF-8">
+        //1RegExp构造函数
+        var regex = new RegExp("xyz",'i');
+        //等价于
+        var regex = /xyz/i;
+        var regex = new RegExp(/xyz/i);
+        //等价于
+        var regex = /xyz/i;
+        var regex = new RegExp(/xyz/,"i");
+        console.log(new RegExp(/abc/ig,'i').flags);//i
+        //原有正则对象的修饰符是ig，它会被第二个参数i覆盖。
+
+        //2字符串的正则方法
+        /*String.prototype.match 调用 RegExp.prototype[Symbol.match]
+        String.prototype.replace 调用 RegExp.prototype[Symbol.replace]
+        String.prototype.search 调用 RegExp.prototype[Symbol.search]
+        String.prototype.split 调用 RegExp.prototype[Symbol.split]*/
+
+        //3u修饰符
+        //4y修饰符
+        var s = 'aaa_aa_a';
+        var r1 = /a+/g;
+        var r2 = /a+/y;
+
+        console.log(r1.exec(s)); // ["aaa"]
+        console.log(r2.exec(s)); // ["aaa"]
+
+        console.log(r1.exec(s)); // ["aa"]
+        console.log(r2.exec(s)); // null
+
+        var s = 'aaa_aa_a';
+        var r = /a+_/y;
+
+        console.log(r.exec(s)); // ["aaa_"]
+        console.log(r.exec(s)); // ["aa_"]
+
+        //5sticky属性
+        var r = /hello\d/y;
+        console.log(r.sticky);
+
+        //6flags属性
+        console.log(/abc/ig.source);
+        console.log(/abc/ig.flags);
+        //7RegExp.escape()
+        //8后行断言
+        //9Unicode属性类
+    </script>
+</head>
+<body>
+</body>
+</html>
