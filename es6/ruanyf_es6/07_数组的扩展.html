@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数组的扩展</title>
+    <script type="text/javascript" charset="UTF-8">
+        //1 Array.from()
+        let arrayLike = {
+            '0':'1',
+            '1':'2',
+            '2':'3',
+            length:3
+        };
+        //ES5的写法
+        var arr1 = [].slice.call(arrayLike);//['a','b','c']
+        //arrayLike.([].slice())
+        console.log(arr1);
+        //ES6的写法
+        var arr2 = Array.from(arrayLike);
+        console.log(arr2);
+        //实际应用中,常见的类似数组的对象是DOM操作返回的NodeList集合
+        //以及函数内部的arguments对象
+        //NodeList对象
+        let ps = document.querySelectorAll("p");
+        Array.from(ps).forEach(function(p){
+            console.log(p);
+        });
+        console.log(document);
+        //arguments对象
+        function foo(){
+            var args = Array.from(arguments);
+            //...
+            console.log(args);
+        }
+        foo(1,2,3);
+        //只要是部署了Iterator接口的数据结构,Array.from都能将其转为数组
+        console.log(Array.from("hello"));
+        let namesSet = new Set(['a','b']);
+        console.log(Array.from(namesSet));
+        //如果参数是一个真正的数组，Array.from会返回一个一模一样的新数组
+        console.log(Array.from([1,2,3]));
+        //扩展运算符(...)也可以将某些数据结构转为数组
+        //arguments对象
+        function bar(){
+            var args = [...arguments];//扩展运算符
+            console.log(args);
+        }
+        bar('abc');
+        //NodeList对象
+        console.log([...document.querySelectorAll('div')]);
+        //扩展运算符背后调用的是遍历器接口(Symbol.iterator),
+        //类似数组的对象:必须有length属性,任何有length属性的对象,
+        //都可以通过Array.from方法转化为数组,而此时扩展运算符就无法转换
+        console.log(Array.from({length:3}));//// [ undefined, undefined, undefined ]
+        const toArray = (() =>
+          Array.from ? Array.from : obj => [].slice.call(obj)
+        )();
+        console.log(Array.from(arrayLike,x => x * x));
+        //等同于
+        console.log(Array.from(arrayLike).map(x => x * x));
+        console.log(Array.from([1,2,3],(x)=> x * x));
+        //一组DOM节点的文本内容
+        let spans = document.querySelectorAll("span.name");
+        //map()
+        let name1 = Array.prototype.map.call(spans,s => s.textContent);
+        //Array.from()
+        let name2 = Array.from(spans,s => s.textContent);
+        //将数组中布尔值为false的成员转为0
+        console.log(Array.from([1,,2,,3],(n)=> n||0));
+        // [1, 0, 2, 0, 3]
+        //返回各种数据的类型
+        function typesof(){
+            return Array.from(arguments,value => typeof value);
+        }
+        console.log(typesof(1,true,'abc',null,[],NaN));
+        console.log(Array.from({length: 2},()=> "Jack"));
+        function countSymbols(string){
+            return Array.from(string).length;
+        }
+        console.log(countSymbols("hello"));
+
+        //2 Array.of()
+        console.log(Array.of(7));
+        console.log(Array.of(1,2,3));
+        console.log(Array(7));
+        console.log(Array(1,2,3));
+        console.log(Array.of(3, 11, 8)); // [3,11,8]
+        console.log(Array.of(3)); // [3]
+        console.log(Array.of(3).length); // 1
+        console.log(Array("abc"));
+        console.log(Array("7"));
+        console.log(Array(7));
+        console.log(Array.of()); // []
+        console.log(Array.of(undefined)); // [undefined]
+        console.log(Array.of(1)); // [1]
+        console.log(Array.of(1, 2)); // [1, 2]
+        function ArrayOf(){
+            return [].slice.call(arguments);
+        }
+
+        //3 数组实例的copyWithin()
+        console.log([1,2,3,4,5].copyWithin(0,3));
+        //将3号位复制到0号位
+        console.log([1,2,3,4,5].copyWithin(0,3,4));
+        //-2相当于3号位，-1相当于4号位
+        console.log([1,2,3,4,5].copyWithin(0,-2,-1));
+        //将3号位复制到0号位
+        console.log([].copyWithin.call({length:5,3:1},0,3));
+        //将2号位到数组结束，复制到0号位
+        var i32a = new Int32Array([1,2,3,4,5]);
+        console.log(i32a.copyWithin(0,2));
+        // 对于没有部署TypedArray的copyWithin方法的平台
+        // 需要采用下面的写法
+        console.log([].copyWithin.call(new Int32Array([1,2,3,4,5]),0,3,4));
+
+        //4 数组实例的find()和findIndex()
+        console.log([1,4,-5,10].find((n) =>  n < 0));
+        console.log([1,5,10,15].find(function(val,index,arr){
+              return val > 9;
+        }));//10
+        console.log([1,4,-5,10].findIndex((n) =>  n < 0));
+        console.log([1,5,10,15].findIndex(function(val,index,arr){
+            return val > 9;
+        }));//10
+        console.log([NaN].indexOf(NaN));//-1
+        console.log([NaN].find((elem) => Object.is(elem,NaN)));
+        console.log([NaN].findIndex((elem) => Object.is(elem,NaN)));
+        //5 数组实例的fill()
+        console.log(['a','b','c'].fill(7));
+        console.log(new Array(3).fill(7));
+        console.log(['a','b','c'].fill(7,1,2));
+        //6 数组实例的entries()，keys()和values()
+        for(let index of ['a','b'].keys()){
+           console.log(index);
+        }
+        /*for(let elem of ['a','b'].values()){
+            console.log(elem);
+        }*/
+        /*for (let elem of ['a', 'b'].values()) {
+            console.log(elem);
+        }*/
+
+        for(let [index,elem] of ['a','b'].entries()){
+            console.log(index,elem);
+        }
+        let letter = ['a','b','c'];
+        let entries = letter.entries();
+        console.log(entries.next().value);
+        console.log(entries.next().value);
+        console.log(entries.next().value);
+
+        //7 数组实例的includes()
+        var a = [1,2,3];
+        console.log(a.includes(2));
+        console.log(a.includes(4));
+        console.log([1, 2, NaN].includes(NaN)); // true
+
+        //8 数组的空位
+        /*
+        * forEach(), filter(), every() 和some()都会跳过空位。
+          map()会跳过空位，但会保留这个值
+          join()和toString()会将空位视为undefined，而undefined和null会被处理成空字符串
+        * */
+        console.log(0 in [undefined, undefined, undefined]); // true
+        console.log(0 in [, , ,]); // false
+        //forEach方法
+        [,'a'].forEach((x,i) => console.log(i)); //1
+        //filter方法
+        console.log(['a',,'b'].filter(x => true));//['a','b']
+        //every方法
+        console.log([,"a"].every(x => x === 'a'));//true
+        //some方法
+        console.log([,'a'].some(x => x !== 'a'));//false
+        //map方法
+        console.log([,'a'].map(x => 1));//false
+        //join方法
+        console.log([,'a',undefined,null].join('#'));
+        //toString方法
+        console.log([,'a',undefined,null].toString());
+        console.log(Array.from(['a',,'b']));
+        console.log([...['a',,'b']]);
+        console.log([,'a','b',,].copyWithin(2,0)); // [,"a",,"a"])
+        console.log(new Array(3).fill(3));
+        let arr = [,,];
+        for(let i of arr){
+            console.log(1)
+        }
+        console.log([...[,'a'].entries()]);
+        console.log([...[,'a'].keys()]);
+        //console.log([...[,'a'].values()]);
+        console.log([,'a'].find(x => true));
+        console.log([,'a'].findIndex(x => true));
+    </script>
+</head>
+<body>
+</body>
+</html>
