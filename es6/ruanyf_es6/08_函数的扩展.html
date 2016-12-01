@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>函数的扩展</title>
+    <script type="text/javascript" charset="UTF-8">
+        //1函数参数的默认值
+           //基本用法
+        function log(x,y){
+            y = y || "World";
+            console.log(x,y);
+        }
+        log("Hello");
+        log("Hello","China");
+        log("Hello","");
+        function log(x,y = "World"){
+            console.log(x,y);
+        }
+        log("Hello");
+        log("Hello","China");
+        log("Hello","");
+        function Point(x = 0, y = 0){
+            this.x = x;
+            this.y = y;
+        }
+        var p = new Point();
+        console.log(p);
+        //参数变量是默认声明的，所以不能用let或const再次声明。
+        function foo(x = 5){
+            //let x = 1;
+            //const x = 5;
+        }
+           //与解构赋值默认值结合使用
+           function foo({x,y = 5}){
+               console.log(x,y);
+           }
+           foo({});
+           foo({x:1});
+           foo({x:1,y:2});
+           //foo();
+           function fetch(url,{body = '', method = 'GET', headers = {}}){
+               console.log(method);
+           }
+           fetch("http://example.com",{});
+           //fetch("http://example.com");
+           //双重默认值
+           function fetch(url,{body = '', method = 'GET', headers = {}} = {}){
+               console.log(method);
+           }
+           fetch("http://example.com");
+           //上面代码中，函数fetch没有第二个参数时，函数参数的默认值就会生效，然后才是解构赋值的默认值生效，
+           //变量method才会取到默认值GET
+
+           //写法一(函数参数的默认值是空对象,但是设置了对象解构赋值的默认值)
+           function m1({x =0, y = 0} = {}){
+               return [x,y];
+           }
+           //写法二(函数参数的默认值是一个有具体属性的对象,但是没有设置对象解构赋值的默认值)
+           function m2({x,y} = {x: 0, y: 0}){
+               return [x,y];
+           }
+
+        // 函数没有参数的情况
+        console.log(m1()); // [0, 0]
+        console.log(m2()); // [0, 0]
+
+        // x和y都有值的情况
+        console.log(m1({x: 3, y: 8})); // [3, 8]
+        console.log(m2({x: 3, y: 8})); // [3, 8]
+
+        // x有值，y无值的情况
+        console.log(m1({x: 3})); // [3, 0]
+        console.log(m2({x: 3})); // [3, undefined]
+
+        // x和y都无值的情况
+        console.log(m1({})); // [0, 0];
+        console.log(m2({})); // [undefined, undefined]
+
+        console.log(m1({z: 3})); // [0, 0]
+        console.log(m2({z: 3})); // [undefined, undefined]
+
+           //参数默认值的位置
+           function f(x = 1,y){
+               return [x,y];
+           }
+           console.log(f());
+           console.log(f(2));
+           //console.log(,1);
+           console.log(f(undefined,1));
+
+           function f(x,y = 5,z){
+               return [x,y,z];
+           }
+           console.log(f());
+           console.log(f(1));
+           //console.log(f(1,,2));
+           console.log(f(1,undefined,2));
+           function foo(x = 5, y = 6){
+               console.log(x,y);
+           }
+           //如果传入undefined，将触发该参数等于默认值，null则没有这个效果。
+           foo(undefined,null);//5,null
+           //x参数对应undefined，结果触发了默认值，y参数等于null，就没有触发默认值。
+
+           //函数的length属性(该函数预期传入的参数个数)
+           console.log((function(a){}).length);//1
+           console.log((function(a = 5){}).length);//0
+           console.log((function(a,b,c=5){}).length);//2
+           console.log((function(...rest){}).length);//0
+           console.log((function (a = 0, b, c) {}).length); // 0
+           console.log((function (a, b = 1, c) {}).length); // 1
+           //作用域
+           var x = 1;
+           function f(x,y = x){
+               console.log(y);
+           }
+           f(2);
+           /*let m = 1;
+           function f(y = m){
+               let m = 2;
+               console.log(y);
+           }
+           f();*/
+           /*let foo1 = "outer";
+           function bar(func = x => foo1){
+               let foo1 = "inner";
+               console.log(func());//outer
+           }
+           bar();*/
+           function bar123(func123 = () => foo){
+               let foo = "inner";
+               console.log(func123());
+           }
+           bar123();
+
+           var x = 1;
+           function test(x, y = function(){ x = 2;}){
+               x = 3;
+               y();
+               console.log(x);
+           }
+           test();
+
+           //应用
+           function throwIfMissing(){
+               throw new Error("Missing parameter");
+           }
+
+           function foo111(musBeProvided = throwIfMissing()){
+               return musBeProvided;
+           }
+           foo111(1);
+           function foo(optional = undefined){
+               //......
+           }
+
+        //2rest参数
+
+
+        //3扩展运算符
+        //4严格模式
+        //5name属性
+        //6箭头函数
+        //7绑定 this
+        //8尾调用优化
+
+
+        //9函数参数的尾逗号(ES7)
+        /*function clownsEverywhere(
+                param1,
+                param2,
+        ){/!**!/}
+        clownsEverywhere(
+                'foo',
+                'bar',
+        )*/
+    </script>
+</head>
+<body>
+</body>
+</html>
