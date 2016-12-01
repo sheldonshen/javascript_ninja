@@ -156,8 +156,68 @@
 
         //2rest参数
 
+        
+        //3扩展运算符(将一个数组转为用逗号分隔的参数序列)
+        //含义
+        console.log(...[1,2,3]);
+        console.log(1,...[2,3,4],5);
+        [...document.querySelectorAll('div')];
+        //[<div>,<div>,<div>]
+        function push(array,...items){
+            array.push(...items);
+        }
+        function add(x,y){
+            return x + y;
+        }
+        var members = [4,38];
+        add(...members);
+        function f(v,w,x,y,z){}
+        var args = [0,1];
+        f(-1,...args,2,...[3]);
+        //替代数组的apply方法
+        function f(x,y,z){
+            //...
+        }
+        var args = [0,1,2];
+        f.apply(null,args);//ES5写法
+        f(...args);//ES6写法
+        Math.max.apply(null,[14,3,77]);
+        Math.max(...[14,3,77]);
+        //等同于
+        Math.max(14,3,77);
+        var arr1 = [0,1,2];
+        var arr2 = [3,4,5];
+        Array.prototype.push.apply(arr1,arr2);//es5
+        arr1.push(...arr2);//es6
+        new (Date.bind.apply(Date,[null,2015,1,1]));
+        new Date(...[2015,1,1]);
 
-        //3扩展运算符
+        //扩展运算符的应用
+          //1合并数组
+          [1,2].concat(more);
+          [1,2,...more];
+          var arr1 = ['a','b'];
+          var arr2 = ['c'];
+          var arr3 = ['d','e'];
+          arr1.concat(arr2,arr3);//es5合并数组
+          [...arr1,...arr2,...arr3];//es6合并数组
+          //2与解构赋值结合
+          a = list[0], rest = list.slice(1);//es5
+          [a,...rest] = list;//es6
+          //3函数的返回值
+          var dateFields = readDateFields(database);
+          var d = new Date(...dateFields);
+          //4字符串
+          [..."hello"];
+          'x\uD83D\uDE80y'.length // 4
+          //[...'x\uD83D\uDE80y'].length // 3
+          function length(str) {
+             return [...str].length;
+          }
+          length('x\uD83D\uDE80y') // 3
+          //5实现了Iterator接口的对象
+          //6Map与Set结构,Generator函数
+        
         //4严格模式
         //5name属性
         //6箭头函数
