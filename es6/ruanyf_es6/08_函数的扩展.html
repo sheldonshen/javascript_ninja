@@ -154,7 +154,38 @@
                //......
            }
 
-        //2rest参数
+        //2 rest参数
+        function add(...values){
+            let sum = 0;
+            for(var val of values){
+                sum += val;
+            }
+            return sum;
+        }
+        console.log(add(2,3,5));
+        //arguments变量的写法
+        function sortNumbers(){
+            return Array.prototype.slice.call(arguments).sort();
+        }
+        //rest参数的写法
+        //const sortNumbers = (...numbers)=> numbers.sort();
+        function push(array,...items){
+            items.forEach(function(item){
+                array.push(item);
+                console.log(item);
+            });
+        }
+        var a = [];
+        push(a,[1,2,3]);
+        console.log(a);
+
+        /*function f(a,...b,c){
+
+        }*/
+        //函数的length属性，不包括rest参数。
+        console.log((function(a){}).length);
+        console.log((function(...a){}).length);
+        console.log((function(a,...b){}).length);
 
         
         //3扩展运算符(将一个数组转为用逗号分隔的参数序列)
