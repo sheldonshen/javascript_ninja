@@ -465,9 +465,188 @@
            //var fix = f => (x => f(v => x(x)(v)))
            //(x => f(v => x(x)(v)));
         
-        
-        //7绑定 this
+        //7绑定this
+           //函数绑定
+           foo::bar;
+           //等同于
+           bar.bind(foo);
+           //foo:bar(..arguments);
+           //等同于
+           //bar.apply(foo,arguments);
+           const hasOwnProperty = Object.prototype.hasOwnProperty;
+           function hasOwn(obj,key){
+               return obj::hasOwnProperty(key);
+           }
+           var method = obj::obj.foo;
+           //等同于
+           var method = ::obj.foo;
+           let log = ::console.log;
+           //等同于
+           var logg = console.log.bind(console);
+           //由于双冒号运算符返回的还是原对象，因此可以采用链式写法.
+           import {map,takeWhile,forEach} from "iterlib"
+           getPlayers();
+           ::map(x=> x.character());
+           ::takeWhile(x => x.strength > 100);
+           ::forEach(x => console.log(x));
+           let {find,html} = jake;
+           document.querySelectorAll('div.myClass');
+           ::find("p");
+           ::html("hahaha");
+
         //8尾调用优化
+           //什么是尾调用(就是指某个函数的最后一步是调用另一个函数)
+           function f(x){
+               return g(x);
+           }
+           //以下情况不属于尾调用
+           function f(x){
+               let y = g(x);
+               return y;
+           }
+           function f(x){
+               return g(x) + 1;
+           }
+           function f(x){
+               g(x)
+               //return undefined
+           }
+           //尾调用不一定出现在函数尾部，只要是最后一步操作即可
+           function f(x){
+               if(x > 0){
+                   return m(x);
+               }
+               return n(x);
+           }
+           //上面代码中，函数m和n都属于尾调用，因为它们都是函数f的最后一步操作。
+
+           //尾调用优化
+           function f(){
+               let m = 1;
+               let n = 2;
+               return g(m + n);
+           }
+           f();
+           //等同于
+           function f(){
+               return g(3);
+           }
+           f();
+           //等同于
+           g(3);
+           //只有不再用到外层函数的内部变量，内层函数的调用帧才会取代外层函数的调用帧，否则就无法进行“尾调用优化”
+           function addOne(a){
+               var one = 1;
+               function inner(b){
+                   return b + one;
+               }
+               return inner(a);
+           }
+           //面的函数不会进行尾调用优化，因为内层函数inner用到了外层函数addOne的内部变量one。
+
+           //尾递归
+           //函数调用自身，称为递归。如果尾调用自身，就称为尾递归
+           function fact(n){
+               if(n === 1) return 1;
+               return n * fact(n-1);//递归
+           }
+           console.log(fact(10000));
+           //改写为尾递归
+           function fact_tail(n,total){
+                if(n === 1) return total;
+                fact_tail(n-1,n * total);
+           }
+           console.log(fact_tail(10000,1));
+           function fibonacci(n){
+               if(n <= 1){return 1};
+               return fibonacci(n-1) + fibonacci(n-2);
+           }
+           console.log(fibonacci(10));
+           // Fibonacci(100)
+           // Fibonacci(500)
+           // 堆栈溢出了
+           //尾递归优化
+           function fibonacci_tail(n,ac1 = 1,ac2 = 1){
+               if(n <= 1){ return ac2};
+               return fibonacci_tail(n-1,ac2,ac1 + ac2);
+           }
+           fibonacci_tail(100) // 573147844013817200000
+           fibonacci_tail(1000) // 7.0330367711422765e+208
+           fibonacci_tail(10000) // Infinity
+
+           //递归函数的改写
+           function tailFactorial(n,total){
+               if(n == 1) return total;
+               return tailFactorial(n-1,n * total);
+           }
+
+           function factorial(n){
+               return tailFactorial(n,1);
+           }
+
+           factorial(5);
+           //1 函数式编程概念:柯里化(currying):将多参数的函数转为单参数的形式
+           function currying(fn,n){
+               return function(m){
+                   return fn.call(this,m,n);
+               }
+           }
+
+           function tailFactorial(n,total){
+              if(n == 1) return total;
+              return tailFactorial(n-1,n * total);
+           }
+           const factorial  = currying(tailFactorial,1)
+           console.log(factorial(5));//120
+           //2 ES6函数默认值
+           function factorial(n,total = 1){
+               if(n === 1) return total;
+               return factorial(n-1,n * total);
+           }
+           factorial(5);
+           /*
+           * 总结一下，递归本质上是一种循环操作。纯粹的函数式编程语言没有循环操作命令，所有的循环都用递归实现，
+           * 这就是为什么尾递归对这些语言极其重要。对于其他支持“尾调用优化”的语言（比如Lua，ES6），
+           * 只需要知道循环可以用递归代替，而一旦使用递归，就最好使用尾递归。
+           * */
+
+           //严格模式
+           //所以尾调用模式仅在严格模式下生效
+           function restricted(){
+               //"use strict";
+               restricted.caller;    // 报错
+               restricted.arguments; // 报错
+           }
+           restricted();
+
+           //尾递归优化的实现
+           //怎么做可以减少调用栈呢？就是采用“循环”换掉“递归”。
+           function sum(x,y){
+               if(y > 0){
+                   return sum(x + 1,y -1);
+               }else{
+                   return x;
+               }
+           }
+           sum(1,10000);
+           //蹦床函数（trampoline）可以将递归执行转为循环执行。
+           function trampoline(f){
+               while(f && f instanceof Function){
+                   f = f();
+               }
+               return f;
+           }
+           function sum(x,y){
+               if(y > 0){
+                   sum.bind(null,x + 1, y -1);
+               }else{
+                   return x;
+               }
+           }
+         console.log(trampoline(sum(1,10000)));
+
+         //蹦床函数并不是真正的尾递归优化，下面的实现才是
+        
 
 
         //9函数参数的尾逗号(ES7)
