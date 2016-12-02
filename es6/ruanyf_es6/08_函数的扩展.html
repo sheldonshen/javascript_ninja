@@ -316,8 +316,156 @@
             };
         }())
 
-        //5name属性
+       //5 name属性
+        function foo(){}
+        console.log(foo.name);
+        var func1 = function(){};
+        console.log(func1.name);
+        console.log(func1.name);
+        const bar = function baz(){};
+        console.log(bar.name);//baz
+        console.log((new Function).name);//anonymous
+        function test(){}
+        console.log(test.bind({}).name);//"bound test"
+        console.log((function(){}).bind({}).name);//"bound"
         //6箭头函数
+           //基本用法
+           var f = v => v;
+           //等同于
+           var f = function (v){
+               return v;
+           }
+           var f = () => 5;
+           var f = function(){return 5};
+           var sum = (num1,num2) => num1 + num2;
+           var sum = function(num1,num2){ return num1 + num2};
+           var sum = (num1,num2) => {
+               return num1 + num2;
+           };
+           var getTempItem = id => ({id:id,name:'temp'});
+           const full = ({first,last}) => first + " " + last;
+           //等同于
+           function full1(person){
+               return person.first + " " + person.last;
+           }
+           const isEven = x => x % 2== 0;
+           const square = x => x * x;
+           //正常函数写法
+           [1,2,3].map(function(x){
+               return x * x;
+           });
+           //箭头函数写法
+           [1,2,3].map(x => x * x);
+           /*var result = values.sort(function(a,b){
+               return a -b;
+           });
+           var result = values.sort((a,b) => a - b);*/
+           const restNums = (...nums) => nums;
+           console.log(restNums(1,2,3,4,5));//[1,2,3,4,5]
+           const headAndTail = (head,...tail) => [head,tail];
+           console.log(headAndTail(1,2,3,4,5));
+           //使用注意点
+              //（1）函数体内的this对象，就是定义时所在的对象，而不是使用时所在的对象。
+              //（2）不可以当作构造函数，也就是说，不可以使用new命令，否则会抛出一个错误。
+              //（3）不可以使用arguments对象，该对象在函数体内不存在。如果要用，可以用Rest参数代替。
+              //（4）不可以使用yield命令，因此箭头函数不能用作Generator函数。
+              //在箭头函数中this的指向是不变的
+              function testThis(){
+                 /* setTimeout(function(){
+                      console.log("id:",this.id);
+                  },100);*///21
+                  setTimeout(()=>{
+                      console.log("id:",this.id);
+                  },100);
+              }
+
+              var id = 21;
+              testThis.call({id:42});
+              function Timer(){
+                  this.s1 = 0;
+                  this.s2 = 0;
+                  //箭头函数
+                  setInterval(()=> this.s1++,1000);
+                  //普通函数
+                  setInterval(function(){
+                      this.s2++;
+                  },1000)
+              }
+              var timer = new Timer();
+              setTimeout(()=>console.log("s1:",timer.s1),3100);
+              setTimeout(()=>console.log("s2:",timer.s2),3100);
+              var handler = {
+                  id:'123456',
+                  init:function(){
+                      document.addEventListener('click',event=>this.dosomething(event.type),false);
+                  },
+                  dosomething:function(type){
+                      console.log("Handling " + type + " for " + this.id);
+                  }
+              };
+              function thisCount(){
+                  return () =>{
+                      return ()=>{
+                          return ()=>{
+                              console.log("id:",this.id);
+                          }
+                      };
+                  };
+              }
+              var f = thisCount.call({id:1});
+              var t1 = f.call({id:2})()();// id: 1
+              var t2 = f().call({id:3})();// id: 1
+              var t3 = f()().call({id:4});// id: 1
+              //除了this，以下三个变量在箭头函数之中也是不存在的，
+              //指向外层函数的对应变量：arguments、super、new.target
+              function abc(){
+                  setTimeout(()=>{
+                      //上面代码中，箭头函数内部的变量arguments，其实是函数foo的arguments变量
+                      console.log("args:",arguments);
+                  },1000);
+              }
+              abc(2,4,6,8);
+              //由于箭头函数没有自己的this，所以当然也就不能用call()、apply()、bind()这些方法去改变this的指向
+              (function(){
+                  return [
+                      (() => console.log(this.x)).bind({x:"inner"})()
+                  ];
+              }).call({x:"outer"});//['outer']
+              //箭头函数没有自己的this，所以bind方法无效，内部的this指向外部的this
+
+           //嵌套的箭头函数
+           /*function insert(value){
+               return {into:function (array){
+                 return {after:function(afterValue){
+                     array.splice(array.indexOf(afterValue)+1,0,value);
+                     return array;
+                 }}
+               }};
+           }
+           console.log(insert(2).into([1,3]).after(1));//[1,2,3]*/
+           let insert = (value) => ({into:(array)=>({after:(afterValue)=>{
+               array.splice(array.indexOf(afterValue)+1,0,value);
+               return array;
+           }})});
+           console.log(insert(2).into([1,3]).after(1));//[1,2,3]
+
+           const pipeline = (...funcs) =>
+               val => funcs.reduce((a,b)=>b(a),val);
+           const plus1 = a => a + 1;
+           const mult2 = a => a * 2;
+           const addThenMult = pipeline(plus1,mult2);
+           console.log(addThenMult(5));//12
+           const plus1Other = a => a + 1;
+           const mult2Other = a => a * 2;
+           console.log(mult2Other(plus1Other(5)));
+           // λ演算的写法
+           //fix = λf.(λx.f(λv.x(x)(v)))(λx.f(λv.x(x)(v)))
+
+           // ES6的写法
+           //var fix = f => (x => f(v => x(x)(v)))
+           //(x => f(v => x(x)(v)));
+        
+        
         //7绑定 this
         //8尾调用优化
 
