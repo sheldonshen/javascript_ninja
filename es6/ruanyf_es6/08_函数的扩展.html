@@ -246,10 +246,76 @@
              return [...str].length;
           }
           length('x\uD83D\uDE80y') // 3
-          //5实现了Iterator接口的对象
-          //6Map与Set结构,Generator函数
-        
+         //5实现了Iterator接口的对象
+           var nodeList = document.querySelectorAll("div");
+           var array = [...nodeList];//nodeList是一个类似数组的对象,且NodeList对象,实现了Iterator接口
+           //对于那些没有部署Iterator接口的类似数组的对象,扩展运算符就无法将其转为真正的数组
+           var arrayLike = {
+               '0':'a',
+               '1':'b',
+               '2':'c',
+               length:3
+           };
+           //var arr = [...arrayLike];TypeError: Cannot spread non-iterable object.
+           var arr = [...Array.from(arrayLike)];
+           //6Map与Set结构,Generator函数
+           //扩展运算符内部调用的是数据结构的Iterator接口,因此只有具有Iterator接口的对象,
+           //都可以使用扩展运算符
+           let map = new Map([
+                   [1,"one"],
+                   [2,'two'],
+                   [3,'three']
+           ]);
+           let keys = [map.keys()];
+           console.log(keys);//[1,2,3]
+           var go = function* (){//generator函数
+               yield 1;
+               yield 2;
+               yield 3;
+           };
+           console.log([...go()]);//[1,2,3]
+           var obj = {a:1,b:2};
+           //let dd = [...obj];//TypeError: Cannot spread non-iterable object
+
         //4严格模式
+        function dosomething(a,b){
+            "use strict";
+            //code
+        }
+        /*function dosomething(a,b =a){
+            "use strict";//error
+            //code
+        }*/
+        /*const dosomething = function({a,b}){
+            "use strict";//error
+            //code
+        };*/
+        /*const dosomething = (...a)=>{
+            "use strict";
+            //code
+        }*/
+        const obj123 = {
+            dosomething({a,b}){
+                //"use strict";
+                //code
+            }
+        };
+        /*function dosomething(value=070){
+            "use strict";
+            return value;
+        }*/
+        //解放方案
+        "use strict";//设置全局的严格模式
+        function dosomething(a,b=a){
+            //code
+        }
+        const dosomethingOther = (function(){
+            "use strict";//IIEF
+            return function(value=42){
+                  return value;
+            };
+        }())
+
         //5name属性
         //6箭头函数
         //7绑定 this
