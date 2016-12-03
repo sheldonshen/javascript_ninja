@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据类型</title>
+    <script type="text/javascript" charset="UTF-8">
+        /*alert(0.1+0.2);
+        alert(Number.MIN_VALUE);
+        alert(Number.MAX_VALUE);
+        alert(100e10000);
+        alert(-100e10000);
+        alert(Number.POSITIVE_INFINITY);
+        alert(Number.NEGATIVE_INFINITY);
+        var number = 100e100;
+        alert(isFinite(number));*/
+        //NaN
+        /*alert(0/0);//NaN
+        alert(Number.NaN);
+        alert(Number.NaN+1);
+        alert(NaN == NaN);//false
+        alert(isNaN(NaN));//true
+        alert(isNaN(23));//false
+        alert(isNaN("Leee"));//true*/
+        /*var box = {
+            toString: function(){
+                //return "123";
+                return "Lee"
+            }
+        };//false
+        //box = {};//true
+        alert(isNaN(box));*/
+        /*alert(Number(true));//1
+        alert(Number(null));//0
+        alert(Number(undefined));//NaN*/
+        var box = {
+            toString: function(){
+                return null;
+                //return "Lee"
+            }
+        };
+        alert(Number(box));//0
+        alert(parseInt(null));//NaN
+        alert(parseInt(undefined));//NaN
+        alert(parseInt(NaN));
+        alert(parseInt("456Lee"));//456
+        alert(Number("456Lee"));//NaN
+        alert(parseInt("Lee456Lee"));//NaN
+        alert(parseInt("56.12"));//56
+        alert(parseInt(""));//NaN
+        alert(parseFloat("56.12"));
+    </script>
+</head>
+<body>
+</body>
+</html>
