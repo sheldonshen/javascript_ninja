@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>convert NodeList to Array</title>
+</head>
+<body>
+   <div>1</div>
+   <div>2</div>
+</body>
+</html>
+<script type="text/javascript" charset="UTF-8">
+    //Note that this may not be the actual value seen by the method
+    var nodesArray = Array.prototype.slice.call(document.querySelectorAll('div'));
+    var nodesArray = [].slice.call(document.querySelectorAll('div'));
+    alert(nodesArray.length);
+</script>
