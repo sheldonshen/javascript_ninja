@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Window</title>
+    <script type="text/javascript" charset="UTF-8">
+        /*
+        * 1 window
+        * 2 location
+        * 3 history
+        * */
+        //window.find();
+        //var box = window.open('https://www.baidu.com/');
+        //alert("message");
+        //超时调用
+        var timeoutId = window.setTimeout(function(){
+            alert("Lee");
+        },2000);
+        clearTimeout(timeoutId);
+        //间歇调用
+        var intervalId = setInterval(function(){
+            alert("Lee");
+        },2000);
+        clearInterval(intervalId);
+
+        //定时器
+        /*var num = 0;
+        var max = 5;
+        setInterval(function(){
+            num++;
+            document.getElementById("div").innerHTML+=num;
+            if(num === max){
+                clearInterval(this);//this代表本身,但是this本身不能代表id
+                alert("time up to 5s");
+            }
+        },1000);*/
+
+        /*var num = 0;
+        var max = 5;
+        var id = setInterval(function(){
+            num++;
+            document.getElementById("div").innerHTML+=num;
+            if(num === max){
+                clearInterval(id);//
+                alert("time up to 5s");
+            }
+        },1000);*/
+
+
+        var num = 0;
+        var max = 5;
+        function box(){
+            num++;
+            document.getElementById("div").innerHTML+=num;
+            if(num === max){
+                alert("time up to 5s");
+            }else{
+                setTimeout(box,1000);//递归调用
+            }
+        }
+       setTimeout(box,1000);
+       //使用超时调用的递归形式模拟间歇调用
+       alert(window.location);
+       alert(window.document.location);
+       location.hash = '#66';
+       alert(location.hash);
+       location.search="?id=5";
+    </script>
+</head>
+<body>
+   <div id="div"></div>
+</body>
+</html>
