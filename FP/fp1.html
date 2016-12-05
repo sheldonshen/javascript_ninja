@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>函数式编程(一)</title>
+<script type="text/javascript">
+    //命令式编程
+    //纯函数
+    //纯函数的定义是，对于相同的输入，永远会得到相同的输出，而且没有任何可观察的副作用，也不依赖外部环境的状态
+    var arr = [1,2,3,4,5];
+    //// Array.slice是纯函数，因为它没有副作用，对于固定的输入，输出总是固定的,可以，这很函数式
+    //alert(arr.slice(0,3));//=>[1,2,3]
+    //alert(arr.slice(0,3));//=>[1,2,3] 
+    //// Array.slice是纯函数，因为它没有副作用，对于固定的输入，输出总是固定的,可以，这很函数式
+    var arr = [1,2,3,4,5];
+    alert(arr.splice(0,3));//[1,2,3]
+    alert(arr.splice(0,3));//[4,5]
+    alert(arr.splice(0,3));//[]
+    //不纯的
+    var min = 18;
+    var checkage = age => age > min;
+    //纯的,这很函数式
+    var checkage = age => age > 18;
+    //纯函数不仅可以有效降低系统的复杂度，还有很多很棒的特性，比如可缓存性
+    //import _ from "lodash";
+    //var  sin = _.memorize(x => Math.sin(x));
+    //var a = sin(1);//第一次计算会稍慢些
+    //var b = sin(1);//第二次有了缓存，速度极快
+    //函数的柯里化
+    //函数柯里化（curry）的定义很简单：传递给函数一部分参数来调用它，让它返回一个函数去处理剩下的参数
+    var add = (x,y) => x + y;
+    //比较容易读懂的ES5写法
+    var add = function(x){
+    	return function(y){
+    		return x + y;
+    	};
+    };
+    //ES6写法，也是比较正统的函数式写法
+    var add = x => (y => x + y);
+    //试试看
+    var add2=add(2);
+    var add200=add(200);
+    alert(add2(2));//4
+    alert(add200(50));//250
+    var checkage = min => (age => age > min);
+    var checkage18 = checkage(18);
+    alert(checkage18(20));//true
+    //事实上柯里化是一种“预加载”函数的方法，通过传递较少的参数，得到一个已经记住了这些参数的新函数，
+    //某种意义上讲，这是一种对参数的“缓存”，是一种非常高效的编写函数的方法
+    //import {curry} from "lodash";
+    //首先柯里化两个纯函数
+    //var match = curry((reg,str) => str.match(reg));
+    //var filter = curry((f,arr)  => arr.filter(f));
+    ////判断字符串里有没有空格
+    //var haveSpace = match(/\s+/g);
+    //haveSpace("fffffff");//=>null
+    //haveSpace("a b");//=> [" "]
+    //filter(haveSpace,["abcdefg",'Hello World']);////=>["Hello world"]
+    //函数组合
+    //两个函数的组合
+    var compose = function(f,g){
+    	return function(x){
+    		return f(g(x));
+    	};
+    };
+    //或者
+    var compose = (f,g) => (x => f(g(x)));
+    var add1 = x => x + 1;
+    var mul5 = x => x * 5;
+    alert(compose(mul5,add1)(2));//15
+    var first = arr => arr[0];
+    var reverse = arr => arr.reverse();
+    var last = compose(first,reverse);
+    alert(last([1,2,3,4,5]));//5
+    
+    //Point Free
+    //var map = (f,arr) => arr.map(f);
+    //var toUpperCase = word => word.toUpperCase();
+    ////这不Piont free
+    var f = str => str.toUpperCase().split(" ");
+    var toUpperCase = word => word.toUpperCase();
+    var split = x => (str => str.split(x));
+    var f = compose(split(" "),toUpperCase);
+    alert(f("abcd efgh"));
+    //声明式与命令式代码
+    //命令式
+    var CEOs = [];
+    for(var i = 0; i < companies.length; i++){
+    	CEOs.push(companies[i].CEO);
+    }
+    //声明式
+    var CEOs = companies.map(c => c.CEO);
+    //声明式的写法是一个表达式，如何进行计数器迭代，返回的数组如何收集，这些细节都隐藏了起来。它指明的是做什么，而不是怎么做
+    //https://zhuanlan.zhihu.com/p/21714695
+</script>
+</head>
+<body>
+</body>
+</html>
