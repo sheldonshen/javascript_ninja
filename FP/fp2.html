@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>javascript函数式编程(2)</title>
+<script type="text/javascript">
+    //一容器,Functor
+    var Container = function(x){
+    	this.__value = x;
+    };
+    Container.of = x =>  new Container(x);
+    
+    //试试看
+    alert(Container.of(1));
+    alert(Container.of("abcd"));
+    
+    Container.prototype.map = function(f){
+    	return Container.of(f(this.__value));
+    }
+    Container.of(3)
+             .map(x => x + 1) //=> Container(4)
+             .map(x => "Result is " + x);//Container("Result is 4")
+    //我们仅花了 7 行代码就实现了很炫的『链式调用』，这也是我们的第一个 Functor
+    
+    //Functor(函子)是实现了map并遵守一些特定规则的容器类型
+    var Maybe = function(x){
+       this.__value = x;        	 
+    }
+    Maybe.of = function(x){
+    	return new Maybe(x);
+    }
+    Maybe.prototype.map = function(f){
+    	return this.isNothing()?Maybe.of(null):Maybe.of(f(this.__value));
+    }
+    Maybe.prototype.isNothing = function(){
+    	return (this.__value === null || this.__value === undefined);
+    }
+    import _ from "lodash";
+    var add = _.curry(_.add);
+    Maybe.of({name:"Stack"})
+         .map(_.prop("age"))
+         .map(add(10));
+    //=> Maybe(null)
+    Maybe.of({name:"Stark",age:21})
+         .map(_.prop("age"))
+         .map(add(10))
+    //=> Maybe(31)
+    import _ from "lodash";
+    var compose = _.flowRight;
+    var add     = _.curry(_.add);
+    //创造一个柯里化的map
+    var map = _.curry((f.functor) => functor.map(f));
+    
+    var doEverything = map(compose(add(10),_.property("age")));
+    
+    var functor = Maybe.of({name:"Stark",age:21});
+    doEverything(functor);
+    //=>Maybe(31)
+    
+    //二错误处理,Either
+    doSomething()
+        .then(async1)
+        .then(async2)
+        .catch(e => console.log(e));
+    
+    // 这里是一样的=。=
+	var Left = function(x){
+    	this.__value = x;
+    } 
+    var Right = function(x){
+    	this.__value = x;
+    };
+    // 这里也是一样的=。=
+    Left.of = function(x){
+    	return new Left(x);
+    }
+    Right.of = function(x){
+    	return new Right(x);
+    }
+    //// 这里不同！！！
+    Left.prototype.map = function(f){
+    	return this;
+    }
+    Right.prototype.map = function(f){
+    	return Right.of(f(this.__value));
+    }
+    Right.of("Hello").map(str => str + " World!");
+    //Right("Hello World!")
+    Left.of("Hello").map(str => str + " World!");
+    //Left("Hello")
+    
+    var getAge = user => user.age ? Right.of(user.age):Left.of("ERROR!");
+    ////=> Right('Age is 21')
+    getAge({name:"stark",age:'21'}).map(age => "Age is " + age);
+    getAge({name:"stark"}).map(age => "Age is " + age);
+    ////=> Left('ERROR!')
+    
+    //三IO
+    function readLocalStorage(){
+    	return window.localStorage;
+    }
+    
+    function readLocalStorage(){
+    	return function(){
+    		return window.localStorage;
+    	}; 	
+    }
+    
+    import _ from "lodash";
+    var compose = _.flowRight;
+    var IO = function(f){
+    	this.__value = f;
+    }
+    IO.of = x => new IO(_ => x);
+    IO.prototype.map = function(f){
+    	return new IO(compose(f,this.__value));
+    }
+    
+    var io_document = new IO(_ => window.document);
+    io_document.map(function(doc){
+    	return doc.title;
+    });
+    
+
+//下面我们来做稍微复杂点的事情，编写一个函数，从当前 url 中解析出对应的参数
+import _ from 'lodash';
+
+// 先来几个基础函数：
+// 字符串
+var split = _.curry((char, str) => str.split(char));
+// 数组
+var first = arr => arr[0];
+var last = arr => arr[arr.length - 1];
+var filter = _.curry((f, arr) => arr.filter(f));
+//注意这里的 x 既可以是数组，也可以是 functor
+var map = _.curry((f, x) => x.map(f)); 
+// 判断
+var eq = _.curry((x, y) => x == y);
+// 结合
+var compose = _.flowRight;
+
+
+var toPairs = compose(map(split('=')), split('&'));
+// toPairs('a=1&b=2')
+//=> [['a', '1'], ['b', '2']]
+
+var params = compose(toPairs, last, split('?'));
+// params('http://xxx.com?a=1&b=2')
+//=> [['a', '1'], ['b', '2']]
+
+// 这里会有些难懂=。= 慢慢看
+// 1.首先，getParam是一个接受IO(url)，返回一个新的接受 key 的函数；
+// 2.我们先对 url 调用 params 函数，得到类似[['a', '1'], ['b', '2']]
+//   这样的数组；
+// 3.然后调用 filter(compose(eq(key), first))，这是一个过滤器，过滤的
+//   条件是 compose(eq(key), first) 为真，它的意思就是只留下首项为 key
+//   的数组；
+// 4.最后调用 Maybe.of，把它包装起来。
+// 5.这一系列的调用是针对 IO 的，所以我们用 map 把这些调用封装起来。
+var getParam = url => key => map(compose(Maybe.of, filter(compose(eq(key), first)), params))(url);
+
+// 创建充满了洪荒之力的 IO！！！
+var url = new IO(_ => window.location.href);
+// 最终的调用函数！！！
+var findParam = getParam(url);
+
+// 上面的代码都是很干净的纯函数，下面我们来对它求值，求值的过程是非纯的。
+// 假设现在的 url 是 http://xxx.com?a=1&b=2
+// 调用 __value() 来运行它！
+findParam("a").__value();
+//=> Maybe(['a', '1'])
+
+//https://zhuanlan.zhihu.com/p/21926955    
+</script>
+</head>
+<body>
+</body>
+</html>
