@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Javascript元编程（一）</title>
+<script type="text/javascript">
+   //什么是元编程
+   //元编程就是将代码视作数据，直接用字符串 or AST or 其他任何形式去操纵代码，以此获得一些维护性、效率上的好处
+   //Javascript 中，eval、new Function() 便是两个可以用来进行元编程的特性
+   //原始示例
+   //现在我们有一堆用户的数据，具体字段有name, sex, age, address等等，通过类似 /get_name?id=123456 来拉取数据
+   class User{
+	   constructor(userId){
+		   this.id = userId;
+	   }
+	   get_name(){
+		   return $.ajax("/get_name?id=${this.id");
+	   }
+	   get_sex(){
+		   return $.ajax('/get_sex?id=${this.id}');	   
+	   }
+	   //下面是get_age、get_address......
+   }
+   //进阶（一）
+   class User{
+	   constructor(userId){
+		   this.id  = userId;
+	   }
+	   __fetchData(key){
+		   ////这是一个private方法，直接调用类似__fetchData("age")是不被允许的
+		   return $.ajax("/get_${key}?id=${this.id");
+	   }
+	   get_name(){
+		  return this.__fetchData("name"); 
+	   }
+	   get_sex(){
+		  return this.__fetchData("sex");
+	   }
+	   //下面是get_age、get_address......
+   }
+	   
+  class User{
+	 constructor(userId){
+		 this.id = userId;
+		 this.registerProperties(["name","age","sex",'address']);
+	 }
+	 
+	 registerProperties(keyArray){
+		 keyArray.forEach(key => {
+			     this[`get_${key}`] = () => this.__fetchData(key);  
+		    });
+		 }
+	 }
+  
+	  __fetchData(key){
+		   ////这是一个private方法，直接调用类似__fetchData("age")是不被允许的
+		   return $.ajax("/get_${key}?id=${this.id");
+	  }
+  }
+	  
+	  
+//进阶（二）
+class User {
+    constructor(userID) {
+        this.id = userID;
+        this.registerProperties(["name", "age", "sex", "address"]);
+    }
+
+    registerProperties(keyArray) {
+        keyArray.forEach(key => {
+            //注意这里的fnBody内部依然采用ES5的写法，因为babel目前不会编译函数字符串。
+            var fnBody = `return this.__fetchData("/get_${key}?id=${this.id}")
+                    .then(function(data){
+                        return this.__handle_${key}?_this.handle_${key}(data):data;
+                    })`;
+            this[`get_${key}`] = new Function(fnBody);
+        })
+    }
+
+    __handle_name(name) {
+        //do somthing with name...
+        return name;
+    }
+
+    __handle_age(age) {
+        //do somthing with age...
+        return age;
+    }
+
+    __fetchData(key) {
+        return $.ajax(`/get_${key}?id=${this.id}`)
+    }
+
+}
+   //进阶（三）
+   class UserDataBase {
+    constructor() {}
+    get_name(id) {}
+    get_age(id) {}
+    get_address(id) {}
+    get_sex(id) {}
+    get_anything_else1(id) {}
+    get_anything_else2(id) {}
+    get_anything_else3(id) {}
+    get_anything_else4(id) {}
+    //......
+
+}
+
+   class User {
+       constructor(userID, dataBase) {
+           this.id = userID;
+           this.__dataBase = dataBase;
+           for (var method in dataBase) {
+               //对每一个方法
+               this.registerMethod(method);
+           }
+       }
+
+       registerMethod(methodName) {
+           //这里除去了前置的"get_"
+           var propertyName = methodName.slice(4);
+           //注意这里拉取数据的方法改为使用dataBase
+           var fnBody = `return this.__dataBase.${methodName}()
+                       .then(function(data){
+                           return this.__handle_${propertyName}?_this.handle_${propertyName}(data):data;
+                       })`;
+           this[`get_${propertyName}`] = new Function(fnBody);
+       }
+
+       __handle_name(name) {
+           //do somthing with name...
+           return name;
+       }
+
+       __handle_age(age) {
+           //do somthing with age...
+           return age;
+       }
+   }
+
+   var userDataBase = new UserDataBase();
+   var user = new User("123", userDataBase);
+   //进阶（四）
+   function createUser(id, userDataBase) {
+    return new Proxy(new User(id, userDataBase), {
+        get: (target, property) => (typeof(target[property]) === "function" ? target[property] : () => false)
+    })
+}
+
+var userDataBase = new UserDataBase();
+var user = createUser("123", userDataBase);
+
+user.get_name() => // fetch name data
+user.get_wwwwww() // => false
+
+   //总结
+   //链接：https://zhuanlan.zhihu.com/p/20758879
+</script>
+</head>
+<body>
+</body>
+</html>
