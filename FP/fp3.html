@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>javascript函数式编程(3)</title>
+<script type="text/javascript" charset="utf-8">
+     //1 Monad
+     //Promise就是一种Monad
+var chain = _.curry((f, functor) => functor.chain(f));
+IO.prototype.chain = function(f) {
+  return this.map(f).join();
+}
+
+// 现在可以这样调用了
+var doSomething = compose(chain(f), chain(g), chain(h));
+
+// 当然，也可以这样
+someMonad.chain(f).chain(g).chain(h)
+
+// 写成这样是不是很熟悉呢？
+readFile('file')
+    .chain(x => new IO(_ => {
+        console.log(x);
+        return x;
+    }))
+    .chain(x => new IO(_ => {
+        // 对x做一些事情，然后返回
+    }))
+
+
+//二、函数式编程的应用
+//1 React:函数式和状态机
+//2 Rxjs:函数响应式编程（Functional Reactive Programming，FRP
+//3 Cycle.js 
+//链接：https://zhuanlan.zhihu.com/p/22094473
+</script>
+</head>
+<body>
+</body>
+</html>
