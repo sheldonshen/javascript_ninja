@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>代码组合（compose）</title>
+<script type="text/javascript">
+//函数饲养
+var compose = function(f,g){
+	return function(x){
+		  return f(g(x));
+	};
+};
+var toUpperCase = function(x){
+	return x.toUpperCase();
+};
+var exclaim = function(x){
+	return x + "!";
+};
+var shout = compose(exclaim,toUpperCase);
+alert(shout("send in the clowns"));
+
+var head = function(x) { return x[0]; };
+var reverse = reduce(function(acc, x){ return [x].concat(acc); }, []);
+var last = compose(head, reverse);
+
+alert(last(['jumpkick', 'roundhouse', 'uppercut']));
+//结合律（associativity）
+var associative = compose(f, compose(g, h)) == compose(compose(f, g), h);
+// true
+
+// 前面的例子中我们必须要写两个组合才行，但既然组合是符合结合律的，我们就可以只写一个，
+// 而且想传给它多少个函数就传给它多少个，然后让它自己决定如何分组。
+
+var lastUpper = compose(toUpperCase, head, reverse);
+
+lastUpper(['jumpkick', 'roundhouse', 'uppercut']);
+//=> 'UPPERCUT'
+
+var loudLastUpper = compose(exclaim, toUpperCase, head, reverse)
+loudLastUpper(['jumpkick', 'roundhouse', 'uppercut']);
+//=> 'UPPERCUT!'
+
+var loudLastUpper = compose(exclaim, toUpperCase, head, reverse);
+
+// 或
+var last = compose(head, reverse);
+var loudLastUpper = compose(exclaim, toUpperCase, last);
+
+// 或
+var last = compose(head, reverse);
+var angry = compose(exclaim, toUpperCase);
+var loudLastUpper = compose(angry, last);
+
+// 更多变种...
+
+//pointfree
+//函数无须提及将要操作的数据是什么样的。一等公民的函数、柯里化（curry）以及组合协作起来非常有助于实现这种模式
+//非pointfree,因为提到了数据:word
+var snakeCase = function(word){
+	retrn word.toLowerCase().replace(/\s+/ig,"_");
+};
+//pointfree
+var snakeCase = compose(replace(/\s+/ig,"_"),toLowerCase);
+//非 pointfree，因为提到了数据：name
+var initials = function(name){
+	return name.split(" "),map(compose(toUpperCase,head).join(". ")); 
+};
+//pointfree
+var initials = compose(join(". "),map(compose(toUpperCase,head)),split(" "));
+initials("hunter stockton thompson");
+
+//debug
+// 错误做法：我们传给了 `angry` 一个数组，根本不知道最后传给 `map` 的是什么东西。
+var latin = compose(map, angry, reverse);
+
+latin(["frog", "eyes"]);
+// error
+
+
+// 正确做法：每个函数都接受一个实际参数。
+var latin = compose(map(angry), reverse);
+
+latin(["frog", "eyes"]);
+// ["EYES!", "FROG!"])
+
+var trace = curry(function(tag, x){
+  console.log(tag, x);
+  return x;
+});
+
+var dasherize = compose(join('-'), toLower, split(' '), replace(/\s{2,}/ig, ' '));
+
+dasherize('The world is a vampire');
+// TypeError: Cannot read property 'apply' of undefined
+
+//范畴学
+
+//总结
+
+</script>
+</head>
+<body>
+</body>
+</html>
