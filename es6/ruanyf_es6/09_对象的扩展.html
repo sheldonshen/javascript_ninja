@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>对象的扩展</title>
+    <script type="text/javascript" charset="UTF-8">
+        //1属性的简洁表示法
+        var foo = "bar";
+        var baz = {foo};
+        console.log(baz);
+        //等同于
+        var baz = {foo:foo};//ES6允许在对象之中，直接写变量。这时，属性名为变量名, 属性值为变量的值
+        console.log(baz);
+        function f(x,y){
+            return {x,y};
+        }
+        //等同于
+        function f(x,y){
+            return {x:x,y:y};
+        }
+        console.log(f(1,2));//Object {x: 1, y: 2}
+        var o = {
+           method(){
+               return "Hello!";
+           }
+        };
+        console.log(o.method());
+        //等同于
+        var o = {
+            method:function(){
+                return "Hello!";
+            }
+        }
+        console.log(o.method());
+        var birth = "2000/01/01";
+        var person = {
+            name:"张三",
+            //等同于birth:birth
+            birth,
+            //等同于hello:function()...
+            hello(){
+                console.log("我的名字是:",this.name);
+            }
+        };
+        console.log(person.birth);
+        person.hello();
+        //用于函数的返回值
+        function getPoint(){
+            var x = 1;
+            var y = 10;
+            return {x,y};
+        }
+        console.log(getPoint());
+
+        //CommonJS模块输出变量，就非常合适使用简洁写法
+        /*var ms = {};
+        function getItem(key){
+            return key in ms ? ms[key] : null;
+        }
+        function setItem(key,value){
+            ms[key] = value;
+        }
+        function clear(){
+            ms = {};
+        }
+
+        module.exports = {
+          getItem,setItem,clear
+        };
+        //等同于
+        module.exports = {
+           getItem:getItem,
+           setItem:setItem,
+           clear:clear
+        };*/
+
+        //属性的赋值器（setter）和取值器（getter），事实上也是采用这种写法
+        var cart = {
+            _wheels:4,
+            get wheels(){
+                return this._wheels;
+            },
+            set wheels(value){
+                if(value < this._wheels){
+                    throw new Error("数值太小了");
+                }
+                this._wheels = value;
+            }
+        };
+        //注意，简洁写法的属性名总是字符串，这会导致一些看上去比较奇怪的结果。
+        var obj = {
+            class (){}
+        };
+        //等同于
+        var obj = {
+            "class":function(){}
+        };
+        //如果某个方法的值是一个Generator函数，前面需要加上星号
+        var obj = {
+            * m(){
+                yield "hello,world";
+            }
+        };
+
+        //2属性名表达式
+        //方法一
+        obj.foo = true;
+        //方法二
+        obj['a' + 'bc'] = 123;
+        var obj = {
+            foo:true,
+            abc:123
+        };
+        let  propKey = "foo";
+        var obj = {
+            [propKey]:true,
+            ['a' + 'bc']:123
+        };
+        console.log(obj);
+
+        var lastWord = "last word";
+        var a = {
+            "first word":"hello",
+            [lastWord]:"world"
+        };
+        console.log(a['first word']);
+        console.log(a[lastWord]);
+        console.log(a['last word']);
+
+        var obj = {
+            ["h" + "ello"](){
+                return "hi";
+            }
+        };
+        console.log(obj.hello());
+
+        //注意，属性名表达式与简洁表示法，不能同时使用，会报错
+        //报错
+        var foo = "bar";
+        var bar = "abc";
+        //var baz = {[foo]};
+        //正确
+        var foo = "bar";
+        var baz = {[foo]:"abc"};
+
+        const keyA = {a:1};
+        const keyB = {b:2};
+        const myObject = {
+            [keyA]:"valueA",
+            [keyB]:"valuesB"
+        };
+        console.log(myObject);// Object {[object Object]: "valueB"}
+        //面代码中，[keyA]和[keyB]得到的都是[object Object]，
+        //所以[keyB]会把[keyA]覆盖掉，而myObject最后只有一个[object Object]属性。
+
+        //3方法的 name 属性
+        var person = {
+            sayName(){
+              console.log(this.name);
+            },
+            get firstName(){
+                return "Nicholas";
+            }
+        };
+
+        console.log(person.sayName.name);
+        console.log(person.firstName.name);
+        console.log(new Function().name);//anonymous
+        var dosomething = function(){};
+        console.log(dosomething.bind().name);//"bound doSomething"
+        const key1 = Symbol("description");
+        const key2 = Symbol();
+        let obj1 = {
+            [key1](){},
+            [key2](){}
+        };
+        console.log(obj1[key1].name);//"[description]"
+        console.log(obj1[key2].name);//""
+        
+        //4Object.is()
+        //5Object.assign()
+        //6属性的可枚举性
+        //7属性的遍历
+        //8__proto__属性，Object.setPrototypeOf()，Object.getPrototypeOf()
+        //9Object.values()，Object.entries()
+        //10对象的扩展运算符
+        //11Object.getOwnPropertyDescriptors()
+    </script>
+</head>
+<body>
+</body>
+</html>
