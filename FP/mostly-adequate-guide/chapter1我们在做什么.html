@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>我们在做什么</title>
+<script type="text/javascript">
+    //OOP写法
+    var Flock = function(n) {
+	  this.seagulls = n;
+	};
+
+	Flock.prototype.conjoin = function(other) {
+	  this.seagulls += other.seagulls;
+	  return this;
+	};
+
+	Flock.prototype.breed = function(other) {
+	  this.seagulls = this.seagulls * other.seagulls;
+	  return this;
+	};
+
+	var flock_a = new Flock(4);
+	var flock_b = new Flock(2);
+	var flock_c = new Flock(0);
+
+	var result = flock_a.conjoin(flock_c).breed(flock_b).conjoin(flock_a.breed(flock_b)).seagulls;
+	//=> 32
+	//我相信没人会写这样糟糕透顶的程序,代码的内部可变状态非常难以追踪
+	//重点是状态和可变值非常难以追踪
+	//函数式写法
+	var conjoin = function(flock_x,flock_y){
+		return flock_x + flock_y;
+	};
+	var breed = function(flock_x,flock_y){
+		return flock_x * flock_y;
+	};
+	var flock_a = 4;
+	var flock_b = 2;
+	var flock_c = 0;
+	alert(conjoin(breed(flock_b,conjoin(flock_a,flock_c)),breed(flock_a,flock_b)));//=>16
+	//代码中的两个函数除了函数名有些特殊，其他没有任何难以理解的地方。我们把它们重命名一下，看看它们的真面目
+	var add = function(x,y){
+		return x + y;
+	};
+	var multiply = function(x,y){
+		return x * y; 
+	};
+	var flock_a = 4;
+	var flock_b = 2;
+	var flock_c = 0;
+	var result = add(multiply(flock_b,add(flock_a,flock_c)),multiply(flock_a,flock_b));
+	alert(result);
+	// 原有代码
+	add(multiply(flock_b, add(flock_a, flock_c)), multiply(flock_a, flock_b));
+
+	// 应用同一律，去掉多余的加法操作（add(flock_a, flock_c) == flock_a）
+	add(multiply(flock_b, flock_a), multiply(flock_a, flock_b));
+
+	// 再应用分配律
+	multiply(flock_b, add(flock_a, flock_a));
+</script>
+</head>
+<body>
+</body>
+</html>
