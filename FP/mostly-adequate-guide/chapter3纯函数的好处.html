@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>纯函数的好处</title>
+<script type="text/javascript">
+//再次强调“纯”
+//纯函数:纯函数是这样一种函数,即相同的输入,永远会得到相同的输出,而且没有任何可观察的副作用
+var xs = [1,2,3,4];
+//纯的
+xs.slice(0,3);
+//=>[1,2,3];
+xs.slice(0,3);
+//=>[1,2,3]
+xs.slice(0,3);
+//=>[1,2,3]
+
+//不纯的
+xs.splice(0,3);
+//=>[1,2,3]
+xs.splice(0,3);
+//=>[4,5]
+xs.splice(0,3);
+//=>[]
+
+//不纯的
+var minimum = 21;
+var checkAge = function(age){
+	return age >= minimum;
+}; 
+//纯的
+var checkAge = function(age){
+	var minimum = 21;
+	return age >= minimum;
+};
+var immutableState = Object.freeze({
+	minimum:21
+});
+
+//副作用可能包括...
+//副作用是在计算结果的过程中，系统状态的一种变化，或者与外部世界进行的可观察的交互
+
+//八年级数学
+var toLowerCase = {"A":"a", "B": "b", "C": "c", "D": "d", "E": "e", "D": "d"};
+alert(toLowerCase["C"]);//=>"c"
+var isPrime = {1:false, 2: true, 3: true, 4: false, 5: true, 6:false};
+alert(isPrime[3]);//=>true
+
+//追求“纯”的理由
+//可缓存性（Cacheable）
+//首先，纯函数总能够根据输入来做缓存。实现缓存的一种典型方式是 memoize 技术：
+var squareNumber = memoize(function(x){return x * x;});
+console.log(squareNumber(4));
+squareNumber(4);
+//=> 16
+
+squareNumber(4); // 从缓存中读取输入值为 4 的结果
+//=> 16
+
+squareNumber(5);
+//=> 25
+
+squareNumber(5); // 从缓存中读取输入值为 5 的结果
+//=> 25
+var memoize = function(f){
+	var cache = {};
+	return function(){
+		var arg_str = JSON.stringify(arguments);
+		cache[arg_str]=cache[arg_str]||f.apply(f,arguments);
+		return cache[arg_str];
+	};
+};
+//值得注意的一点是，可以通过延迟执行的方式把不纯的函数转换为纯函数：
+var pureHttpCall = memoize(function(url,params){
+	return function(){
+		return $.getJSON(url,params);
+	};
+});
+
+//可移植性／自文档化（Portable / Self-Documenting）
+// 不纯的
+var signUp = function(attrs) {
+  var user = saveUser(attrs);
+  welcomeUser(user);
+};
+
+// 纯的
+var signUp = function(Db, Email, attrs) {
+  return function() {
+    var user = saveUser(Db, attrs);
+    welcomeUser(Email, user);
+  };
+};
+//通过这种仅仅是延迟执行的方式来让一个函数变纯
+
+//可测试性（Testable）
+
+//合理性（Reasonable）
+var decrementHP = function(player) {
+  return player.set("hp", player.hp-1);
+};
+
+var isSameTeam = function(player1, player2) {
+  return player1.team === player2.team;
+};
+
+var punch = function(player, target) {
+  if(isSameTeam(player, target)) {
+    return target;
+  } else {
+    return decrementHP(target);
+  }
+};
+
+var jobe = Immutable.Map({name:"Jobe", hp:20, team: "red"});
+var michael = Immutable.Map({name:"Michael", hp:20, team: "green"});
+
+punch(jobe, michael);
+//=> Immutable.Map({name:"Michael", hp:19, team: "green"})
+
+//并行代码
+
+//总结
+
+</script>
+</head>
+<body>
+</body>
+</html>
