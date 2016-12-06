@@ -177,14 +177,176 @@
         console.log(obj1[key1].name);//"[description]"
         console.log(obj1[key2].name);//""
         
-        //4Object.is()
-        //5Object.assign()
-        //6属性的可枚举性
-        //7属性的遍历
+        //4 Object.is()
+        console.log(NaN === NaN);//false
+        console.log(+0  === -0);//true
+        console.log(Object.is(+0,-0));//false
+        console.log(Object.is(NaN,NaN));//true
+        console.log(Object.is("f00","f00"));//true
+        console.log(Object.is({},{}));//false
+        //ES5可以通过下面的代码，部署Object.is。
+        Object.defineProperty(Object, 'is', {
+            value: function(x, y) {
+                if (x === y) {
+                    // 针对+0 不等于 -0的情况
+                    return x !== 0 || 1 / x === 1 / y;
+                }
+                // 针对NaN的情况
+                return x !== x && y !== y;
+            },
+            configurable: true,
+            enumerable: false,
+            writable: true
+        });
+        //5 Object.assign()
+        var target = {a:1};
+        var source1 = {b:2};
+        var source2 = {c:3};
+        Object.assign(target,source1,source2);
+        console.log(target);
+        var target = {a:1,b:1};
+        var source1 = {b:2,c:2};
+        var source2 = {c:3};
+        Object.assign(target,source1,source2);
+        console.log(target);
+        var obj = {a:1};
+        console.log(Object.assign(obj) === obj);//true
+        console.log(typeof Object.assign(2));//"object"
+        //Object.assign(undefined);
+        //Object.assign(null);
+        var obj = {a:1};
+        console.log(Object.assign(obj,undefined)===obj);//true
+        console.log(Object.assign(obj,null)===obj);//true
+        var v1 = "abc";
+        var v2 = true;
+        var v3 = 10;
+        var obj = Object.assign({},v1,v2,v3);
+        console.log(obj);//{ "0": "a", "1": "b", "2": "c" }
+        console.log(Object(true));
+        console.log(Object(10));
+        console.log(Object("abc"));
+        //Object.assign拷贝的属性是有限制的，只拷贝源对象的自身属性（不拷贝继承属性），也不拷贝不可枚举的属性（enumerable: false）
+        console.log(Object.assign({b:'c'},Object.defineProperty({},"invisible",{
+               enumerable:false,
+               value:"hello"
+          })
+        ));
+        //属性名为Symbol值的属性，也会被Object.assign拷贝。
+        console.log(Object.assign({a:"b"},{[Symbol("c")]:"d"}));
+        //注意点
+        //Object.assign方法实行的是浅拷贝，而不是深拷贝
+        var obj1 = {a:{b:1}};
+        var obj2 = Object.assign({},obj1);
+        obj1.a.b = 2;
+        console.log(obj2.a.b);//2
+        var target = {a:{b:'c',d:"e"}};
+        var source = {a:{b:"hello"}};
+        console.log(Object.assign(target,source));//{ a: { b: 'hello' } }
+        console.log(Object.assign([1,2,3],[4,5]));//=>[4,5,3]
+        //常见用途
+        //(1)为对象添加属性
+        class Point{
+            constructor(x,y){
+                Object.assign(this,{x,y});
+            }
+        }
+        //(2)为对象添加方法
+       /* Object.assign(SomeClass.prototype,{
+            someMethod(arg1,arg2){
+
+            },
+            anotherMethod(){
+
+            }
+        });
+        //等同于下面的写法
+        SomeClass.prototype.someMethod=function(arg1,arg2){
+
+        };
+        SomeClass.prototype.anotherMethod =function(){
+
+        };*/
+       //(3)克隆对象
+       function clone(origin){
+           return Object.assign({},origin);
+       }
+       //不过，采用这种方法克隆，只能克隆原始对象自身的值，不能克隆它继承的值。如果想要保持继承链，可以采用下面的代码
+       function clone(origin){
+           let originProto = Object.getPrototypeOf(origin);
+           return Object.assign(Object.create(originProto),origin);
+       }
+       //(4)合并多个对象
+       const merge1 = (target,...sources)=> Object.assign(target,...sources);
+       const merge2 = (...sources) => Object.assign({},sources);
+       //(5)为属性指定默认值
+       const DEFAULTS = {
+           logLevel:0,
+           outputFormat:"html"
+       };
+       function processContent(options){
+           options = Object.assign({},DEFAULTS,options);
+       }
+
+       //6 属性的可枚举性
+       //对象的每个属性都有一个描述对象（Descriptor），用来控制该属性的行为
+       var obj = {foo:123};
+       console.log(Object.getOwnPropertyDescriptor(obj,"foo"));
+        /*ES5有三个操作会忽略enumerable为false的属性。
+        1 for...in循环：只遍历对象自身的和继承的可枚举的属性
+        2 Object.keys()：返回对象自身的所有可枚举的属性的键名
+        3 JSON.stringify()：只串行化对象自身的可枚举的属性 */
+        //ES6新增了一个操作Object.assign()，会忽略enumerable为false的属性，只拷贝对象自身的可枚举的属性
+        console.log(Object.getOwnPropertyDescriptor(Object.prototype,"toString").enumerable);//false
+        console.log(Object.getOwnPropertyDescriptor([],"length").enumerable);//false
+        console.log(Object.getOwnPropertyDescriptor(class {
+            foo(){}
+        }.prototype,"foo").enumerable);//false
+
+       //7 属性的遍历
+        /*（1）for...in
+
+        for...in循环遍历对象自身的和继承的可枚举属性（不含Symbol属性）。
+
+        （2）Object.keys(obj)
+
+        Object.keys返回一个数组，包括对象自身的（不含继承的）所有可枚举属性（不含Symbol属性）。
+
+        （3）Object.getOwnPropertyNames(obj)
+
+        Object.getOwnPropertyNames返回一个数组，包含对象自身的所有属性（不含Symbol属性，但是包括不可枚举属性）。
+
+        （4）Object.getOwnPropertySymbols(obj)
+
+        Object.getOwnPropertySymbols返回一个数组，包含对象自身的所有Symbol属性。
+
+        （5）Reflect.ownKeys(obj)
+
+        Reflect.ownKeys返回一个数组，包含对象自身的所有属性，不管是属性名是Symbol或字符串，也不管是否可枚举。
+
+        以上的5种方法遍历对象的属性，都遵守同样的属性遍历的次序规则。
+
+        首先遍历所有属性名为数值的属性，按照数字排序。
+        其次遍历所有属性名为字符串的属性，按照生成时间排序。
+        最后遍历所有属性名为Symbol值的属性，按照生成时间排序。 */
+        console.log(Reflect.ownKeys({[Symbol()]:0,b:0,10:0,2:0,a:0}));
+        //// ['2', '10', 'b', 'a', Symbol()]
+
+
         //8__proto__属性，Object.setPrototypeOf()，Object.getPrototypeOf()
-        //9Object.values()，Object.entries()
+        //(1)__proto__属性
+        //(2)Object.setPrototypeOf()
+        //(3)Object.getPrototypeOf()
+
+        //9 Object.values()，Object.entries()
+        //Object.keys()
+        //Object.values()
+        //Object.entries()
+
         //10对象的扩展运算符
-        //11Object.getOwnPropertyDescriptors()
+        //(1)解构赋值
+        //(2)扩展运算符
+
+        //11 Object.getOwnPropertyDescriptors()
     </script>
 </head>
 <body>
