@@ -551,9 +551,98 @@
         //如果扩展运算符的参数是null或undefined，这个两个值会被忽略，不会报错。
         let emptyObject = {...null,...undefined};//不报错
         
-        //11 Object.getOwnPropertyDescriptors()
-        //  Reflect.getOwnPropertyDescriptors()
+         //11 Object.getOwnPropertyDescriptors() 
+        var obj = {p:'a'};
+        console.log(Object.getOwnPropertyDescriptor(obj,'p'));
+        // Object { value: "a",
+        //   writable: true,
+        //   enumerable: true,
+        //   configurable: true
+        // }
+        var obj = {
+        	foo:123,
+        	get bar(){
+        		return "abc";
+        	}
+        };
+        console.log(Object.getOwnPropertyDescriptors(obj));
+        function getOwnPropertyDescriptor(obj){
+        	const result = {};
+        	for(let key of Reflect.ownKeys(obj)){
+        		result[key]=Object.gteOwnPropetyDescriptor(obj,key);
+        	}
+        	return result;
+        }
+        //该方法的提出目的，主要是为了解决Object.assign()无法正确拷贝get属性和set属性的问题
+        const source = {
+        	set foo(value){
+        		console.log(value);
+        	}
+        };
+        const target1 = {};
+        Object.assign(target1,source);
+        console.log(Object.getOwnPropertyDescriptor(target1,"foo"));
+        // { value: undefined,
+        //   writable: true,
+        //   enumerable: true,
+        //   configurable: true }
+        //Object.assign方法总是拷贝一个属性的值，而不会拷贝它背后的赋值方法或取值方法
+        //Object.getOwnPropertyDescriptors方法配合Object.defineProperties方法，就可以实现正确拷贝
+        var source1 = {
+           set foo(value){
+        	   console.log(value);
+           }
+        };
+        var  target2 = {};
+        Object.defineProperties(target2,Object.getOwnPropertyDescriptors(source1));
+        console.log(Object.getOwnPropertyDescriptor(target2,"foo"));
+        // { get: undefined,
+        //   set: [Function: foo],
+        //   enumerable: true,
+        //   configurable: true }
+        const shallowMerge = (target,source) => Object.defineProperties(
+        		target,Object.getOwnPropertyDescriptors(source)
+        );
+        //bject.getOwnPropertyDescriptors方法的另一个用处，是配合Object.create方法，将对象属性克隆到一个新对象。这属于浅拷贝
+        const clone = Object.create(Object.getPrototypeOf(obj),
+        		Object.getOwnPropertyDescriptors(obj));
+        //或者
+        const shallowClone = (obj) => Object.create(
+            Object.getPrototypeOf(obj),
+            Object.getOwnPropertyDescriptors(obj)
+        );
+        //一个对象继承另一个对象
+        const obj = {
+        		__proto__:prot,
+        		foo:123
+        };
+        //ES6规定__proto__只有浏览器要部署，其他环境不用部署。如果去除__proto__，上面代码就要改成下面这样
+        const obj = Object.create(prot);
+        obj.foo = 123;
+        //或者
+        const obj = Object.assign(
+        		Object.create(prop),{
+        			foo:123,
+        		}
+        );
+        const obj = Object.create(prot,Object.getOwnPropertyDescriptors({
+        	foo:123
+        }));
+        //Object.getOwnPropertyDescriptors也可以用来实现Mixin（混入）模式
+        let mix = (object)=>({
+        	with:(...mixin) => mixins.reduce((c,mixin)=> Object.create(
+        			c,Object.getOwnPropertyDescriptors(mixin)
+        		  ),object)
+        });
         
+        //// multiple mixins example
+        let a = {a:"a"};
+        let b = {b:'b'};
+        let c = {c:'c'};
+        let d = mix(c).with(a,b);
+        //上面代码中，对象a和b被混入了对象c。
+        //出于完整性的考虑，Object.getOwnPropertyDescriptors进入标准以后，
+        //还会有Reflect.getOwnPropertyDescriptors方法     
     </script>
 </head>
 <body>
