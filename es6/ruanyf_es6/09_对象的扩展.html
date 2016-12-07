@@ -331,22 +331,229 @@
         console.log(Reflect.ownKeys({[Symbol()]:0,b:0,10:0,2:0,a:0}));
         //// ['2', '10', 'b', 'a', Symbol()]
 
-
         //8__proto__属性，Object.setPrototypeOf()，Object.getPrototypeOf()
-        //(1)__proto__属性
+        //(1) __proto__属性,用来读取和设置当前对象的prototype对象
+        //es6写法
+        var obj = {
+        		method:function(){
+        			//......
+        		}
+        };
+        obj.__proto__ = someOtherObj;
+        //es5写法
+        var obj = Object.create(someOtherObj);
+        obj.method = function(){
+        	//......
+        };
+        //在实现上，__proto__调用的是Object.prototype.__proto__，具体实现如下
+        Object.defineProperty(Object.prototype,"__proto__",{
+        	get(){
+        		let _thisObj = Object(this);
+        		return Object.getPrototypeOf(_thisObj);
+        	},
+        	set(proto){
+        		if(this === undefined || this === null){
+        			throw new TypeError();
+        		}
+        		if(!isObject(this)){
+        			return undefined;
+        		}
+        		if(!isObject(proto)){
+        			return undefined;
+        		}
+        		let status = Reflect.setPrototypeOf(this,proto);
+        		if(!status){
+        			throw new TypeError();
+        		}
+        	}
+        	
+        });
+        function idObject(value){
+        	return Object(value) === value;
+        }
+        //如果一个对象本身部署了__proto__属性，则该属性的值就是对象的原型。
+        console.log(Object.getPrototypeOf({__proto__:null}));//=>null
         //(2)Object.setPrototypeOf()
+        //格式
+        Object.setPrototypeOf(object,prototype);
+        //用法
+        var o = Object.setPrototypeOf({},null);
+        //该方法等同于下面的函数
+        function setPrototype(obj,proto){
+        	obj.__proto__ = proto;
+        	return obj;
+        }
+        
+        let proto = {};
+        let obj = {x:10};
+        Object.setPrototypeOf(obj,proto);
+        proto.y = 20;
+        proto.z = 30;
+        console.log(obj.x);//=>10
+        console.log(obj.y);//=>20
+        console.log(obj.z);//=>30
         //(3)Object.getPrototypeOf()
-
+        function Rectangle(){}
+        var rec = new Rectangle();
+        console.log(Object.getPrototypeOf(rec) === Rectangle.prototype);//=>true
+        Object.setPrototypeOf(rec,Object.prototype);
+        console.log(Object.getPrototypeOf(rec) === Rectangle.prototype);//=>false
+        
         //9 Object.values()，Object.entries()
-        //Object.keys()
-        //Object.values()
-        //Object.entries()
-
-        //10对象的扩展运算符
+        //(1)Object.keys
+        var obj = {foo:"bar",baz:42};
+        console.log(Object.keys(obj));//["foo", "baz"]
+        let {keys,values,entries} = Object;
+        let obj = {a:1,b:2,c:3};
+        for(let key of keys(obj)){
+        	console.log(key);
+        }
+        for(let value of values(obj)){
+        	console.log(value);
+        }
+        for(let [key,value] of entries(obj)){
+        	console.log([key,value]);
+        }
+        //(2)Object.values
+        var obj = {foo:"bar",baz:42};
+        console.log(obj.values(obj));
+        var obj = {100:"a",2:'b',7:"c"};
+        console.log(Object.values(obj));//// ["b", "c", "a"]
+        var obj = Object.create({},{p:{value:42}});
+        console.log(Object.values(obj));//[]
+        //Object.values会过滤属性名为Symbol值的属性
+        console.log(Object.values({[Symbol()]:123,foo:'abc'}));//["abc"]
+        //如果Object.values方法的参数是一个字符串，会返回各个字符组成的一个数组
+        console.log(Object.values("cpp"));
+        //如果参数不是对象，Object.values会先将其转为对象。
+        //由于数值和布尔值的包装对象，都不会为实例添加非继承的属性。所以，Object.values会返回空数组
+        console.log(Object.values(42));//=>[]
+        console.log(Object.values(true));//=>[]
+        //(3)Object.entries
+        var obj = {foo:"bar",baz:42};
+        console.log(Object.entries(obj));// [ ["foo", "bar"], ["baz", 42] ]
+        //如果原对象的属性名是一个Symbol值，该属性会被省略
+        console.log(Object.entries({[Symbol()]:123,foo:"abc"}));//=>[ [ 'foo', 'abc' ] ]
+        //Object.entries的基本用途是遍历对象的属性
+        var obj = {one:1,two:2};
+        for(let [k,v] of Object.entries(obj)){
+        	console.log(`${JSON.stringify(k)}:${JSON.stringify(v)}`);
+        }
+        //Object.entries方法的一个用处是，将对象转为真正的Map结构。
+        var obj = {foo:"bar",baz:42};
+        var map = new Map(Object.entries(obj));
+        console.log(map);
+        //自己实现Object.entries方法，非常简单
+        //Generator函数的版本
+        function* entries(obj){
+        	for(let key of Object.keys(obj)){
+        		yield [key,obj[key]];
+        	}
+        }
+        //非Generator函数的版本
+        function entries(obj){
+        	let arr = [];
+        	for(let key of Object.keys(obj)){
+        		arr.push([key,obj[key]]);
+        	}
+        	return arr;
+        }
+        
+        //10 对象的扩展运算符
         //(1)解构赋值
+        let {x,y,...z} = {x:1,y:2,a:3,b:4};
+        console.log(x);
+        console.log(y);
+        console.log(z);
+        //由于解构赋值要求等号右边是一个对象，所以如果等号右边是undefined或null，就会报错，因为它们无法转为对象
+        let {x,y,...z} = null;// 运行时错误
+        let {x,y,...z} = undefined;// 运行时错误
+        //解构赋值必须是最后一个参数，否则会报错。
+        let {...x,y,z} = obj;//语法错误
+        let {x,...y,...z} = obj;//语法错误
+        //注意，解构赋值的拷贝是浅拷贝，即如果一个键的值是复合类型的值（数组、对象、函数）、那么解构赋值拷贝的是这个值的引用，
+        //而不是这个值的副本
+        let obj = {a:{b:1}};
+        let {...x} = obj;
+        obj.a.b = 2;
+        console.log(x.a.b);
+        //解构赋值不会拷贝继承自原型对象的属性
+        let o1 = {a:1};
+        let o2 = {b:2};
+        o2.__proto__ = o1;
+        let o3 = {...o3};
+        console.log(o3);//=>{b:2}
+        
+        var o = Object.create({x:1,y:2});
+        o.z = 3;
+        let {x,...{y,z}} = o;
+        console.log(x);//=>1
+        console.log(y);//=>undefined
+        console.log(z);//=>3
+        //解构赋值的一个用处，是扩展某个函数的参数，引入其他操作。
+        function baseFunction({a,b}){
+        	//...
+        }
+        function wrapperFunction({x,y,...restConfig}){
+        	// 使用x和y参数进行操作
+        	// 其余参数传给原始函数
+        	return baseFunction(restConfig);
+        }
+        
         //(2)扩展运算符
-
+        //扩展运算符（...）用于取出参数对象的所有可遍历属性，拷贝到当前对象之中。
+        let z = {a:3,b:4};
+        let n = {...z};
+        console.log(n);// { a: 3, b: 4 }
+        let aClone = {...a};
+        //等同于
+        let aClone = Object.assign({},a);
+        //扩展运算符可以用于合并两个对象。
+        let ab = {...a,...b};
+        //等同于
+        let ab = Object.assign({},a,b);
+        //如果用户自定义的属性，放在扩展运算符后面，则扩展运算符内部的同名属性会被覆盖掉
+        let aWithOverrides = {...a,x:1,y:2};
+        //等同于
+        let aWithOverrides = {...a,...{x:1,y:2}};
+        //等同于
+        let x = 1,y=2,aWithOverrides = {...a,x,y};
+        //等同于
+        let aWithOverrides = Object.assign({},a,{x:1,y:2});
+        
+        let newVersion = {
+        		  ...previousVersion,
+        		  name: 'New Name' // Override the name property
+        };
+        //如果把自定义属性放在扩展运算符前面，就变成了设置新对象的默认属性值。
+        let aWithDefaults = { x: 1, y: 2, ...a };
+        // 等同于
+        let aWithDefaults = Object.assign({}, { x: 1, y: 2 }, a);
+        // 等同于
+        let aWithDefaults = Object.assign({ x: 1, y: 2 }, a);
+        //扩展运算符的参数对象之中，如果有取值函数get，这个函数是会执行的
+        //// 并不会抛出错误，因为x属性只是被定义，但没执行
+        let aWithXGetter = {
+        		...a;
+        		get x(){
+        			throws new Error("not thrown yet");
+        		}
+        };
+        // 会抛出错误，因为x属性被执行了
+        let runtimeError = {
+        		...a,
+        		...{
+        			get x(){
+        				throw new Error("thrown now");
+        			}
+        		}
+        };
+        //如果扩展运算符的参数是null或undefined，这个两个值会被忽略，不会报错。
+        let emptyObject = {...null,...undefined};//不报错
+        
         //11 Object.getOwnPropertyDescriptors()
+        //  Reflect.getOwnPropertyDescriptors()
+        
     </script>
 </head>
 <body>
