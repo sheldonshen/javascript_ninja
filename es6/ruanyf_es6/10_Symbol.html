@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Symbol</title>
+    <script type="text/javascript" charset="UTF-8">
+        //1概述
+        //保证每个属性的名字是都是独一无二的,从根本上防止属性名的冲突,这就是ES6引入Symbol的原因
+        //ES6引入了一种新的原始数据类型Symbol,表示独一无二的值,它是javascript语言的第7种数据类型
+        //前六种是：Undefined、Null、布尔值（Boolean）、字符串（String）、数值（Number）、对象（Object）
+        //Symbol值通过symbol函数生成
+        //对象的属性名现在可以有两种类型，一种是原来就有的字符串，另一种就是新增的Symbol类型
+        //凡是属性名属于Symbol类型,就都是独一无二的,可以保证不会与其他属性名产生冲突
+        let s = Symbol();//s是一个原始类型的值,不是对象,基本上，它是一种类似于字符串的数据类型
+        console.log(typeof s);//=>"symbol"
+        
+        var s1 = Symbol("foo");
+        var s2 = Symbol("bar");
+        console.log(s1);//Symbol(foo)
+        console.log(s2);//Symbol(bar)
+        console.log(s1.toString());//"Symbol(foo)"
+        console.log(s2.toString());//"Symbol(bar)"
+        const obj = {
+        	toString(){
+        		return "bcd";
+        	}
+        };
+        const sym = Symbol(obj);
+        console.log(sym);//=>Symbol(bcd)
+        //注意，Symbol函数的参数只是表示对当前 Symbol 值的描述，因此相同参数的Symbol函数的返回值是不相等的
+        // 没有参数的情况
+        var s1 = Symbol();
+        var s2 = Symbol();
+        console.log(s1 === s2);//=>false
+        // 有参数的情况
+        var s1 = Symbol("false");
+        var s2 = Symbol("false");
+        console.log(s1 === s2);//=>false
+        //Symbol值不能与其他类型的值进行运算，会报错。
+        var sym1 = Symbol("My Symbol");
+        //"your symbol is " + sym1;//Cannot convert a Symbol value to a string
+        //`your symbol is ${sym}`;//Cannot convert a Symbol value to a string
+        //但是，Symbol值可以显式转为字符串。
+        var sym2 = Symbol("My symbol");
+        console.log(String(sym2));//'Symbol(My symbol)'
+        console.log(sym2.toString());//'Symbol(My symbol)'
+        //另外，Symbol值也可以转为布尔值，但是不能转为数值。
+        var sym3 = Symbol();
+        console.log(Boolean(sym));//=>true
+        console.log(!sym3);//=>false
+        if(sym3){
+        	//...
+        }
+        //Number(sym);//TypeError:Cannot convert a Symbol value to a number
+        //sym + 2;//TypeError:Cannot convert a Symbol value to a number
+        
+        //2作为属性名的Symbol  
+        //由于每一个Symbol值都是不相等的，这意味着Symbol值可以作为标识符，用于对象的属性名，就能保证不会出现同名的属性。
+        //这对于一个对象由多个模块构成的情况非常有用，能防止某一个键被不小心改写或覆盖
+        var mySymbol = Symbol();
+        //第一种写法
+        var a = {};
+        a[mySymbol]="Hello!";
+        //第二种写法
+        var a = {
+        	[mySymbol]:"Hello!"	
+        };
+        //第三种写法
+        var a = {};
+        Object.defineProperty(a,mySymbol,{value:"Hello!"});
+        console.log(a[mySymbol]);//=>"Hello!"
+        var mySymbol = Symbol();
+        var a = {};
+        a.mySymbol = "Hello";//点运算符后面总是字符串
+        console.log(a[mySymbol]);//=>undefined
+        console.log(a['mySymbol']);//=>Hello
+        //因为点运算符后面总是字符串，所以不会读取mySymbol作为标识名所指代的那个值，导致a的属性名实际上是一个字符串，
+        //而不是一个Symbol值
+        //同理，在对象的内部，使用Symbol值定义属性时，Symbol值必须放在方括号之中。
+        let ss  = Symbol();
+        let objq = {
+        	[ss]:function(arg){
+        		console.log(arg);
+        	}
+        };
+        console.log(objq[ss](123));
+        let obj = {
+        	[ss](arg){
+        		//...
+        	}	
+        };
+        //Symbol类型还可以用于定义一组常量，保证这组常量的值都是不相等的
+        /*log.levels = {
+        		DEBUG:Symbol("debug"),
+        		INFO:Symbol("info"),
+        		WARN:Symbol("warn")
+        };
+        log(log.levels.DEBUG,"debug message");
+        log(log.levels.INFO,"info message");*/
+        
+        const COLOR_RED = Symbol();
+        const COLOR_GREEN = Symbol();
+        function getComplement(color){
+        	switch(color){
+        	    case COLOR_RED:
+        	    	return COLOR_GREEN;
+        	    case COLOR_GREEN:
+        	    	return COLOR_RED;
+        	    default:
+        	    	throw new Error("Undefined color");
+        	}
+        }    
+        //常量使用Symbol值最大的好处，就是其他任何值都不可能有相同的值了，因此可以保证上面的switch语句会按设计的方式工作
+        
+        //3实例：消除魔术字符串
+         //魔术字符串指的是，在代码之中多次出现、与代码形成强耦合的某一个具体的字符串或者数值。风格良好的代码，
+         //应该尽量消除魔术字符串，该由含义清晰的变量代替
+        function getArea(shape,options){
+             var area = 0;
+             switch(shape){
+                  case "Triangle"://魔术字符串
+                     area = .5 * options.width * options.height;
+                     break;
+                  /*...more code...*/   
+             }
+             retuen area;
+        }
+        getArea("Triangle",{width:100,weight:100});//魔术字符串
+        //上面代码中，字符串“Triangle”就是一个魔术字符串。它多次出现，与代码形成“强耦合”，不利于将来的修改和维护
+        var shapeType={
+        	triangle:"Triangle"	
+        };
+        function getArea(shape,options){
+             var area = 0;
+             switch(shape){
+                  case shapeType.triangle://魔术字符串
+                     area = .5 * options.width * options.height;
+                     break;
+                  /*...more code...*/   
+             }
+             retuen area;
+        }
+        getArea(shapeType.triangle,{width:100,weight:100});//魔术字符串
+        //上面代码中，我们把“Triangle”写成shapeType对象的triangle属性，这样就消除了强耦合
+        
+        //如果仔细分析，可以发现shapeType.triangle等于哪个值并不重要，
+        //只要确保不会跟其他shapeType属性的值冲突即可。因此，这里就很适合改用Symbol值
+        const shapeType = {
+        	triangle:Symbol()	
+        };
+        //上面代码中，除了将shapeType.triangle的值设为一个Symbol，其他地方都不用修改
+         
+        //4属性名的遍历
+        //Object.getOwnPropertySymbols方法
+        var objs = {};
+        var a = Symbol("a");
+        var b = Symbol("b");
+        objs[a]="Hello";
+        objs[b]="World";
+        var objectSymbols = Object.getOwnPropertySymbols(objs);
+        console.log(objectSymbols);//=>[Symbol(a), Symbol(b)]
+        //Object.getOwnPropertySymbols方法与for...in循环、Object.getOwnPropertyNames方法进行对比的例子
+        var obj = {};
+        var foo = Symbol("foo");
+        Object.defineProperty(obj,foo,{
+        	value:"foobar"
+        });
+        for(var i in obj){
+        	console.log(i);//无输出
+        }
+        console.log(Object.getOwnPropertyNames(obj));//[]
+        console.log(Object.getOwnPropertySymbols(obj));//[Symbol(foo)]
+        //另一个新的API，Reflect.ownKeys方法可以返回所有类型的键名，包括常规键名和 Symbol 键名
+        let obj = {
+        		[Symbol("my_key")]:1,
+        		enum:2,
+        		nonEnum:3
+        };
+        console.log(Reflect.ownKeys(obj));
+        //// [Symbol(my_key), 'enum', 'nonEnum']
+        //由于以 Symbol 值作为名称的属性，不会被常规方法遍历得到。我们可以利用这个特性，为对象定义一些非私有的、但又希望只用于内部的方法
+        var size = Symbol("size");
+        class Collection{
+        	constructor(){
+        		this[size]=0;
+        	}
+        	add(item){
+        		this[this[size]]=item;
+        		this[size]++;
+        	}
+        	static sizeOf(instance){
+        		return instance[size];
+        	}
+        }
+        
+        var x = new Collection();
+        console.log(Collection.sizeOf(x));//=>0
+        
+        x.add("foo");
+        console.log(Collection.sizeOf(x));//=>1
+        
+        console.log(Object.keys(x));
+        console.log(Object.getOwnPropertyNames(x));
+        console.log(Object.getOwnPropertySymbols(x));
+                
+        //5Symbol.for()，Symbol.keyFor()
+        var s1 = Symbol.for("foo");
+        var s2 = Symbol.for("foo");
+        console.log(s1 === s2);//=>true
+        console.log(Symbol.for("bar") === Symbol.for("bar"));//=>true
+        console.log(Symbol("vue") === Symbol("vue"));//=>false
+        var s1 = Symbol.for("foo");
+        console.log(Symbol.keyFor(s1));//=>"foo"
+        var s2 = Symbol("foo");
+        console.log(Symbol.keyFor(s2));//=>undefined
+        //需要注意的是，Symbol.for为Symbol值登记的名字，是全局环境的，可以在不同的 iframe 或 service worker 中取到同一个值
+        iframe = document.createElement("iframe");
+        iframe.src  = String(window.location);
+        document.body.appendChild(iframe);
+        console.log(iframe.contentWindow.Symbol.for("foo") === Symbol.for("foo"));
+        //上面代码中，iframe 窗口生成的 Symbol 值，可以在主页面得到。
+        
+        //6实例：模块的 Singleton 模式
+        //mod.js
+        function A(){
+        	this.foo = "hello";
+        }
+        if(!global._foo){
+        	global._foo = new A();
+        }
+        module.exports = global._foo;
+        var a = require('./mod.js');
+        console.log(a.foo);
+        //global._foo = 123;
+        
+        //mod.js
+        const FOO_KEY = Symbol.for("foo");
+        function A(){
+        	this.foo = "hello";
+        }
+        if(!global[FOO_KEY]){
+        	global[FOO_KEY] = new A();
+        }
+        module.exports = global[FOO_KEY];
+        //上面代码中，可以保证global[FOO_KEY]不会被无意间覆盖，但还是可以被改写。
+        var a = require("./mod.js");
+        global[Symbol.for("foo")]=123;
+        //mod.js
+        const FOO_KEY = Symbol("foo");
+        //// 后面代码相同 ……
+        
+        //7 内置的Symbol值
+        //(1)Symbol.hasInstance
+        class MyClass{
+        	[Symbol.hasInstance](foo){
+        		return foo instanceof Array;
+        	}
+        }
+        console.log([1,2,3] instanceof new MyClass());//=> true
+        
+        class Even{
+        	static [Symbol.hasInstance](obj){
+        		return Number(obj) % 2 == 0;
+        	}
+        }
+        console.log(1 instanceof Even);//=>false
+        console.log(2 instanceof Even);//=>true
+        console.log(3 instanceof Even);//=>false
+       
+        //(2)Symbol.isConcatSpreadable
+        let arr1 = ["c",'d'];
+        console.log(["a","b"].concat(arr1,"e"));// ['a', 'b', 'c', 'd', 'e']
+        console.log(arr1[Symbol.isConcatSpreadable]);// undefined
+        
+        let arr2 = ['c','d'];
+        arr2[Symbol.isConcatSpreadable] = false;
+        console.log(["a","b"].concat(arr2,"e"));// ['a', 'b', 'c', 'd', 'e']
+        
+        let obj = {length:2,0:"c",1:'d'};
+        console.log(['a','b'].concat(obj,'e'));
+        obj[Symbol.isConcatSpreadable] = true;
+        console.log(['a','b'].concat(obj,'e'));
+        //对于一个类来说，Symbol.isConcatSpreadable属性必须写成实例的属性。
+        class A1 extends Array{
+        	constructor(args){
+        		super(args);
+        		this[Symbol.isConcatSpreadable] = true;
+        	}
+        }
+        class A2 extends Array{
+        	constructor(args){
+        		super(args);
+        		this[Symbol.isConcatSpreadable] = false;
+        	}
+        }
+        let a1 = new A1();
+        a1[0] = 3;
+        a1[1] = 4;
+        let a2 = new A2();
+        a2[0] = 5;
+        a2[1] = 6;
+        console.log([1,2].concat(a1).concat(a2));// [1, 2, 3, 4, [5, 6]]
+        
+        //(3)Symbol.species
+        //Symbol.species属性默认的读取器如下
+        static get [Symbol.species](){
+        	return this;
+        }
+        
+        //(4)Symbol.match
+        //String.prototype.match(regexp);
+        //等同于
+        //regexp[Symbol.match](this);
+        class MyMatcher{
+        	[Symbol.match](string){
+        		return "hello,world".indexOf(string);
+        	}
+        }
+        console.log("e".match(new MyMatcher()));//1
+        
+        //(5)Symbol.replace
+        //String.prototype.replace(searchValue, replaceValue)
+        // 等同于
+        //searchValue[Symbol.replace](this, replaceValue)
+        const x = {};
+        x[Symbol.replace] =(...s) => console.log(s);
+        console.log("Hello".replace(x,"World"));
+        
+        //(6)Symbol.search
+        //String.prototype.search(regexp)
+        //等同于
+        //regexp[Symbol.search](this);
+        class MySearch{
+        	constructor(value){
+        		this.value = value;
+        	}
+        	[Symbol.search](string){
+        		return string.indexOf(this.value);
+        	}
+        }
+        console.log("foobar".search(new MySearch("foo")));// 0
+        
+        //(7)Symbol.split
+        //String.prototype.split(separator,limit);
+        //等同于
+        separator[Symbol.split](this,limit);
+        
+        //(8)Symbol.iterator
+        var myIterable = {};
+        myIterable[Symbol.iterator] = function* (){
+        	yield 1;
+        	yield 2;
+        	yield 3;
+        };
+        console.log([...myIterable]);//[1, 2, 3]
+        
+        class Collection{
+        	*[Symbol.iterator](){
+        		let i = 0;
+        		while(this[i]!== undefined){
+        			yield this[i];
+        			++i;
+        		}
+        	}
+        }
+        let myCollection = new Collection();
+        myCollection[0]=1;
+        myCollection[1]=2;
+        for(let value of myCollection){
+        	console.log(value);
+        }
+        // 1
+        // 2
+        
+        //(9)Symbol.toPrimitive
+        let obj = {
+        	[Symbol.toPrimitive](hint){
+        		switch(hint){
+        		    case 'number':
+        		    	return 123;
+        		    case "string":
+        		    	return "str";
+        		    case "default":
+        		    	return "default";
+        		    default:
+        		    	throw new Error();
+        		}
+        	}
+        };
+        console.log(2 * obj);
+        console.log(3 + obj);
+        console.log(obj == 'default');
+        console.log(String(obj));
+       
+        //(10)Symbol.toStringTag
+        console.log(({[Symbol.toStringTag()]:"Foo"}.toString()));
+        //// "[object Foo]"
+        
+        class Collection{
+        	get [Symbol.toStringTag](){
+        		return "xxx";
+        	}
+        }
+        var x = new Collection();
+        console.log(Object.prototype.toString.call(x));//// "[object xxx]"
+        
+        //(11)Symbol.unscopables 
+        console.log(Array.prototype[Symbol.unscopables]);
+        console.log(Object.keys(Array.prototype[Symbol.unscopables]));
+        
+        Array.prototype[Symbol.unscopables]
+     // {
+     //   copyWithin: true,
+     //   entries: true,
+     //   fill: true,
+     //   find: true,
+     //   findIndex: true,
+     //   keys: true
+     // }
+
+     Object.keys(Array.prototype[Symbol.unscopables])
+     // ['copyWithin', 'entries', 'fill', 'find', 'findIndex', 'keys']
+     
+     //// 没有unscopables时
+     class MyClass{
+    	 foo(){
+    		 return 1;
+    	 }
+     }
+     var foo = function(){
+    	 return 2;
+     };
+     with(MyClass.prototype){
+    	 foo();//1
+     }
+     // 有unscopables时
+     class MyClass{
+    	 foo(){
+    		 return 1;
+    	 }
+    	 get [Symbol.unscopables](){
+    		 return {foo:true};
+    	 }
+     }
+     var foo = function(){
+    	 return 2;
+     }
+     with(MyClass.prototype){
+    	 foo();//2
+     }
+    </script>
+</head>
+<body>
+</body>
+</html>
