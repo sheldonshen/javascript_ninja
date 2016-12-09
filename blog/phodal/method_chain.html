@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Javascript Method Chaining 方法链</title>
+<script type="text/javascript">
+//1Javascript Method Chaining
+/*Method chaining, also known as named parameter idiom, 
+ is a common syntax for invoking multiple method calls in object-oriented programming languages. 
+ Each method returns an object, allowing the calls to be chained together in a single statement.
+ Chaining is syntactic sugar which eliminates the need for intermediate variables. 
+ A method chain is also known as a train wreck due to the increase in the number of methods that 
+ come one after another in the same line that occurs as more methods are chained togethe 
+ even though line breaks are often added between methods.
+ */
+ 
+//2Method Chaining 使用
+//chaining(jQuery)
+$("#person").slideDown("slow")
+            .addClass("grouped")
+            .css("margin-left",'11px');
+//没有方法链
+var p = ${"#person"};
+p.slideDown("slow");
+p.addClass("grouped");
+p.css("margin-left","11px");
+
+//3Javascript 方法链示例
+function f(i){
+	return function(e){
+		i+=e;
+		return function(e){
+			i+=e;
+			return function(e){
+				document.write(i+e);
+			}
+		}
+	}
+}
+f(1)(2)(3)(4);//10
+//这是网上的一个例子，然而也是我上一次写链式调用的作法。看上去弱爆了
+var func = (function(){
+	return {
+		add:function(){
+			console.log("1");
+			return {
+				result:function(){
+					console.log("2");
+				}
+			};
+		}
+	};
+})();
+func.add().result();
+//重构
+Func = (function(){
+	this.add = function(){
+		console.log("1");
+		return this;
+	};
+	this.result = function(){
+		console.log("2");
+		return this;
+	}
+});
+var func = new Func();
+func.add().result();
+//new Func().add().result()
+
+//4其他
+//Method Chaining VS prototype Chaining
+/* 原型链与方法链在某些方面上是差不多的，不同的地方或许在于
+
+原型链是需要用原型
+方法链则是用方法 */
+</script>
+</head>
+<body>
+</body>
+</html>
