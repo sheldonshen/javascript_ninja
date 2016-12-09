@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>JavaScript DSL 流畅接口(使用链式调用)</title>
+<script type="text/javascript">
+
+//DSL 流畅接口
+//很多人将链式调用等同于流畅接口。然而链式调用是流畅接口的一种常用方法，真实的流畅接口不止这么一点点
+//流畅接口的初衷是构建可读的API，毕竟代码是写给人看的
+//简单的看一下早先我们是通过方法级联来操作DOM
+var btn = document.createElement("BUTTON");        // Create a <button> element
+var t = document.createTextNode("CLICK ME");       // Create a text node
+btn.appendChild(t);                                // Append the text to <button>
+//document.body.appendChild(btn);                  // Append <button> to <body>
+//用jQuery写的话,
+//$("<span>").append("click me");
+//于是回我们便可以创建一个简单的示例来展示这个最简单的DSL
+Func = (function(){
+	this.add = function(){
+		console.log("1");
+		return this;
+	};
+	this.result = function(){
+		console.log("2");
+		return this;
+	};
+	//return this;
+});
+var func = new Func();
+func.add().result();
+//然而这看上去像是表达式生成器。
+
+//DSL 表达式生成器
+//表达式生成器对象提供一组连贯接口，之后将连贯接口调用转换为对底层命令-查询API的调用。
+var query =
+  SQL('select name, desc from widgets')
+   .WHERE('price < ', $(params.max_price), AND,
+          'clearance = ', $(params.clearance))
+   .ORDERBY('name asc');
+
+//其他
+//方法级联
+a.b();
+a.c();
+
+</script>
+</head>
+<body>
+</body>
+</html>
