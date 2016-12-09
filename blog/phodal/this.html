@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>关于Javascript的this的一些知识</title>
+<script type="text/javascript">
+//this的隐形绑定
+function add(a,b){ return a + b;}
+var sum = add(3,4);
+document.write(sum);
+document.write(typeof add);
+
+var hello = function(){
+	return "hello " + this.name;
+}
+var name = "phodal";
+document.write(hello());//=>hello phodal
+
+var hello = function(){
+	return "Hello," + this.name;
+};
+var user = {
+		world:hello,
+		name:"congbird"
+};
+document.write(user.world());//Hello,congbird
+
+//var that = this;
+//如果我们在这个方法中定义一个变量并给它赋值this,那么内部函数就可以通过那个变量访问到this。
+var that = this;
+//tips:
+//this变量的作用域总是由其最近的封闭函数所确定。
+//使用一个局部变量(如me,self,that)让this绑定对于内部是可用的。
+var M = function(){
+	this.name = "M";
+};
+var MM = function(){
+	z = new M();
+	this.name = "MM";
+	var self = this;//创建一个当前this作用域的别名
+	z.printName = function(){
+		console.log(name);//undefined
+		//console.log(this.name);//=>M
+		//console.log(self.name);//=>MM
+	};
+	return z.printName();
+};
+var mm = new MM;
+
+//demo bind函数
+var M = function(){
+	this.name = "M";
+};
+
+var MM = function(){
+	z = new M();
+	this.name = "MM";
+	z.printName = function(){
+		console.log(this.name);
+	}.bind(this);
+	return z.printName();
+};
+var mm = new MM;
+</script>
+</head>
+<body>
+</body>
+</html>
