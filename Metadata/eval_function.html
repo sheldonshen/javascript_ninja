@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>JavaScript DSL 元编程</title>
+<script type="text/javascript">
+//1javascript元编程
+/*元编程（Metaprogramming）是指某类计算机程序的编写，这类计算机程序编写或者操纵其他程序（或者自身）作为它们的数据，
+或者在运行时完成部分本应在编译时完成的工作。*/
+
+//2javascript eval(Function,setTimeout,setInterval)
+//eval() 函数可计算某个字符串，并执行其中的的 JavaScript 代码。
+eval("x=10;y=20;document.write(x*y)  //");
+//eval函数应该尽可能的避免使用
+/*
+ *eval() 计算一个字符串作为当前执行范围内JavaScript表达式，可以访问本地变量。 New Function() 解析存储在一个字符串转换成一个函数对象，
+ *然后可以调用的JavaScript代码。因为代码在一个单独的范围内运行，不能访问本地变量。 也就是说eval会干扰到当前函数的作用域
+ */
+
+//3javascript new Function()
+/*
+ *Function 构造器创建一个新的Function 对象. 在JavaScript中每个函数(function)实际是一个Function对象. 
+   使用Function构造器生成的Function对象是在函数创建时被解析的。这比你使用函数声明(function)并在你的代码中调用低效，
+    因为使用函数语句声明的function是跟其他语句一起解析的。 
+*/
+var add = new Function(['x','y'],'return x + y;')
+document.write(add(4,7));
+document.write(add.apply(null,[4,7]));
+//而这也是我在JavaScript Template中所看到的:
+  new Function(
+        tmpl.arg + ',tmpl',
+        "var _e=tmpl.encode" + tmpl.helper + ",_s='" +
+        str.replace(tmpl.regexp, tmpl.func) +
+        "';return _s;"
+  );	
+</script>
+</head>
+<body>
+</body>
+</html>
