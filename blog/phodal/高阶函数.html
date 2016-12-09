@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Javascript高阶函数</title>
+<script type="text/javascript">
+//高阶函数
+//高阶函数只是将函数作为参数或者返回者的函数
+//Javascript的高阶函数
+var Moqi = function(p1){
+	this.add = function(p2){
+		return p1 + " " + p2;
+	};
+	return add;
+};
+document.write(Moqi("Hello")("World"));
+document.write(typeof Moqi("Hello"));
+
+var Moqi = function(p1){
+	return function(p2){
+		return function(p3){
+			return p1 + "," + p2 + "," + p3;
+		}
+	};
+};
+document.write(Moqi("Hello")("World")("Phodal"));
+
+//还原高阶函数
+var Moqi = function(p1){
+	this.add = function(p2){
+		return function(p3){
+			return p1 + p2 + p3;
+		};
+	};
+	return this.add;
+};
+
+var Moqi = function(p1){
+	this.add = function(p2){
+		this.add1 = function(p3){
+			return p1 + p2 + p3;
+		};
+		return add1;
+	};
+	return this.add;
+};
+//使用javascript中的call方法，就会有：
+var Moqi = function(p1){
+	var self = this;
+	function fd(p2){
+		this.add1 = function(p3){
+			return p1 + "," + p2 + "," + p3;
+		};
+	}
+	self.add = function(p2){
+		fd.call(null,p2);
+		return this.add1;
+	};
+	
+	return self.add;
+};
+
+//高阶函数实例
+add = function(a,b){
+	return a + b;
+}
+function math(func,array){
+	return func(array[0],array[1]);
+}
+document.write(math(add,[1,2]));
+
+//其他
+/* 参考书目
+《Javascript编程精解》
+《编写高质量Javascript的68个有效方法》 */
+</script>
+</head>
+<body>
+</body>
+</html>
