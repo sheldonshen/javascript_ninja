@@ -6,13 +6,164 @@
 <script type="text/javascript">
     //1 Set
     //基本用法
+    var s = new Set();
+    [5,1,5,4,5,2,2].map(x => s.add(x));
+    for(let i of s){
+    	document.write(i);//=>2,3,4,5
+    	document.write("---<br>");
+    }
+    var set = new Set([1,2,3,4,4]);
+    document.write([...set]);//=>1,2,3,4
+    var items = new Set([1,2,3,4,5,5,5,5,5]);
+    document.write("----<br>" + items.size);//=>5
+    function divs(){
+    	return [...document.querySelectorAll("div")];
+    }
+    var set = new Set(divs());
+    //set.size
+    //类似于
+    //divs().forEach(div => set.add(div));
+    //上面代码中，例一和例二都是Set函数接受数组作为参数，例三是接受类似数组的对象作为参数
+    
+    //// 去除数组的重复成员
+    //[...new Set(array)];
+    
+    //Set内部判读2个值是否相等,使用的算法是"same-value equality",类似于"===".
+    //主要的区别是NaN等于自身，而精确相等运算符认为NaN不等于自身
+    var set = new Set();
+    let a = NaN;
+    let b = NaN;
+    set.add(a);
+    set.add(b);
+    for(let i of set){
+    	document.write("---<br>");
+    	document.write(i);//=>NaN,在Set内部,两个NaN是相等的
+    	document.write("---<br>");
+    }
+    //另外，两个对象总是不相等的。
+    var set = new Set();
+    set.add({});
+    document.write(set.size);//1
+    set.add({});
+    document.write("---<br>");
+    document.write(set.size);//2
+    
     //Set实例的属性和方法
+    var set = new Set();
+    set.add(1).add(2).add(2);
+    document.write("---<br>");
+    document.write(set.size);//=>2
+    document.write(set.has(1));//=>true
+    document.write(set.has(2));//=>true
+    document.write(set.has(3));//=>false
+    document.write(set.has("1"));//=>false
+    set.delete(2);
+    document.write(set.has(2));//=>false
+    
+    //对象的写法
+    var properties = {
+       "width":1,
+       "height":1
+    };
+    if(properties['width']){
+    	
+    }
+    //Set的写法
+    var properties = new Set();
+    properties.add("width");
+    properties.add("height");
+    if(properties.has("height")){
+    	
+    }
+    
+    //Array.from方法可以将Set结构转为数组。
+    var items = new Set([1,2,3,4,5]);
+    var array = Array.from(items);
+    document.write("Set convert to Array");
+    document.write(array);
+    //这就提供了去除数组重复成员的另一种方法。
+    function dedupe(array){
+    	return Array.from(new Set(array));
+    }
+    document.write(dedupe([1,2,3,4,4]));//[1,2,3,4]
+    
     //遍历操作
+    //Set的遍历顺利就是插入顺序,这个特性有时非常有用
     //(1)keys()，values()，entries()
+    //由于Set结构没有键名，只有键值（或者说键名和键值是同一个值），所以key方法和value方法的行为完全一致
+    var set = new Set(['red','green','blue']);
+    document.write("****************<br>");
+    for(let item of set.keys()){
+    	document.write(item + " ");
+    }
+    for(let item of set.values()){
+    	document.write(item + " ");
+    }
+    for(let item of set.entries()){
+    	document.write(item + " ");
+    }
+    // ["red", "red"]
+    // ["green", "green"]
+    // ["blue", "blue"]
+    //Set结构的实例默认可遍历，它的默认遍历器生成函数就是它的values方法
+    document.write(Set.prototype[Symbol.iterator]===Set.prototype.values);
+    //true
+    //这意味着，可以省略values方法，直接用for...of循环遍历Set。
+    var set = new Set(['red','green','blue']);
+    for(let x of set){
+    	document.write(x);
+    }
+   
     //(2)forEach()
+    var set = new Set([1,2,3]);
+    set.forEach((value,key)=> document.write(value * 2));//2,4,6
+    
     //(3)遍历的应用
+    var set = new Set(['red','green','blue']);
+    var arr = [...set];
+    document.write(arr);
+    var arr = [3,5,2,2,5,3];
+    var unique = [...new Set(arr)];
+    document.write(unique);
+    //数组的map和filter方法也可以用于Set了
+    var set = new Set([1,2,3]);
+    set = new Set([...set].map(x => x * 2));//返回Set结构：{2, 4, 6}
+    for(let i of set){
+    	document.write(i);
+    }
+    var set = new Set([1,2,3,4,5]);
+    set = new Set([...set].filter(x => (x % 2) == 0));//返回Set结构：{2, 4}
+    for(let i of set){
+    	document.write(i);
+    }
+    //使用Set可以很容易地实现并集（Union）、交集（Intersect）和差集（Difference）
+    var ab = new Set([1,2,3]);
+    var bb = new Set([4,3,2]);
+    //并集
+    var union = new Set([...ab,...bb]);
+    document.write("---->");
+    for(let i of union){
+    	document.write(i);//1234
+    }
+    //交集
+    var intersect = new Set([...ab].filter(x => bb.has(x)));
+    document.write("---->");
+    for(let i of intersect){
+    	document.write(i);//23
+    }
+    //差集
+    var difference = new Set([...[...ab].filter(x => bb.has(x) === false)],[...[...bb].filter(x => ab.has(x) === false)]);
+    document.write("---->");
+    for(let i of difference){
+    	document.write(i);//1
+    }
+    
+    //上面代码提供了两种方法，直接在遍历操作中改变原来的Set结构
+    var set = new Set[1,2,3];
+    set = new Set()
     
     //2 WeakSet
+    
     
     //3 Map
     //Map结构的目的和基本用法
