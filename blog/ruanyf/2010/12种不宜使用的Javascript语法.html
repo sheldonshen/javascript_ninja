@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>12种不宜使用的Javascript语法</title>
+<script type="text/javascript">
+//1 ==
+//请尽量不要使用前一组(==和!=)，永远只使用===和!==。因为==默认会进行类型转换，规则十分难记
+
+//2 with  	
+obj.a = obj.b;
+obj.c = obj.d;
+with(obj){
+	a = b;
+	c = d;
+}
+//在实际运行时，解释器会首先判断obj.b和obj.d是否存在，如果不存在的话，再判断全局变量b和d是否存在。
+//这样就导致了低效率，而且可能会导致意外，因此最好不要使用with语句
+
+//3 eval
+//因为它有性能和安全性的问题，并且使得代码更难阅读。
+
+//4 continue
+//这条命令的作用是返回到循环的头部，但是循环本来就会返回到头部。所以通过适当的构造，完全可以避免使用这条命令，使得效率得到改善
+
+//5 switch贯穿
+//建议避免switch贯穿，凡是有case的地方，一律加上break
+
+//6 单行的块结构
+//建议不管是否只有一行命令，都一律加上大括号
+
+//7 ++和--
+//实际上会让代码看上去更复杂和更晦涩。因此为了代码的整洁性和易读性，不用为好
+
+//8 位运算符
+//这套运算符针对的是整数，所以对Javascript完全无用，因为Javascript内部，所有数字都保存为双精度浮点数。如果使用它们的话，
+//Javascript不得不将运算数先转为整数，然后再进行运算，这样就降低了速度。而且"按位与运算符"&同"逻辑与运算符"&&，很容易混淆。
+
+//9 function语句
+function foo(){}//会被解析器自动提升到代码的头部，
+//因此违背了函数应该先定义后使用的要求，所以建议定义函数时，全部采用后一种写法
+var foo = function(){};//不会提升
+
+//10 基本数据类型的包装对象
+/*new String("Hello World");
+　　new Number(2000);
+　　new Boolean(false);
+这样写完全没有必要，而且非常费解，因此建议不要使用。
+另外，new Object和new Array也不建议使用，可以用{}和[]代替。*/
+
+//11 new语句
+/*类是这样定义的：
+　　var Cat = function (name) {
+　　　　this.name = name;
+　　　　this.saying = 'meow' ;
+　　}
+然后，再生成一个对象
+　　var myCat = new Cat('mimi');
+这种利用函数生成类、利用new生成对象的语法，其实非常奇怪，一点都不符合直觉
+
+Douglas Crockford给出了一个函数：
+Object.beget = function (o) {
+　　var F = function (o) {};
+　　F.prototype = o ;
+　　return new F;
+};
+创建对象时就利用这个函数，对原型对象进行操作：
+var Cat = {
+　　name:'',
+　　saying:'meow'
+};
+var myCat = Object.beget(Cat);
+对象生成后，可以自行对相关属性进行赋值：
+myCat.name = 'mimi';
+*/
+
+//12 void 
+//在大多数语言中，void都是一种类型，表示没有值。但是在Javascript中，void是一个运算符，接受一个运算数，并返回undefined
+//void 0;undefined
+//这个命令没什么用，而且很令人困惑，建议避免使用。
+</script>
+</head>
+<body>
+</body>
+</html>
