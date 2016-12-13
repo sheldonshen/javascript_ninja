@@ -159,10 +159,55 @@
     }
     
     //上面代码提供了两种方法，直接在遍历操作中改变原来的Set结构
-    var set = new Set[1,2,3];
-    set = new Set()
+    var set = new Set([1,2,3]);
+    set = new Set([...set].map(val => val * 2));
+    var set = new Set([1,2,3]);
+    set = new Set(Array.from(set,val => val * 2));
+    //上面代码提供了两种方法，直接在遍历操作中改变原来的Set结构。
     
     //2 WeakSet
+    //WeakSet的成员只能事对象,而不是其他类型的值
+    //WeakSet中的对象都是弱引用(如果其他对象都不再引用该对象,那么垃圾回收机制会自动回收该对象所占用的内存
+    //不考虑该对象还存在于WeakSet之中,这个特点意味着，无法引用WeakSet的成员，因此WeakSet是不可遍历的)
+    var ws = new WeakSet();
+    //ws.add(1);
+    //ws.add(Symbol());
+    var abb = [[1,2],[3,4]];
+    //注意，是abb数组的成员成为WeakSet的成员，而不是abb数组本身。这意味着，数组的成员只能是对象
+    var ws = new WeakSet(abb);
+    var bbb = [3,4];
+    //var ws = new WeakSet(bbb);//Uncaught TypeError: Invalid value used in weak set(…)
+    var ws = new WeakSet();
+    var obj = {};
+    var foo = {};
+    ws.add(window);
+    ws.add(obj);
+    document.write(ws.has(window));//true
+    document.write(ws.has(foo));//false
+    ws.delete(window);
+    document.write(ws.has(window));//false
+    document.write(ws.size);//undefined
+    document.write(ws.forEach);//undefined
+    /*ws.forEach(function(item){
+    	consolke.log(item);
+    });*/
+    //WeakSet的一个用处，是储存DOM节点，而不用担心这些节点从文档移除时，会引发内存泄漏
+    const foos = new WeakSet();
+    class Foo{
+    	constructor(){
+    		foos.add(this);
+    	}
+    	method(){
+    		if(!foos.has(this)){
+    			throw new TypeError("Foo.prototype.method 只能在Foo的实例上调用！");
+    		}
+    	}
+    }
+   
+    /*
+       上面代码保证了Foo的实例方法，只能在Foo的实例上调用。这里使用WeakSet的好处是，
+    foos对实例的引用，不会被计入内存回收机制，所以删除实例的时候，不用考虑foos，也不会出现内存泄漏
+    */
     
     
     //3 Map
