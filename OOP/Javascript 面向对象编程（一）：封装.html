@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Javascript 面向对象编程（一）：封装</title>
+<script type="text/javascript">
+//一、 生成实例对象的原始模式
+var Cat = {
+   name:"",
+   color:""
+};
+//现在，我们需要根据这个原型对象的规格（schema），生成两个实例对象。
+var cat1 = {};//// 创建一个空对象
+cat1.name="大毛";// 按照原型对象的属性赋值
+cat1.color="黄色";
+var cat2 = {};
+cat2.name="二毛";
+cat2.color="红色";
+//样的写法有两个缺点，一是如果多生成几个实例，写起来就非常麻烦；二是实例与原型之间，没有任何办法，可以看出有什么联系
+
+//二、 原始模式的改进
+function Cat(name,color){
+	return {
+		name:name,
+		color:color
+	};
+}
+var cat1 = Cat("大毛","黄色");
+var cat2 = Cat("二毛","黑色");
+//这种方法的问题依然是，cat1和cat2之间没有内在的联系，不能反映出它们是同一个原型对象的实例
+
+//三、 构造函数模式
+function Cat(name,color){
+	this.name = name;
+	this.color = color;
+}
+var cat1 = new Cat("大毛","黄色");
+var cat2 = new Cat("二毛","黑色");
+alert(cat1.name); // 大毛
+alert(cat1.color); // 黄色
+//这时cat1和cat2会自动含有一个constructor属性，指向它们的构造函数
+alert(cat1.constructor === Cat);//true
+alert(cat2.constructor === Cat);//true
+alert(cat1 instanceof Cat); //true
+alert(cat2 instanceof Cat); //true
+
+//四、构造函数模式的问题
+function Cat(name,color){
+　　　　this.name = name;
+　　　　this.color = color;
+　　　　this.type = "猫科动物";
+　　　　this.eat = function(){alert("吃老鼠");};
+}
+var cat1 = new Cat("大毛","黄色");
+var cat2 = new Cat ("二毛","黑色");
+alert(cat1.type); // 猫科动物
+cat1.eat(); // 吃老鼠
+//type属性和eat()方法都是一模一样的内容，每一次生成一个实例，都必须为重复的内容，
+//多占用一些内存。这样既不环保，也缺乏效率
+alert(cat1.eat === cat2.eat); //false
+//能不能让type属性和eat()方法在内存中只生成一次，然后所有实例都指向那个内存地址呢？回答是可以的
+
+//五、 Prototype模式
+function Cat(name,color){
+　　　　this.name = name;
+　　　　this.color = color;
+}
+Cat.prototype.type = "猫科动物";
+Cat.prototype.eat = function(){alert("吃老鼠")};
+var cat1 = new Cat("大毛","黄色");
+var cat2 = new Cat("二毛","黑色");
+alert(cat1.type); // 猫科动物
+cat1.eat(); // 吃老鼠
+alert(cat1.eat === cat2.eat); //true
+//这时所有实例的type属性和eat()方法，其实都是同一个内存地址，指向prototype对象，因此就提高了运行效率
+
+//六、 Prototype模式的验证方法
+//6.1 isPrototypeOf()
+//这个方法用来判断，某个proptotype对象和某个实例之间的关系。
+alert(Cat.prototype.isPrototypeOf(cat1));//true
+alert(Cat.prototype.isPrototypeOf(cat2));//true
+
+//6.2 hasOwnProperty()
+alert(cat1.hasOwnProperty("name")); // true
+alert(cat1.hasOwnProperty("type")); // false
+
+//6.3 in运算符
+alert("name" in cat1); // true
+alert("type" in cat1); // true
+//in运算符还可以用来遍历某个对象的所有属性。
+for(var prop in cat1) { alert("cat1["+prop+"]="+cat1[prop]); }
+</script>
+</head>
+<body>
+</body>
+</html>
