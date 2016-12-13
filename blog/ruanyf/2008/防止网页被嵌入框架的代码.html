@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>防止网页被嵌入框架的代码</title>
+<script type="text/javascript">
+    if(window != top){// 判断当前的window对象是否是top对象
+    	document.write("网页被嵌入框架了");
+    	top.location.href = window.location.href;
+        //如果不是，将top对象的网址自动导向被嵌入网页的网址
+    }
+    //问题：有没有一种方法，使得我的网页只能被嵌入我自己的框架，而不是别人的框架？
+    if(top.location.hostname != window.location.hostname){
+    	top.location.href = window.location.href;
+    }
+    //问题：跨域(cross-domain)：浏览器的安全政策不允许222.com的网页操作111.com的网页，反之亦然
+    //浏览器甚至不允许你查看top.location.hostname，跨域情况下，一看到这个对象，就直接报错。
+    
+    //事实上，这提示我们，只要查看top.location.hostname是否报错就可以了。如果报错了，表明存在跨域，
+    //就对top对象进行URL重导向；如果不报错，表明不存在跨域（或者未使用框架），就不采取操作
+    try{
+    	top.location.hostname;
+    	//Chrome对top.location.hostname不报错！
+    	if(top.location.hostname != window.location.hostname){//只能为了Chrome，再加一段补充代码
+    		top.location.href = window.location.href;
+    	}
+    }catch(e){
+    	//在IE和Firefox中可以正确运行
+    	top.location.href = window.location.href;
+    }
+    //var topWindow = window.top;
+    //https://developer.mozilla.org/en-US/docs/Web/API/Window/top
+</script>
+</head>
+<body>
+</body>
+</html>
