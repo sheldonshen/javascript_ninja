@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Firebug控制台详解</title>
+<script type="text/javascript">
+//一、显示信息的命令
+//二、占位符
+console.log("%d年%d月%d日",2011,3,26);
+console.log("圆周率是%f",3.1415926);
+//三、分组显示
+　console.group("第一组信息");
+
+　　　　console.log("第一组第一条");
+
+　　　　console.log("第一组第二条");
+
+　　console.groupEnd();
+
+　　console.group("第二组信息");
+
+　　　　console.log("第二组第一条");
+
+　　　　console.log("第二组第二条");
+
+　　console.groupEnd();
+//四、console.dir()
+//console.dir()可以显示一个对象所有的属性和方法。
+
+//五、console.dirxml()
+//console.dirxml()用来显示网页的某个节点（node）所包含的html/xml代码。
+
+//六、console.assert()
+
+//七、console.trace()
+//console.trace()用来追踪函数的调用轨迹。
+
+//八、计时功能
+//console.time()和console.timeEnd()，用来显示代码的运行时间。
+
+//九、性能分析
+console.profile('性能分析器一');
+
+　　Foo();
+
+console.profileEnd();
+</script>
+</head>
+<body>
+</body>
+</html>
