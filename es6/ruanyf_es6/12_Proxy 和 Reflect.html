@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Proxy 和 Reflect</title>
+<script>
+//1 Proxy 概述
+//Proxy 用于修改某些操作的默认行为，等同于在语言层面做出修改，所以属于一种“元编程”（meta programming）
+//即对编程语言进行编程
+//Proxy 可以理解成，在目标对象之前架设一层“拦截”，外界对该对象的访问，都必须先通过这层拦截
+var obj = new Proxy({},{
+get:function(target,key,receiver){
+  console.log(`getting ${key}`);
+  return Reflect.get(target,key,receiver);
+},
+set:function(target,key,value,receiver){
+  console.log(`setting ${key}`);
+  return Reflect.set(target,key,value,receiver);
+}
+});
+obj.count = 1;
+++obj.count;
+
+var proxy = new Proxy({},{
+  get:function(target,property){
+     return 36;
+  }
+});
+
+console.log(proxy.time);
+console.log(proxy.name);
+console.log(proxy.title);
+
+var target={};
+var handler={};
+var proxy = new Proxy(target,handler);
+proxy.a='b';
+console.log(target.a);
+
+//一个技巧是将Proxy对象，设置到object.proxy属性，从而可以在object对象上调用
+var object = {
+  proxy:new Proxy(target,handler)
+};
+//Proxy 实例也可以作为其他对象的原型对象
+var proxy = new Proxy({},{
+   get:function(target,property){
+     return 35;
+   }
+});
+let obj = Object.create(proxy);
+console.log(obj.time);
+//同一个拦截器函数，可以设置拦截多个操作。
+var handler = {
+    get:function(target,name){
+	    if(name === 'prototype'){
+		  return Object.prototype;
+		}
+		return "Hello," + name;
+	},
+	apply:function(target,thisBinding,args){
+	    return args[0];
+	},
+	construct:function(target,args){
+	    return {value:args[1]};
+	}
+};
+var fproxy = new Proxy(function(x,y){
+   return x + y;
+},handler);
+console.log(fproxy(1,2));//1
+console.log(new fproxy(1,2));
+console.log(fproxy.prototype === Object.prototype);//true
+console.log(fproxy.foo);//// "Hello, foo"
+
+//2 Proxy实例的方法
+//get()
+var person = {
+	name:"张三"
+};
+var proxy = new Proxy(person,{
+	get:function(target,property){
+	   	if(property in target){
+	   		return target[property];
+	   	}else{
+	   		throw new Error("Property \"" + property + "\" does not exist.");
+	   	}
+	}
+});
+console.log(proxy.name);
+console.log(proxy.age);//Error: Property "age" does not exist
+//上面代码表示，如果访问目标对象不存在的属性，会抛出一个错误。如果没有这个拦截函数，访问不存在的属性，只会返回undefined
+//get方法可以继承。
+let proto = new Proxy({},{
+	get(target,propertyKey,receiver){
+		console.log("GET " + propertyKey);
+		return target[propertyKey];
+	}
+});
+let obj = Object.create(proto);
+console.log(obj.xxx);//"GET xxx"
+//下面的例子使用get拦截，实现数组读取负数的索引。
+function createArray(...elements){
+	let handler = {
+	   get(target,propKey,receiver){
+		   let index = Number(propKey);
+		   if(index < 0){
+			   propKey = String(target.length + index);
+		   }
+		   return Reflect.get(target,propKey,receiver);
+	   }		
+	};
+	
+	let target = [];
+	target.push(...elements);
+	return new Proxy(target,handler);
+}
+let arr = createArray('a','b','c');
+console.log(arr[-1]);//c
+
+//利用 Proxy，可以将读取属性的操作（get），转变为执行某个函数，从而实现属性的链式操作
+var pipe = (function(){
+	return function(value){
+		var funcStack = [];
+		var oproxy = new Proxy({},{
+			get:function(pipeObject,fnName){
+			    if(fnName === "get"){
+			    	return funcStack.reduce(function(val,fn){
+			    		return fn(val);
+			    	},value);
+			    }
+			    funcStack.push(window[fnName]);
+			    return oproxy;
+			}
+		});
+		return oproxy;
+	};
+}());
+
+var double = n => n * 2;
+var pow    = n => n * n;
+var reverseInt = n => n.toString().split("").reverse().join("") | 0;
+console.log(pipe(3).double.pow.reverseInt.get);
+
+//下面的例子则是利用get拦截，实现一个生成各种DOM节点的通用函数dom
+
+
+
+//set()
+//apply()
+//has()
+//construct()
+//deleteProperty()
+//defineProperty
+//getOwnPropertyDescriptor() 
+//getPrototypeOf() 
+//isExtensible() 
+//ownKeys() 
+//preventExtensions() 
+//setPrototypeOf() 
+
+
+//3 Proxy.revocable()
+
+//4 this 问题
+
+//5 Reflect概述
+
+//6 Reflect对象的方法
+
+//7 实例：使用 Proxy 实现观察者模式
+
+</script>
+</head>
+<body>
+</body>
+</html>
