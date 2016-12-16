@@ -209,25 +209,229 @@
     foos对实例的引用，不会被计入内存回收机制，所以删除实例的时候，不用考虑foos，也不会出现内存泄漏
     */
     
-    
-    //3 Map
+     //3 Map
     //Map结构的目的和基本用法
+    var data = {};
+    var element = document.getElementById("myDiv");
+    data[element] = "metadata";
+    console.log(data['[object HTMLDivElement]']);
+    //Object结构提供了“字符串—值”的对应，Map结构提供了“值—值”的对应
+    var m = new Map();
+    var o = {p:"Hello World"};
+    m.set(o,m);
+    console.log(m.get(o));
+    console.log(m.has(o));
+    console.log(m.delete(o));
+    console.log(m.has(o));
+    
+    var map = new Map([['name','zhangsan'],['title','js']]);
+    console.log(map.size);
+	console.log(map.has("name"));
+	console.log(map.get("name"));
+	console.log(map.has("title"));
+	console.log(map.get("title"));
+	//Map构造函数接受数组作为参数，实际上执行的是下面的算法。
+	var items = [["name",'zhangsan'],['title','js']];
+	var map = new Map();
+	items.forEach(([key,value]) => map.set(key,value));
+	//下面的例子中，字符串true和布尔值true是两个不同的键。
+	var m = new Map([
+	   [true,"foo"],
+	   ["true","bar"]
+	]);
+	console.log(m.get(true));
+	console.log(m.get("true"));
+	//如果对同一个键多次赋值，后面的值将覆盖前面的值。
+	var map = new Map();
+	map.set(1,'aaa');
+	map.set(1,'bbb');
+	console.log(map.get(1));
+	//如果读取一个未知的键，则返回undefined。
+	console.log(map.get("ffffffffffffff"));//undefined
+	//注意，只有对同一个对象的引用，Map结构才将其视为同一个键。这一点要非常小心。
+	var map = new Map();
+	map.set(['a'],555);
+	console.log(map.get(['a']));//undefined
+	//同理，同样的值的两个实例，在Map结构中被视为两个键。
+	var map = new Map();
+	var k1 = ['a'];
+	var k2 = ['a'];
+	map.set(k1,111).set(k2,222);
+	console.log(map.get(k1));//111
+	console.log(map.get(k2));//222
+	//上面代码中，变量k1和k2的值是一样的，但是它们在Map结构中被视为两个键
+	//由上可知，Map的键实际上是跟内存地址绑定的，只要内存地址不一样，就视为两个键
+	var map = new Map();
+	map.set(NaN,123);
+	console.log(map.get(NaN));//123
+	map.set(-0,123);
+	console.log(map.get(+0));//123
+	
     //实例的属性和操作方法
     //(1)size属性
+	var map = new Map();
+	map.set("foo",true);
+	map.set("bar",false);
+	console.log(map.size);
     //(2)set(key,value)
+	var m = new Map();
+    m.set("edition", 6)        // 键是字符串
+    m.set(262, "standard")     // 键是数值
+    m.set(undefined, "nah")    // 键是undefined
+	let map = new Map().set(1,'a').set(2,'b').set(3,"c");
     //(3)get(key)
+	var m = new Map();
+	var hello = function(){
+	  console.log("hello ES6");
+	};
+	m.set(hello,"hello.js");
+	console.log(m.get(hello));
     //(4)has(key)
+	var m = new Map();
+    m.set("edition", 6);
+    m.set(262, "standard");
+    m.set(undefined, "nah");
+
+    m.has("edition")     // true
+    m.has("years")       // false
+    m.has(262)           // true
+    m.has(undefined)     // true
     //(5)delete(key)
+	var m = new Map();
+	m.set(undefined,"nah");
+	m.has(undefined);//true
+	m.delete(undefined);
+	m.has(undefined);//false
     //(6)clear()
+	let map = new Map();
+    map.set('foo', true);
+    map.set('bar', false);
+	console.log(map.size);//2
+	map.clear();
+	console.log(map.size);//0
+	
     //遍历方法
+	var map = new Map([["F","no"],["T","yes"]]);
+	for(let key of map.keys()){
+	  console.log(key);
+	}
+	for(let value of map.values()){
+	  console.log(value); 
+	}
+	for(let item of map.entries()){
+	  console.log(item[0],item[1]);
+	}
+	for(let [key,value] of map.entries()){
+	  console.log(key,value); 
+	}
+	//等同于使用map.entries()
+	for(let [key,value] of map){
+	  console.log(key,value); 
+	}
+	console.log(map[Symbol.iterator] === map.entries);//true
+	//Map结构转为数组结构，比较快速的方法是结合使用扩展运算符（...）。
+	var map = new Map([
+	   [1,'one'],
+	   [2,'two'],
+	   [3,'three'],
+	]);
+	console.log([...map.keys()]);
+	console.log([...map.values()]);
+	console.log([...map.entries()]);
+	console.log([...map]);
+	//结合数组的map方法、filter方法，可以实现Map的遍历和过滤（Map本身没有map和filter方法）
+	let map0 = new Map().set(1,'a').set(2,'b').set(3,'c');
+	let map1 = new Map([...map0].filter(([k,v]) => k < 3));
+	console.log(map1);//产生Map结构 {1 => 'a', 2 => 'b'}
+	let map0 = new Map().set(1,'a').set(2,'b').set(3,'c');
+	let map2 = new Map(
+	      [...map0].map(([k,v]) => [k,"_" + v])
+    );
+	/*let map2 = new Map(
+          [...map0].map(([k, v]) => [k * 2, '_' + v])
+    );*/
+	console.log(map2);
+	
+	let map0 = new Map().set(1,'a').set(2,'b').set(3,'c');
+	map0.forEach(function(value,key,map){
+	    console.log("key:%s,value:%s",key,value);
+	});
+	
+	var reporter = {
+	  report:function(key,value){
+	    console.log("key:%s,value:%s",key,value);
+	  }
+	};
+	map0.forEach(function(value,key,map){
+	   this.report(key,value);
+	},reporter);
+	
     //与其他数据结构的互相转换
     //(1)Map转为数组
+	//前面已经提过，Map转为数组最方便的方法，就是使用扩展运算符（...）。
+	let myMap = new Map().set(true,7).set({foo:7},['abc']);
+	[...myMap];
+	
     //（2）数组转为Map
+	//将数组转入Map构造函数，就可以转为Map。
+	new Map([[true,7],[{foo:3},["abc"]]]),
+	
     //(3)Map转为对象
+	//如果所有Map的键都是字符串，它可以转为对象。
+	function strMapToObj(strMap){
+	   let obj = Object.create(null);
+	   for(let [k,v] of strMap){
+	      obj[k] = v;
+	   }
+	   return obj;
+	}
+	let myMap = new Map().set('yes',true).set('no',false);
+	console.log(strMapToObj(myMap));
+	//// { yes: true, no: false }
+	
     //(4)对象转Map
+	function objToStrMap(obj){
+	   let strMap = new Map();
+	   for(let k of Object.keys(obj)){
+	      strMap.set(k,obj[k]);
+	   }
+	   return strMap;
+	}
+	console.log(objToStrMap({yes:true,no:false}));
+	
     //(5)Map转为JSON
+	//Map转为JSON要区分两种情况。一种情况是，Map的键名都是字符串，这时可以选择转为对象JSON
+	function strMapToObj(strMap){
+	   let obj = Object.create(null);
+	   for(let [k,v] of strMap){
+	      obj[k] = v;
+	   }
+	   return obj;
+	}
+	function strMapToJson(strMap){
+	   return JSON.stringify(strMapToObj(strMap));
+	}
+	let myMap = new Map().set('yes', true).set('no', false);
+    console.log(strMapToJson(myMap));// '{"yes":true,"no":false}'
+	//另一种情况是，Map的键名有非字符串，这时可以选择转为数组JSON。
+	function mapToArrayJson(map){
+	   return JSON.stringify([...map]);
+	}
+	let myMap = new Map().set(true, 7).set({foo: 3}, ['abc']);
+    console.log(mapToArrayJson(myMap));// '[[true,7],[{"foo":3},["abc"]]]'
+	
     //(6)JSON转为Map
+	function jsonToStrMap(jsonStr){
+	   return objToStrMap(JSON.parse(jsonStr));
+	}
+	//// Map {'yes' => true, 'no' => false}
     
+	function jsonToMap(jsonStr){
+	  return new Map(JSON.parse(jsonStr));
+	}
+	jsonToMap('[[true,7],[{"foo":3},["abc"]]]')
+    // Map {true => 7, Object {foo: 3} => ['abc']}
+	    
     //4WeakMap
 
 </script>
