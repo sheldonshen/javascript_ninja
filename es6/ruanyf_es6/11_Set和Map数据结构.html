@@ -432,7 +432,56 @@
 	jsonToMap('[[true,7],[{"foo":3},["abc"]]]')
     // Map {true => 7, Object {foo: 3} => ['abc']}
 	    
-    //4WeakMap
+    //4 WeakSet
+   //WeakMap结构与Map结构基本类似，唯一的区别是它只接受对象作为键名（null除外），
+   //不接受其他类型的值作为键名，而且键名所指向的对象，不计入垃圾回收机制
+   var map = new WeakMap();
+   //map.set(1,2);TypeError: Invalid value used as weak map key
+   //map.set(Symbol(),2);
+   //TypeError: Invalid value used as weak map key
+   var element = document.querySelector(".element");
+   map.set(element,"Original");
+   map.get(element);//"Original"
+   element.parentNode.removeChild(element);
+   element = null;
+   map.get(element);//undefined
+   map.size;//undefined;
+   map.forEach;//undefined;
+   
+   //WeakMap应用的典型场合就是DOM节点作为键名。下面是一个例子
+   let myElement = document.getElementById("logo");
+   let wm = new WeakMap();
+   wm.set(myElement,{timesClicked:0});
+   myElement.addEventListener('click',function(){
+      let logoData = wm.get(myElement);
+	  logoData.timesClicked++;
+   },false);
+   //myElement是一个 DOM 节点，每当发生click事件，就更新一下状态。我们将这个状态作为键值放在 WeakMap 里，
+   //对应的键名就是myElement。一旦这个 DOM 节点删除，该状态就会自动消失，不存在内存泄漏风险
+   
+   //WeakMap 的另一个用处是部署私有属性。
+   let _counter = new WeakMap();
+   let _action  = new WeakMap();
+   class Countdown{
+        constructor(counter,action){
+		   _counter.set(this,counter);
+		   _action.set(this,action);
+		}
+		dec(){
+		   let counter = _counter.get(this);
+		   if(counter < 1) return;
+		   counter--;
+		   _counter.set(this,counter);
+		   if(counter === 0){
+		      _action.get(this)();
+		   }
+		}
+   }
+   let c = new Countdown(2,()=>console.log("Done"));
+   c.dec();
+   c.dec();
+   //Countdown类的两个内部属性_counter和_action，是实例的弱引用，所以如果删除实例，
+   //它们也就随之消失，不会造成内存泄漏
 
 </script>
 </head>
