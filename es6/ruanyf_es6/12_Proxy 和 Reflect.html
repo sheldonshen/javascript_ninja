@@ -142,31 +142,339 @@ var reverseInt = n => n.toString().split("").reverse().join("") | 0;
 console.log(pipe(3).double.pow.reverseInt.get);
 
 //下面的例子则是利用get拦截，实现一个生成各种DOM节点的通用函数dom
+/* const dom = new Proxy({}, {
+  get(target, property) {
+    return function(attrs = {}, ...children) {
+      const el = document.createElement(property);
+      for (let prop of Object.keys(attrs)) {
+        el.setAttribute(prop, attrs[prop]);
+      }
+      for (let child of children) {
+        if (typeof child === 'string') {
+          child = document.createTextNode(child);
+        }
+        el.appendChild(child);
+      }
+      return el;
+    }
+  }
+});
 
+const el = dom.div({},
+		  'Hello, my name is ',
+		  dom.a({href: '//example.com'}, 'Mark'),
+		  '. I like:',
+		  dom.ul({},
+		    dom.li({}, 'The web'),
+		    dom.li({}, 'Food'),
+		    dom.li({}, '…actually that\'s it')
+		  )
+		);
 
-
+document.body.appendChild(el); */
 //set()
+let validator = {
+	set:function(obj,prop,value){
+		if(prop === 'age'){//检查age属性的取值
+			if(!Number.isInteger(value)){
+				throw new TypeError("The age is not an integer");
+			}
+			if(value > 200){
+				throw new RangeError("The age seems invalid");
+			}
+		}
+		//对于age以外的属性,直接保存
+		obj[prop]=value;
+	}
+};
+
+let person = new Proxy({},validator);
+person.age = 100;
+window.alert(person.age);
+//person.age = "young";//error
+//person.age = 300;//error
+
+var handler = {
+   get(target,key){
+	   invariant(key,'get');
+	   return target[key];
+   },
+   set(target,key,value){
+	   invariant(key,'set');
+	   target[key]=value;
+	   return true;
+   }
+};
+
+function invariant(key,action){
+	if(key[0]==="_"){
+		throw new Error(`Invalid attempt to ${action} private "${key}" property`);
+	}
+}
+
+var target = {};
+var proxy = new Proxy(target,handler);
+//proxy._prop;//Invalid attempt to get private "_prop" property
+//proxy._prop = 'c';//Invalid attempt to set private "_prop" property
+//上面代码中，只要读写的属性名的第一个字符是下划线，一律抛错，从而达到禁止读写内部属性的目的
+
 //apply()
+//apply方法拦截函数的调用、call和apply操作。
+var handler = {
+	apply(target,ctx,args){
+		return Reflect.apply(...arguments);
+	}
+};
+
+var target = function(){
+	return "I'm the target";
+};
+
+var handler = {
+   apply:function(){
+	   return "I'm the proxy";
+   }		
+};
+
+var proxy = new Proxy(target,handler);
+alert(proxy());//"i'm the proxy"
+
+var twice = {
+  apply(target,ctx,args){
+	  return Reflect.apply(...arguments) * 2;
+  }
+};
+
+function sum(left,right){
+	return left + right;
+}
+
+var proxy = new Proxy(sum,twice);
+alert(proxy(1,2));//6
+alert(proxy.call(null,5,6));//22
+alert(proxy.apply(null,[7,8]));//30
+alert(Reflect.apply(proxy,null,[9,10]));//38
+
 //has()
+//下面的例子使用has方法隐藏某些属性，不被in运算符发现
+var handler = {
+	has(target,key){
+		if(key[0] === '_'){
+			return false;
+		}
+		return key in target;
+	}
+};
+var target = {_prop:'foo',prop:"foo"};
+var proxy = new Proxy(target,handler);
+alert('_prop' in proxy);//false
+
+//如果原对象不可配置或者禁止扩展，这时has拦截会报错
+var obj = {a:10};
+Object.preventExtensions(obj);
+var p = new Proxy(obj,{
+	has:function(target,key){
+		return false;
+	}
+});
+//'a' in p;//Error
+//值得注意的是，has方法拦截的是HasProperty操作，而不是HasOwnProperty操作，即has方法不判断一个属性是对象自身的属性，还是继承的属性
+//另外，虽然for...in循环也用到了in运算符，但是has拦截对for...in循环不生效
+var  stu1 = {name:'张三',score: 59};
+var  stu2 = {name:"李四",score: 99};
+var  handler = {
+		has(target,key){
+			if(key === 'score' && target[key] < 60){
+				console.log(`${target.name} 不及格`);
+				return false;
+			}
+			return key in target;
+		}
+};
+
+var  oproxy1 = new Proxy(stu1,handler);
+var  oproxy2 = new Proxy(stu2,handler);
+'score' in oproxy1;
+'score' in oproxy2;
+for(let a in oproxy1){
+	console.log(oproxy1[a]);
+}
+for(let a in oproxy2){
+	console.log(oproxy2[a]);
+}
+//上面代码中，has拦截只对in循环生效，对for...in循环不生效，导致不符合要求的属性没有被排除在for...in循环之外
+
 //construct()
+//construct方法用于拦截new命令,
+var handler = {
+	construct(target,args,newTarget){
+		return new target(...args);
+	}
+};
+var p = new Proxy(function(){},{
+	construct:function(target,args){
+		console.log("called: " + args.join(", "));
+		return {value:args[0] * 10};
+	}
+});
+console.log(new p(1).value);
+//construct方法返回的必须是一个对象，否则会报错
+var p = new Proxy(function(){},{
+	construct:function(target,args){
+		return 1;
+	}
+});
+//new p();//error
+
 //deleteProperty()
+//deleteProperty方法用于拦截delete操作，如果这个方法抛出错误或者返回false，当前属性就无法被delete命令删除
+var handler = {
+	deleteProperty(target,key){
+		invariant(key,'delete');
+		return true;
+	}
+};
+
+function invariant(key,action){
+	if(key[0] === '_'){
+		throw new Error(`Invalid attempt to ${action} private "${key}" property`);
+	}
+}
+
+var target = {_prop:'foo'};
+var proxy = new Proxy(target,handler);
+//delete proxy._prop;// Error: Invalid attempt to delete private "_prop" property
+
 //defineProperty
+//defineProperty方法拦截了Object.defineProperty操作。
+var handler = {
+		defineProperty(target,key,descriptor){
+			console.log("defineProperty");
+			return false;
+		}
+};
+
+var target = {};
+var proxy = new Proxy(target,handler);
+proxy.foo="bar";
+//// TypeError: proxy defineProperty handler returned false for property '"foo"'
+
 //getOwnPropertyDescriptor() 
+var handler = {
+		getOwnPropertyDescriptor(target,key){
+			if(key[0] === "_"){
+				return;
+			}
+			return Object.getOwnPropertyDescriptor(target,key);
+		}
+};
+var target = {_foo:'bar',baz:'tar'};
+var proxy = new Proxy(target,handler);
+console.log(Object.getOwnPropertyDescriptor(proxy,'wat'));//undefined
+console.log(Object.getOwnPropertyDescriptor(proxy,'_foo'));//undefined
+console.log(Object.getOwnPropertyDescriptor(proxy,'baz'));
+// { value: 'tar', writable: true, enumerable: true, configurable: true }
+
 //getPrototypeOf() 
+/* getPrototypeOf方法主要用来拦截Object.getPrototypeOf()运算符，以及其他一些操作。
+Object.prototype.__proto__
+Object.prototype.isPrototypeOf()
+Object.getPrototypeOf()
+Reflect.getPrototypeOf()
+instanceof运算符 */
+var proto = {};
+var p = new Proxy({},{
+	getPrototypeOf(target){
+		return proto;
+	}
+});
+console.log(Object.getPrototypeOf(p) === proto);//true
+
 //isExtensible() 
+//isExtensible方法拦截Object.isExtensible操作。
+var p = new Proxy({},{
+	isExtensible:function(target){
+		console.log("called");
+		return true;
+	}
+});
+
+Object.isExtensible(p);
+//isExtensible方法拦截Object.isExtensible操作。
+console.log(Object.isExtensible(proxy) === Object.isExtensible(target));//true
+var p = new Proxy({},{
+	isExtensible:function(target){
+		return false;
+	}
+});
+//Object.isExtensible(p);//error
+
 //ownKeys() 
-//preventExtensions() 
+//ownKeys方法用来拦截Object.keys()操作
+var target = {};
+var handler = {
+		ownKeys(target){
+			console.log("ownKeys");
+			return ['hello', 'world'];
+		}
+};
+var proxy = new Proxy(target,handler);
+console.log(Object.keys(proxy));//// [ 'hello', 'world' ]
+
+var target = {
+		_bar:"foo",
+		_prop:'bar',
+		prop:'baz'
+};
+
+var handler = {
+	ownKeys(target){
+		return Reflect.ownKeys(target).filter(key => key[0] !== '_');
+	}	
+};
+
+var proxy = new Proxy(target,handler);
+for(let key of Object.keys(proxy)){
+	console.log(target[key]);//'baz'
+}
+
+//preventExtensions()
+//preventExtensions方法拦截Object.preventExtensions()。该方法必须返回一个布尔值
+var p = new Proxy({},{
+	preventExtensions:function(target){
+		return true;
+	}
+});
+
+//Object.preventExtensions(p);//error
+//proxy.preventExtensions方法返回true，但这时Object.isExtensible(proxy)会返回true，因此报错
+//为了防止出现这个问题，通常要在proxy.preventExtensions方法里面，调用一次Object.preventExtensions
+var p = new Proxy({},{
+	preventExtensions:function(target){
+		console.log("called");
+		Object.preventExtensions(target);
+		return true;
+	}
+});
+Object.preventExtensions(p);//true
+
 //setPrototypeOf() 
+var handler = {
+  setPrototypeOf (target, proto) {
+    throw new Error('Changing the prototype is forbidden');
+  }
+};
+var proto = {};
+var target = function () {};
+var proxy = new Proxy(target, handler);
+//proxy.setPrototypeOf(proxy, proto);
+//Error: Changing the prototype is forbidden
 
 
 //3 Proxy.revocable()
-
 //4 this 问题
-
 //5 Reflect概述
-
 //6 Reflect对象的方法
-
 //7 实例：使用 Proxy 实现观察者模式
 
 </script>
