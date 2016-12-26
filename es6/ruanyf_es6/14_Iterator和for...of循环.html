@@ -222,16 +222,136 @@ while(!$result.done){
 }
 
 //3 调用Iterator接口的场合
+//有一些场合会默认调用Iterator接口（即Symbol.iterator方法），
+//除了下文会介绍的for...of循环，还有几个别的场合
+//(1)解构赋值
+//对数组和Set结构进行解构赋值时，会默认调用Symbol.iterator方法
+let set = new Set().add('a').add('b').add('c');
+let [x,y] = set;
+//x='a';y='b'
+let [first,...rest]=set;
+//first ='a';rest = ['b','c']
 
+//(2)扩展运算符
+//扩展运算符（...）也会调用默认的iterator接口
+var str = 'hello';
+[...str];//['h','e','l','l','o']
+let arr = ['b','c'];
+['a',...arr,'d'];
+//// ['a', 'b', 'c', 'd']
+//只要某个数据结构部署了Iterator接口，就可以对它使用扩展运算符，将其转为数组
+let arr = [...iterable];
 
+//(3)yield*
+//yield*后面跟的是一个可遍历的结构，它会调用该结构的遍历器接口
+let generator = function* (){
+	yield 1;
+	yield* [2,3,4];
+	yield 5;
+};
+
+var iterator = generator();
+iterator.next() // { value: 1, done: false }
+iterator.next() // { value: 2, done: false }
+iterator.next() // { value: 3, done: false }
+iterator.next() // { value: 4, done: false }
+iterator.next() // { value: 5, done: false }
+iterator.next() // { value: undefined, done: true }
+
+//(4)其他场合
+//由于数组的遍历会调用遍历器接口，所以任何接受数组作为参数的场合，其实都调用了遍历器接口。下面是一些例子
+//for...of
+//Array.from
+//Map(), Set(), WeakMap(), WeakSet()（比如new Map([['a',1],['b',2]])）
+//Promise().all()
+//Promise().race()
 
 //4 字符串的Iterator接口
+//字符串是一个类似数组的对象，也原生具有Iterator接口。
+var someString = 'hi';
+console.log(typeof someString[Symbol.iterator]);//function
+var iterator = someString[Symbol.iterator]();
+iterator.next()  // { value: "h", done: false }
+iterator.next()  // { value: "i", done: false }
+iterator.next()  // { value: undefined, done: true }
+//可以覆盖原生的Symbol.iterator方法，达到修改遍历器行为的目的。
+var str = new String('hi');
+[...str];//// ["h", "i"]
+str[Symbol.iterator] = function(){
+	return {
+		next:function(){
+			if(this._first){
+				this._first = false;
+				return {
+					value:'bye',done:false
+				};
+			}else{
+				return {done:true};
+			}	
+		},
+		_first:true
+	};
+};
+console.log(...str);
+console.log(str);
 
 //5 Iterator接口与Generator函数
+//Symbol.iterator方法的最简单实现，还是使用下一章要介绍的Generator函数
+var myIterable = {};
+myIterable[Symbol.iterator]=function*(){
+	yield 1;
+	yield 2;
+	yield 3;
+};
+console.log([...myIterable]);//[1,2,3]
+//// 或者采用下面的简洁写法
+let obj = {
+		*[Symbol.iterator](){
+			yield 'hello';
+			yield 'world';
+		}
+};
+for(let x of obj){
+	console.log(x);
+}
+//hello
+//world
 
 //6 遍历器对象的return()，throw()
+//遍历器对象除了具有next方法，还可以具有return方法和throw方法
+//return方法的使用场合是，如果for...of循环提前退出（通常是因为出错，或者有break语句或continue语句），
+//就会调用return方法。如果一个对象在完成遍历前，需要清理或释放资源，就可以部署return方法
+function readLineSync(file){
+	return {
+		next(){
+			if(file.isAtEndOfFile()){
+				file.close();
+				return {done:true};
+			}
+		},
+		return (){
+			fis.close();
+			return {done:true};
+		}
+	};
+}
+for(let line of readLineSync(fileName)){
+	console.log(line);
+	break;
+}
 
 //7 for...of循环
+//for...of循环内部调用的是数据结构的Symbol.iterator方法
+//for...of循环可以使用的范围包括数组、Set 和 Map 结构、某些类似数组的对象（比如arguments对象、DOM NodeList 对象）、
+//后文的 Generator 对象，以及字符串
+
+//数组
+
+//Set和Map结构
+//计算生成的数据结构
+//类似数组的对象
+//对象
+//与其他遍历语法的比较
 
 </script>
 </head>
