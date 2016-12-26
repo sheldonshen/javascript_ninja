@@ -342,15 +342,77 @@ for(let line of readLineSync(fileName)){
 
 //7 for...of循环
 //for...of循环内部调用的是数据结构的Symbol.iterator方法
-//for...of循环可以使用的范围包括数组、Set 和 Map 结构、某些类似数组的对象（比如arguments对象、DOM NodeList 对象）、
-//后文的 Generator 对象，以及字符串
-
+//for...of循环可以使用的范围包括数组、Set 和 Map 结构、某些类似数组的对象（比如arguments对象、DOM NodeList 对象）、后文的 Generator 对象，以及字符串
 //数组
+const arr = ['red','green','blue'];
+for(let v of arr){
+	console.log(v);
+}
+const obj = {};
+obj[Symbol.iterator]=arr[Symbol.iterator].bind(arr);
+for(let v of obj){
+	console.log(v);
+}
+const arr = ['red','green','blue'];
+arr.forEach(function(element,index){
+	console.log(element);
+	console.log(index);
+});
+var arr = ['a','b','c','d','e'];
+for(let a in arr){
+	console.log(a);
+}
+for(let a of arr){
+	console.log(a);
+}
+let arr = [3,5,7];
+arr.foo = 'hello';
+for(let i in arr){
+	console.log(i);//// "0", "1", "2", "foo"
+}
+for(let i of arr){
+	console.log(i);////  "3", "5", "7"
+}
 
 //Set和Map结构
+//Set和Map结构也原生具有Iterator接口，可以直接使用for...of循环
+var engines = new Set(['Gecko','Trident','Webkit','Webkit']);
+for(var e of engines){
+	console.log(e);
+}
+var es6 = new Map();
+es6.set('edition',6);
+es6.set('committee','TC39');
+es6.set("standard",'ECMA-262');
+for(var [name,value] of es6){
+	console.log(name+":" + value);
+}
+
+let map = new Map().set('a',1).set('b',2);
+for(let pair of map){
+	console.log(pair);
+}
+//['a', 1]
+//['b', 2]
+for(let [key,value] of map){
+	console.log(key + " : " + value);
+}
+//['a', 1]
+//['b', 2]
+
 //计算生成的数据结构
+let arr = ['a','b','c'];
+for(let pair of arr.entries()){
+	console.log(pair);
+}
+//[0, 'a']
+//[1, 'b']
+//[2, 'c']
+
 //类似数组的对象
+
 //对象
+
 //与其他遍历语法的比较
 
 </script>
