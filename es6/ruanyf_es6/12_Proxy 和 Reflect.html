@@ -809,6 +809,22 @@ function set(target,key,value,receiver){
 //上面代码中，先定义了一个Set集合，所有观察者函数都放进这个集合。然后，
 //observable函数返回原始对象的代理，拦截赋值操作。拦截函数set之中，会自动执行所有观察者
 
+	//Proxy 对象可以拦截目标对象的任意属性，这使得它很合适用来写 Web 服务的客户端
+const service = createWebService('http://example.com/data');
+service.employees().then(json => {
+	const employees = JSON.parse(json);
+});
+
+//上面代码新建了一个 Web 服务的接口，这个接口返回各种数据。Proxy 
+//可以拦截这个对象的任意属性，所以不用为每一种数据写一个适配方法，只要写一个 Proxy 拦截就可以了
+function createWebService(baseUrl){
+	return new Proxy({},{
+		get(target,propKey,receiver){
+			return {} => httpGet(baseUrl + '/' + propKey);
+		}
+	});
+}
+//同理，Proxy 也可以用来实现数据库的 ORM 层
 </script>
 </head>
 <body>
