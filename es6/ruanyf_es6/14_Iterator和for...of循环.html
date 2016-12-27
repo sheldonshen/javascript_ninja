@@ -410,10 +410,87 @@ for(let pair of arr.entries()){
 //[2, 'c']
 
 //类似数组的对象
-
+//类似数组的对象包括好几类。下面是for...of循环用于字符串、DOM NodeList对象、arguments对象的例子
+//字符串
+let str = "hello";
+for(let s of str){
+	console.log(s);
+}
+//DOM　NodeList对象
+let paras = document.querySelectorAll('p');
+for(let p of paras){
+	p.classList.add("test");
+}
+//arguments对象
+function printArgs(){
+	for(let x of arguments){
+		console.log(x);
+	}
+}
+printArgs('a','b');
+for (let x of 'a\uD83D\uDC0A') {
+	  console.log(x);
+}
+//并不是所有类似数组的对象都具有iterator接口，一个简便的解决方法，就是使用Array.from方法将其转为数组
+let arrayLike = {length:2,0:'a',1:'b'};
+//error
+for(let x of arrayLike){
+	console.log(x);
+}
+//right
+for(let x of Array.from(arrayLike)){
+	console.log(x);
+}
 //对象
-
+//对于普通的对象，for...of结构不能直接使用，会报错，必须部署了iterator接口后才能使用。但是，这样情况下，for...in循环依然可以用来遍历键名
+var es6 = {
+		edition:6,
+		committee:'TC39',
+		standard:'ECMA-262'
+};
+for(let e in es6){
+	console.log(e);
+}
+for(let e of es6){
+	console.log(e);
+}
+//TypeError: es6 is not iterable
+//上面代码表示，对于普通的对象，for...in循环可以遍历键名，for...of循环会报错。
+//一种解决方法是，使用Object.keys方法将对象的键名生成一个数组，然后遍历这个数组
+for(var key of Object.keys(someObject)){
+	console.log(key+":" + someObject[key]);
+}
+//想要让for...of环遍历jQuery对象，只要加上下面这一行就可以了。
+jQuery.prototype[Symbol.iterator]=Array.prototype[Symbol.iterator];
+//另一个方法是使用Generator函数将对象重新包装一下
+function* entries(obj){
+	for(let key of Object.keys(obj)){
+		yield [key,obj[key]];
+	}
+}
+for(let [key,value] of entries(obj)){
+	console.log(key,"=>",value);
+}
 //与其他遍历语法的比较
+for(var index = 0; index < myArray.length; index++){
+	console.log(myArray[index]);
+}
+myArray.forEach(function(value){
+	console.log(value);
+});
+for (var index in myArray) {
+	  console.log(myArray[index]);
+}
+for (let value of myArray) {
+	  console.log(value);
+}
+//下面是一个使用break语句，跳出for...of循环的例子。
+for(var n of fibonacci){
+	if(n > 10000){
+		break;
+	}
+	console.log(n);
+}
 
 </script>
 </head>
