@@ -406,10 +406,216 @@ function log(generator){
 log(g());
 
 //5Generator.prototype.return()
+//Generator函数返回的遍历器对象，还有一个return方法，可以返回给定的值，并且终结遍历Generator函数
+function* gen(){
+	yield 1;
+	yield 2;
+	yield 3;
+}
+
+var g = gen();
+g.next()        // { value: 1, done: false }
+g.return('foo') // { value: "foo", done: true }
+g.next()        // { value: undefined, done: true }
+//如果return方法调用时，不提供参数，则返回值的value属性为undefined。
+function* gen(){
+	yield 1;
+	yield 2;
+	yield 3;
+}
+var g = gen();
+g.next()        // { value: 1, done: false }
+g.return() // { value: undefined, done: true }
+//如果Generator函数内部有try...finally代码块，那么return方法会推迟到finally代码块执行完再执行
+function* numbers(){
+	yield 1;
+	try{
+		yield 2;
+		yield 3;
+	}finally{
+		yield 4;
+		yield 5;
+	}
+	yield 6;
+}
+var g = numbers();
+g.next() // { done: false, value: 1 }
+g.next() // { done: false, value: 2 }
+g.return(7) // { done: false, value: 4 }
+g.next() // { done: false, value: 5 }
+g.next() // { done: true, value: 7 }
+//上面代码中，调用return方法后，就开始执行finally代码块，然后等到finally代码块执行完，再执行return方法
+
 //6yield*语句
+//如果在Generater函数内部，调用另一个Generator函数，默认情况下是没有效果的
+function* foo(){
+	yield 'a';
+	yield 'b';
+}
+function* bar(){
+	yield 'x';
+	foo();
+	yield 'y';
+}
+for(let v of bar()){
+	console.log(v);//'x','y'
+}
+//上面代码中，foo和bar都是Generator函数，在bar里面调用foo，是不会有效果的
+//这个就需要用到yield*语句，用来在一个Generator函数里面执行另一个Generator函数
+function* bar(){
+	yield 'x';
+	yield* foo();
+	yield 'y';
+}
+//等同于
+function* bar(){
+	yield 'x';
+	yield 'a';
+	yield 'b';
+	yield 'y';
+}
+//等同于
+function* bar(){
+	yield 'x';
+	for(let v of foo()){
+		yield v;
+	}
+	yield 'y';
+}
+for(let v of bar()){
+	console.log('yield* = ' + v);//'x','a','b','y'
+}
+//再来看一个对比的例子。
+function* inner(){
+	yield 'hello!';
+}
+function* outer1(){
+	yield 'open';
+	yield inner();
+	yield 'close';
+}
+
+var gen = outer1();
+gen.next().value // "open"
+gen.next().value // 返回一个遍历器对象
+gen.next().value // "close"
+
+function* outer2(){
+	yield 'open';
+	yield* inner();
+	yield 'close';
+}
+var gen = outer2();
+gen.next().value // "open"
+gen.next().value // "hello!"
+gen.next().value // "close"
+//从语法角度看，如果yield命令后面跟的是一个遍历器对象，需要在yield命令后面加上星号，表明它返回的是一个遍历器对象。这被称为yield*语句
+let delegatedIterator = (function* (){
+	yield 'Hello!';
+	yield 'Bye!';
+}());
+let delegatingIterator = (function*(){
+	yield 'Greeting!';
+	yield* delegatedIterator;
+	yield 'Ok,bye';
+}());
+for(let value of delegatingIterator){
+	console.log(value);
+}
+//"Greetings!
+//"Hello!"
+//"Bye!"
+//"Ok, bye."
+//yield*后面的Generator函数（没有return语句时），等同于在Generator函数内部，部署一个for...of循环
+function* concat(iter1,iter2){
+	yield* iter1;
+	yield* iter2;
+}
+//等同于
+function* concat(iter1,iter2){
+	for(var value of iter1){
+		yield value;
+	}
+	for(var value of iter2){
+		yield value;
+	}
+}
+//如果yield*后面跟着一个数组，由于数组原生支持遍历器，因此就会遍历数组成员
+function* gen(){
+	yield* ['a','b','c'];
+}
+console.log(gen().next());
+//上面代码中，yield命令后面如果不加星号，返回的是整个数组，加了星号就表示返回的是数组的遍历器对象
+//实际上，任何数据结构只要有Iterator接口，就可以被yield*遍历
+let read = (function* (){
+	yield 'hello';
+	yield* 'hello';
+}());
+console.log(read.next().value);
+console.log(read.next().value);
+//上面代码中，yield语句返回整个字符串，yield*语句返回单个字符。因为字符串具有Iterator接口，所以被yield*遍历
+//如果被代理的Generator函数有return语句，那么就可以向代理它的Generator函数返回数据
+function* foo(){
+	yield 2;
+	yield 3;
+	return 'foo';
+}
+
+function* bar(){
+	yield 1;
+	var v = yield* foo();
+	console.log("v=" + v);
+	yield 4;
+}
+var it = bar();
+it.next()
+//{value: 1, done: false}
+it.next()
+//{value: 2, done: false}
+it.next()
+//{value: 3, done: false}
+it.next();
+//"v: foo"
+//{value: 4, done: false}
+it.next()
+//{value: undefined, done: true}
+
+//再看一个例子
+function* genFuncWithReturn(){
+	yield 'a';
+	yield 'b';
+	return 'The result';
+}
+function* logReturned(genObj){
+	let result = yield* genObj;
+	console.log(result);
+}
+console.log([...logReturned(genFuncWithReturn())]);
+
+//yield*命令可以很方便地取出嵌套数组的所有成员
+function* iterTree(tree){
+	if(Array.isArray(tree)){
+		for(let i=0; i < tree.length; i++){
+			yield* iterTree(tree[i]);
+		}
+	}else{
+		yield tree;
+	}
+}
+const tree = [ 'a', ['b', 'c'], ['d', 'e'] ];
+for(let x of iterTree(tree)){
+	console.log(x);
+}
+
+//下面是一个稍微复杂的例子，使用yield*语句遍历完全二叉树。
+
+
 //7作为对象属性的Generator函数
+
 //8Generator函数的this
+
 //9含义
+
 //10应用
 
 </script>
