@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Promise对象</title>
+<script type="text/javascript">
+//1Promise的含义
+//Promise是异步编程的一种解决方案,比传统的解决方案——回调函数和事件——更合理和更强大
+//Promise对象有以下2个特点
+//(1)对象的状态不受外界影响：Pending（进行中）、Resolved（已完成，又称Fulfilled）和Rejected（已失败）。
+//只有异步操作的结果，可以决定当前是哪一种状态，任何其他操作都无法改变这个状态
+//(2)一旦状态改变,就不会在变,任何时候都可以得到这个结果
+//Promise对象的状态改变，只有两种可能：从Pending变为Resolved和从Pending变为Rejected。
+//只要这两种情况发生，状态就凝固了，不会再变了，会一直保持这个结果
+//有了Promise对象，就可以将异步操作以同步操作的流程表达出来,避免了层层嵌套的回调函数
+
+//Promise的缺点:(1)无法取消Promise,(2)如果不设置回调函数,Promise内部抛出的错误,不会反应到外部
+//(3)当处于Pending状态时,无法得知目前进展到哪一个阶段（刚刚开始还是即将完成）。
+//如果某些事件不断地反复发生，一般来说，使用stream模式是比部署Promise更好的选择
+
+//2基本用法
+//下面代码创造了一个Promise实例
+var promise = new Promise(function(resolve,reject){
+	//...some code
+	if(/*异步操作成功*/){
+		resolve(value);
+	}else{
+		reject(error);
+	}
+});
+//Promise构造函数接受一个函数作为参数，该函数的两个参数分别是resolve和reject。
+//它们是两个函数，由JavaScript引擎提供，不用自己部署
+
+//resolve函数的作用是，将Promise对象的状态从“未完成”变为“成功”（即从Pending变为Resolved），在异步操作成功时调用，
+//并将异步操作的结果，作为参数传递出去；reject函数的作用是，将Promise对象的状态从“未完成”变为“失败”（即从Pending变为Rejected），
+//在异步操作失败时调用，并将异步操作报出的错误，作为参数传递出去
+
+//Promise实例生成以后，可以用then方法分别指定Resolved状态和Reject状态的回调函数
+promise.then(function(value){
+	//success
+},function(reason){
+	//failure
+});
+
+//下面是一个Promise对象的简单例子
+function timeout(ms){
+	return new Promise((resolve,reject)=> {
+		setTimeout(resolve,ms,"done");
+	});
+}
+timeout(100).then((value)=>{
+	console.log(value);
+});
+//Promise新建后就会立即执行
+let promise = new Promise(function(resolve,reject){
+	console.log("Promise");
+	resolve();
+});
+promise.then(function(){
+	console.log("Resolved");
+});
+console.log("Hi");
+//Promise
+//Hi!
+//Resolved
+//上面代码中，Promise新建后立即执行，所以首先输出的是“Promise”。然后，then方法指定的回调函数，
+//将在当前脚本所有同步任务执行完才会执行，所以“Resolved”最后输出
+
+//下面是异步加载图片的例子
+function loadImageAsync(url){
+	return new Promise(function(resolve,reject){
+		var image = new Image();
+		image.onload = function(){
+			resolve(image);
+		};
+		image.onerror = function(){
+			reject(new Error('Could not load image at ' + url));
+		};
+		image.src = url;
+	});
+}
+//下面是一个用Promise对象实现的Ajax操作的例子
+var getJSON = function(url){
+	var promise = new Promise(function(resolve,reject){
+		var client = new XMLHttpRequest();
+		client.open("GET",url);
+		client.onreadystatechange = handler;
+		client.responseTyep = "json";
+		client.setRequestHeader("Accept",'application/json');
+		client.send();
+		
+		function handler(){
+			if(this.readyState !== 4){
+			   return;
+			}
+			if(this.status === 200){
+				resolve(this.response);
+			}else{
+				reject(new Error(this.statusText));
+			}
+		}
+	});
+	
+	return promise;
+};
+
+getJSON("/posts.json").then(function(json){
+	console.log("contents:" + json)
+},function(error){
+	console.log("error:" + error);
+});
+
+//resolve函数的参数除了正常的值以外，还可能是另一个Promise实例，表示异步操作的结果有可能是一个值，也有可能是另一个异步操作
+var p1 = new Promise(function(resolve,reject){
+	//...
+});
+
+var p2 = new Promise(function(resolve,reject){
+	resolve(p1);//一个异步操作的结果是返回另一个异步操作
+});
+//注意，这时p1的状态就会传递给p2，也就是说，p1的状态决定了p2的状态。如果p1的状态是Pending，那么p2的回调函数就会等待p1的状态改变；
+//如果p1的状态已经是Resolved或者Rejected，那么p2的回调函数将会立刻执行
+var p1 = new Promise(function(resolve,reject){
+	setTimeout(()=> reject(new Error("fail")),3000);
+});
+var p2 = new Promise(function(resolve,reject){
+	setTimeout(()=> resolve(p1),1000);
+});
+
+p.then(result => console.log(result)).catch(error => console.log(error));//Error: fail
+
+//3Promise.prototype.then()
+//4Promise.prototype.catch()
+//5Promise.all()
+//6Promise.race()
+//7Promise.resolve()
+//8Promise.reject()
+//9两个有用的附加方法
+//10应用
+//11Promise.try()
+
+
+//http://es6.ruanyifeng.com/#docs/promise
+//https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
+
+</script>
+</head>
+<body>
+</body>
+</html>
