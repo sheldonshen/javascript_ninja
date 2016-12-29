@@ -130,7 +130,170 @@ var p2 = new Promise(function(resolve,reject){
 p.then(result => console.log(result)).catch(error => console.log(error));//Error: fail
 
 //3Promise.prototype.then()
+getJSON("/posts.json").then(function(json){
+	return json.post;
+}).then(function(post){
+	//...
+});
+//采用链式的then，可以指定一组按照次序调用的回调函数。这时，前一个回调函数，
+//有可能返回的还是一个Promise对象（即有异步操作），这时后一个回调函数，就会等待该Promise对象的状态发生变化，才会被调用
+getJSON("/post/1.json").then(function(post){
+	return getJSON(post.commentURL);
+}).then(function funcA(comments){
+	console.log("Resolved:",comments);
+},function funcB(err){
+	console.log("Rejected:",err);
+});
+//上面代码中，第一个then方法指定的回调函数，返回的是另一个Promise对象。这时，第二个then方法指定的回调函数，
+//就会等待这个新的Promise对象状态发生变化。如果变为Resolved，就调用funcA，如果状态变为Rejected，就调用funcB
+getJSON("/post/1.json").then(
+		post => getJSON(post.commentURL);
+).then(comments => console.log("Resolved:",comments),
+       err =>  console.log("Rejected:",err)
+);
+
 //4Promise.prototype.catch()
+//Promise.prototype.catch方法是.then(null, rejection)的别名，用于指定发生错误时的回调函数
+getJSON("/posts.json").then(function(posts){
+	//...
+}).catch(function(error){
+	// 处理 getJSON 和 前一个回调函数运行时发生的错误
+	console.log("发送错误!",error);
+});
+
+p.then((val) => console.log("fulfilled:",value))
+.catch((err) => console.log("rejected:",err));
+//等同于
+p.then((val) => console.log("fulfilled:",val))
+.then(null,(err) => console.log("rejected:",err));
+
+//下面是一个例子
+var promise = new Promise(function(resolve,reject){
+	throw new Error("test");
+});
+promise.catch(function(error){
+	console.log(error);
+});
+//// 写法一
+var promise = new Promise(function(resolve,reject){
+	try{
+		throw new Error('test');
+	}catch(e){
+		reject(e);
+	}
+});
+promise.catch(function(error){
+	console.log(error);
+});
+//// 写法二
+var promise = new Promise(function(resolve,reject){
+	reject(new Error("test")); 
+});
+promise.catch(function(error){
+	console.log(error);
+});
+//如果Promise状态已经变成Resolved，再抛出错误是无效的
+var promise = new Promise(function(resolve,reject){
+	resolve("ok");
+	throw new Error('test');
+});
+promise.then(function(value){
+	console.log(value);
+}).catch(function(error){
+	console.log(error);
+});
+//Promise对象的错误具有“冒泡”性质，会一直向后传递，直到被捕获为止。也就是说，错误总是会被下一个catch语句捕获
+getJSON("/post/1.json").then(function(post){
+	return getJSON(post.commentURL);
+}).then(function(comments){
+	//some code
+}).catch(function(error){
+	//处理前面3个promise产生的错误
+})
+//一般来说，不要在then方法里面定义Reject状态的回调函数（即then的第二个参数），总是使用catch方法。
+//bad
+promise.then(function(data){
+	//success
+},function(err){
+	//error
+});
+//goog
+promise.then(function(data){
+	//success
+}).catch(function(err){
+	//error
+});
+//跟传统的try/catch代码块不同的是，如果没有使用catch方法指定错误处理的回调函数，
+//Promise对象抛出的错误不会传递到外层代码，即不会有任何反应
+var someAsyncThing = function(){
+	return new Promise(function(resolve,reject){
+		//下面一行会报错，因为x没有声明
+		resolve(x+2);
+	});
+};
+someAsyncThing().then(function(){
+	console.log('everything is great');
+});
+
+var promise = new Promise(function(resolve,reject){
+	resolve("ok");
+	setTimeout(function(){
+		throw new Error("test")
+	},0);
+});
+promise.then(function(value){
+	console.log(value);
+});
+//Node 有一个unhandledRejection事件，专门监听未捕获的reject错误。
+process.on("unhandledRejection",function(err,p){
+	console.error(err.stack);
+});
+//需要注意的是，catch方法返回的还是一个 Promise 对象，因此后面还可以接着调用then方法
+var someAsyncThing = function(){
+	return new Promise(function(resolve,reject){
+		//下面一行会报错，因为x没有声明
+		resolve(x + 2);
+	});
+};
+someAsyncThing().catch(function(err){
+	console.log("oh no", error);
+}).then(function(){
+	console.log('carry on');
+});
+//上面代码运行完catch方法指定的回调函数，会接着运行后面那个then方法指定的回调函数。如果没有报错，则会跳过catch方法
+Promise.resolve().catch(function(error){
+	console.log("oh no ",error);
+}).then(function(){
+	console.log("carry on");
+});
+//catch方法之中，还能再抛出错误。
+var someAsyncThing = function() {
+  return new Promise(function(resolve, reject) {
+    // 下面一行会报错，因为x没有声明
+    resolve(x + 2);
+  });
+};
+someAsyncThing().then(function(){
+	return someAsyncThing();
+}).catch(function(error){
+	console.log('oh no', error);
+	// 下面一行会报错，因为y没有声明
+	y + 2;
+}).then(function(){
+	console.log('carry on');
+});
+//如果改写一下，结果就不一样了
+someAsyncThing().then(function(){
+	return someAsyncThing();
+}).catch(function(error){
+	console.log('oh no', error);
+	// 下面一行会报错，因为y没有声明
+	y + 2;
+}).catch(function(){
+	console.log('carry on',error);
+});
+//上面代码中，第二个catch方法用来捕获，前一个catch方法抛出的错误。
+
 //5Promise.all()
 //6Promise.race()
 //7Promise.resolve()
@@ -138,7 +301,6 @@ p.then(result => console.log(result)).catch(error => console.log(error));//Error
 //9两个有用的附加方法
 //10应用
 //11Promise.try()
-
 
 //http://es6.ruanyifeng.com/#docs/promise
 //https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
