@@ -10,3 +10,4 @@ Juriy Zaytsev http://perfectionkills.com/<br>
 Web Reflection http://webreflection.blogspot.hk/<br>
 Vjeux[React,ReactNative] http://blog.vjeux.com/<br>
 PPK http://www.quirksmode.org/blog/<br>
+Axel Rauschmayer http://www.2ality.com/<br>
