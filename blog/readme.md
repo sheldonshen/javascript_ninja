@@ -5,7 +5,7 @@ ruanyf<br>
 司徒正美<br>
 hax http://hax.iteye.com/<br>
 hacke2 http://www.hacke2.cn/posts/<br>
-
+Allen M http://blog.allenm.me/ <br> 
 ##国外
 Juriy Zaytsev http://perfectionkills.com/<br>
 Web Reflection http://webreflection.blogspot.hk/<br>
