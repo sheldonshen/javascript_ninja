@@ -6,6 +6,7 @@ ruanyf<br>
 hax http://hax.iteye.com/<br>
 hacke2 http://www.hacke2.cn/posts/<br>
 Allen M http://blog.allenm.me/ <br> 
+高云 http://nuysoft.com/ <br>
 ##国外
 Juriy Zaytsev http://perfectionkills.com/<br>
 Web Reflection http://webreflection.blogspot.hk/<br>
