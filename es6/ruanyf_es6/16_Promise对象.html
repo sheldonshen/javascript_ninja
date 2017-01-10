@@ -293,15 +293,149 @@ someAsyncThing().then(function(){
 	console.log('carry on',error);
 });
 //上面代码中，第二个catch方法用来捕获，前一个catch方法抛出的错误。
-
 //5Promise.all()
-//6Promise.race()
-//7Promise.resolve()
-//8Promise.reject()
-//9两个有用的附加方法
-//10应用
-//11Promise.try()
+//Promise.all方法用于将多个Promise实例，包装成一个新的Promise实例。
+var p = Promise.all([p1,p2,p3]);
+//生成一个Promise对象的数组
+var promises = [2,3,5,7,11,13].map(function(id){
+	return getJSON("/post/" + id + ".json");
+});
+Promise.all(promises).then(function(posts){
+	//...
+}).catch(function(reason){
+	//...
+});
+//下面是另一个例子。
+const databasePromise = connectDatabase();
+const booksPromise = databasePromise.then(findAllBooks);
+const userPromise = databasePromise.then(getCurrentUser);
+Promise.all([booksPromise,userPromise]).then(([books,user]) => pickTopRecommentation(book));
 
+//6Promise.race()
+var p = new Promise([p1,p2,p3]);
+//下面是一个例子，如果指定时间内没有获得结果，就将Promise的状态变为reject，否则变为resolve
+var p = Promise.race([
+    fetch('/resource-that-may-take-a-while'),
+    new Promise(function(resolve,reject){
+    	setTimeout(() => reject(new Error('request timeout')),5000);
+    })
+]);
+p.then(response => console.log(response));
+p.catch(error => console.log(error));
+
+//7Promise.resolve()
+//有时需要将现有对象转为Promise对象，Promise.resolve方法就起到这个作用
+var jsPromise = Promise.resolve($.ajax('/whatever.json'));
+//上面代码将jQuery生成的deferred对象，转为一个新的Promise对象
+//Promise.resolve等价于下面的写法
+Promise.resolve("foo");
+//等价于
+new Promise(resolve => resolve("foo"));
+
+//8Promise.reject()
+var p = Promise.reject('出错了');
+//等同于
+var p = new Promise((resolve,reject) => reject("出错了"));
+p.then(null,function(s){
+	console.log(s);
+});
+
+const thenable = {
+		then(resolve,reject){
+			reject("出错了");
+		}
+};
+Promise.reject(thenable).catch(e => {
+	console.log(e === thenable);
+});
+
+//9两个有用的附加方法
+//done
+//asyncFunc().then(f1).catch(r1).then(f2).done();
+Promise.prototype.done = function(onFulfilled,onRejected){
+	this.then(onFulfilled,onRejected).catch(function(reason){
+		//抛出一个全局错误
+		setTimeout(() => { throw reason},0);
+	});
+}
+//finally
+//下面是一个例子，服务器使用Promise处理请求，然后使用finally方法关掉服务器。
+/* server.listen(0).then(function(){
+	//run test
+}).finally(server.stop); */
+Promise.prototype.finally = function(callback){
+	let P = this.constructor;
+	return this.then(
+       value => P.resolve(callback()).then(() => value),
+       reason => P.resolve(callback()).then() => {throw reason})
+	);
+};
+
+//10应用
+//1加载图片
+const preloadImage = function(path){
+	return new Promise(function(resolve,reject){
+		var img = new Image();
+		img.onload = resolve;
+		img.onerror = reject;
+		img.src = path;
+	});
+};
+//2Generator函数与Promise的结合
+function getFoo(){
+	return new Promise(function(resolve,reject){
+		resolve("foo");
+	});
+}
+var g = function* (){
+	try{
+		var foo = yield getFoo();
+		console.log(foo);
+	}catch(e){
+		console.log(e);
+	}
+};
+
+function run(generator){
+	var it = generator();
+	function go(result){
+		if(result.done){
+			return result.value;
+		}
+		return result.value.then(function(value){
+			return go(it.next(value));
+		},function(error){
+			return go(it.throw(error));
+		});
+	}
+	go(it.next());
+}
+run(g);
+
+//11Promise.try()
+const f = () => console.log("now");
+Promise.resolve().then(f);
+console.log("next");
+
+const f = () => console.log("now");
+(async () => f())();
+console.log('next');
+//需要注意的是，async () => f()会吃掉f()抛出的错误。所以，如果想捕获错误，要使用promise.catch方法
+//(async () => f())().then(...).catch(...);
+
+const f = () => console.log('now');
+(
+  () => new Promise(){
+	  resolve => resolve(f())
+  }
+)();
+console.log('next');
+
+function getUsername(userId){
+	return database.users.get({id:userId}).then(function(user){
+		return user.name;
+	});
+}
 //http://es6.ruanyifeng.com/#docs/promise
 //https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
 
