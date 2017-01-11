@@ -7,7 +7,8 @@ http://www.liaoxuefeng.com/wiki/001434446689867b27157e896e74d51a89c25cc8b43bdb30
 http://www.cnblogs.com/TomXu/archive/2011/12/15/2288411.html    汤姆大叔深入理解JavaScript系列<br>
 http://www.ruanyifeng.com/blog/javascript/                阮一峰javascript系列文章<br>
 http://javascript.ruanyifeng.com/                         阮一峰JavaScript 标准参考教程（alpha）<br>
-http://javascript.crockford.com/                          douglas crockford<br>
+https://github.com/ruanyf/jstraining                      全栈工程师培训材料(React,Node)<br>
+http://javascript.crockford.com/                          douglas crockford<br>
 http://javascript.info/                                   The JavaScript Tutorial<br>
 http://www.quirksmode.org/js/contents.html                 js quirksmode<br>
 #video
