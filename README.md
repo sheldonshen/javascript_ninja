@@ -22,6 +22,7 @@ http://stackoverflow.com/tags/javascript/info             stackoverflow javascri
 http://javascriptweekly.com/                              javascript weekly<br>
 https://jslive.com/                                       jslive<br>    
 http://www.echojs.com/                                    echojs(Hacker News JS Edition)<br>
+https://www.sitepoint.com/javascript/                     sitepoint js<br>
 #article
 http://www.cnblogs.com/rubylouvre/tag/javascript/         司徒正美javascript文章<br> 
 https://www.phodal.com/blog/tag/javascript/               phodal javascript文章<br>
