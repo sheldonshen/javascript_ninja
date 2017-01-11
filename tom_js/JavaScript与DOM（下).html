@@ -7,20 +7,131 @@
 </head>
 <body>
 <div id="intro">introduction</div>
+
+<a href="http://www.google.com" id="google">google</a>
+
+<table id="mytable">
+    <tr><td>1</td><td>2</td></tr>
+    <tr><td>3</td><td>4</td></tr>
+    <tr><td>5</td><td>6</td></tr>
+    <tr><td>7</td><td>8</td></tr> 
+</table>
+
 </body>
 <script type="text/javascript">
 //操作元素
 //document.getElementById("intro").style.color="red";
 var myDocument =document;
-window.alert(myDocument);//HTMLDocument
+//window.alert(myDocument);//HTMLDocument
 var myIntro = myDocument.getElementById("intro");
-window.alert(myIntro);//HTMLDivElement
-var myIntroStyles = myIntro.style;
-window.alert(myIntroStyles);//CSSStyleDeclaration
+//window.alert(myIntro);//HTMLDivElement
+var myIntroStyles = myIntro.style;//该元素的style对象的引用
+//window.alert(myIntroStyles);//CSSStyleDeclaration
+//现在，我们可以设置颜色了: 
+myIntroStyles.color="red";
+myIntroStyles.padding = "2px 3px 0 3px";
+myIntroStyles.backgroundColor='#FFF';
+myIntroStyles.marginTop = '20px';
+myIntroStyles.paddingTop='10em';
+//产生语法错误：
+//在JavaScript里横线-是减法操作符
+//而且也没有这样的属性名称
+//myIntroStyles.padding-top="10em";
+function changeStyle(element,property,val){
+	element.style[property] = val;//使用[]来访问属性
+}
+//使用上述的函数
+var myIntro = document.getElementById("intro");
+changeStyle(myIntro,'color','green');
+//替换当前的内容
+myIntro.innerHTML = 'New content for the <strong>amazing</strong> paragraph!';
+//添加内容到当前内容
+myIntro.innerHTML += '...some more content...';
+
 //Node节点
+var myIntro = document.getElementById("intro");
+//添加内容
+var someText = "This is the text I want to add";
+var textNode = document.createTextNode(someText);
+myIntro.appendChild(textNode);
+
+//这里有一个使用DOM方法的更详细例子
+var myIntro = document.getElementById("intro");
+//添加新连接到文本节点
+//首先，创建新连接元素
+var myNewLink = document.createElement("a");//<a/>
+myNewLink.href = "http://www.google.com";// <a href="http://google.com"/> 
+myNewLink.appendChild(document.createTextNode("Visit Google"));
+//// <a href="http://google.com">Visit Google</a> 
+// 将内容附件到文本节点
+myIntro.appendChild(myNewLink);
+//通过insertBefore和appendChild我们可以实现自己的insertAfter函数：
+// 'Target'是DOM里已经存在的元素
+// 'Bullet'是要插入的新元素
+function insertAfter(target,bullet){
+	target.nextSibling ? target.parentNode.insertBefore(bullet,target.nextSibling):target.parentNode.appendChild(bullet);
+}
+
 //Event事件
+//DOM和JavaScript语言是2个单独的东西，浏览器事件是DOM API的一部分，而不是JavaScript的一部分。
 //Event对象
+function myEventHandler(e) {
+
+    // 注意参数e
+    // 该函数调用的时候e是event对象（W3C实现）
+
+    // 兼容IE的代码
+    e = e || window.event;
+
+    // 现在e就可以兼容各种浏览器了
+}
+
+// 这里可以自由地绑定事件了
+
+//例如当你想取消默认的行为的时候你可以使用Event对象里的preventDefault()方法，
+//但IE里不得不使用对象的returnValue属性值来控制，兼容代码如下
+function myEventHandler(e){
+	e = e  || window.event;
+	//防止默认行为
+	if(e.preventDefault){
+		e.preventDefault();
+	}else{
+		e.returnValue = false;
+	}
+}
+
+document.getElementById("google").addEventListener('click',myEventHandler,false);
+
 //事件冒泡
+function myParagraphEventHandler(evt){
+	evt = evt || window.event;
+	//停止向上冒泡
+	if(evt.stopPropagation){
+		evt.stopPropagation();//w3c实现
+	}else{
+		evt.cancelBubble = true;//IE实现
+	}
+}
+//使用我们自定义的addEvent函数将myParagraphEventHandler绑定到click事件上：  
+//addEvent(document.getElementsByTagName('p')[0], 'click', myParagraphEventHandler);
+
+//事件委托
+//事件委托描述的是将事件绑定在容器元素上，然后通过判断点击的target子元素的类型来触发相应的事件。
+var myTable = document.getElementById("mytable");
+myTable.onclick = function(evt){
+	 // 处理浏览器兼容
+	 evt = evt || window.event;
+	 var targetNode = evt.target || evt.srcElement;
+	 window.alert(targetNode);
+	 // 测试如果点击的是TR就触发
+	 if(targetNode.nodeName.toLowerCase() === 'tr'){
+		 window.alert('You clicked a table row!');
+	 }else if(targetNode.nodeName.toLowerCase() === 'td'){
+		 window.alert('You clicked a table column!');
+	 }
+};
+//事件委托依赖于事件冒泡，如果事件冒泡到table之前被禁用的话，那上面的代码就无法工作了。
+
 //总结
 //http://www.cnblogs.com/TomXu/archive/2012/02/17/2351938.html
 </script>
