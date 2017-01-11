@@ -98,6 +98,7 @@ https://code.facebook.com/web/       facebook web<br>
 http://www.thatjsdude.com/
 
 #在线API
-http://devdocs.io/
-http://www.javascripture.com/ 
+http://devdocs.io/ <br>
+http://www.javascripture.com/ <br>
+http://krook.org/jsdom/ jsdom api(Class Hierarchy)<br>
 
