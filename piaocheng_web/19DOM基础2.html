@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+   window.onload = function(){
+	   //var box = document.getElementById("box");
+	   //box.innerHTML="网站<strong>JS</strong>";
+	   //var lis = document.getElementsByTagName("li");
+	   //window.alert(lis);
+	   //window.alert(lis.length);
+	   //window.alert(lis[0]);
+	   //window.alert(lis.item(0));
+	   //window.alert(lis[0].tagName);
+	   //window.alert(lis[0].firstChild.nodeValue);
+	   //var body = document.getElementsByTagName("body")[0];
+	   //window.alert(body);
+	   //var all = document.getElementsByTagName("*");
+	   //window.alert(all.length);
+	   //var box = document.getElementsByName("ddd")[0];
+	   //window.alert(box);
+	   var box = document.getElementById("box");
+	   /* window.alert(box.getAttribute("style"));
+	   window.alert(box.getAttribute("name"));
+	   window.alert(box.getAttribute("bbb"));
+	   window.alert(box.getAttribute("class")); */
+	   //window.alert(box.onclick);
+	   //window.alert(box.getAttribute("onclick"));
+	   box.setAttribute("title",'iamtitle');
+	   box.setAttribute("style",'color:green');
+	   box.removeAttribute("style");
+   };
+</script>
+</head>
+<body>
+<div id="box" title="我是div" class="pox" style="color:red;" bbb="xxx" name="ddd" onclick="abc();"><span>div</span></div>
+
+<ur>
+   <li>1</li>
+   <li>2</li>
+   <li>3</li>
+</ur>
+
+</body>
+</html>
