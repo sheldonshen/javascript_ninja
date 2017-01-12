@@ -10,7 +10,9 @@ http://javascript.ruanyifeng.com/                         阮一峰JavaScript �
 https://github.com/ruanyf/jstraining                      全栈工程师培训材料(React,Node)<br>
 http://javascript.crockford.com/                          douglas crockford<br>
 http://javascript.info/                                   The JavaScript Tutorial<br>
-http://www.quirksmode.org/js/contents.html                 js quirksmode<br>
+http://www.quirksmode.org/js/contents.html                js quirksmode<br>
+https://www.freecodecamp.com/                             freecodecamp英文版<br>
+https://freecodecamp.cn/                                  freecodecamp中文版<br>
 #video
 http://www.ycku.com/javascript/                           瓢城Web俱乐部JavaScript第一季150集(注重项目实战)<br>
 http://www.bjsxt.com/2014/down_1112/39.html               尚学堂科技_javascript视频教程_白贺翔<br>
