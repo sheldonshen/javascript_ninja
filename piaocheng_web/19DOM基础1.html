@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+   window.onload = function(){
+	   var box = document.getElementById("box");
+	   //window.alert(box.tagName);//获取元素节点的标签名
+	   //window.alert(box.innerHTML);
+	   //window.alert(box.innerText);
+	   //window.alert(box.id);
+	   //window.alert(box.title);
+	   //window.alert(box.style);//获取style属性对象
+	   //window.alert(box.style.color);
+	   window.alert(box.className);
+	   window.alert(box.bbb);
+   };
+</script>
+</head>
+<body>
+<!--  
+节点分类:
+1 元素节点
+2 文本节点
+3 属性节点
+IE是以COM实现的DOM.
+-->
+
+<div id="box" title="我是div" class="pox" style="color:red;" bbb="xxx"><span>div</span></div>
+</body>
+</html>
