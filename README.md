@@ -74,6 +74,7 @@ http://help.adobe.com/zh_CN/FlashPlatform/reference/actionscript/3/package-summa
 http://www.ecma-international.org/publications/standards/Ecma-404.htm ECMA JSON<br>
 http://www.ecma-international.org/publications/standards/Ecma-262.htm ECMA JavaScript<br>
 https://www.w3.org/DOM/DOMTR                                           W3C DOM<br> 
+https://html.spec.whatwg.org/multipage/                               WHATWG HTML Standard<br>
 #单元测试
 jsunit<br>
 Qunit<br>
