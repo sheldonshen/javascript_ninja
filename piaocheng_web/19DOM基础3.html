@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+   window.onload = function(){
+	  var box = document.getElementById("box");
+	  /* window.alert(box.nodeName);
+	  window.alert(box.tagName);
+	  window.alert(box.nodeType);
+	  window.alert(box.nodeValue); */
+	  //window.alert(box.innerHTML);
+	  //window.alert(box.childNodes.length);
+	  /* window.alert(box.childNodes[0].nodeType);
+	  window.alert(box.childNodes[0].nodeValue);
+	  window.alert(box.childNodes[1].nodeType);
+	  window.alert(box.childNodes[1].innerText); */
+	  //window.alert(box.childNodes[1].innerHTML);
+	  /* window.alert(box.childNodes[0].nodeName);
+	  window.alert(box.childNodes[1].nodeName); */
+	  /* for(var i=0,length=box.childNodes.length;i<length;i++){
+		  if(box.childNodes[i].nodeType === 1){//元素节点
+			  window.alert(box.childNodes[i].nodeName);
+		  }else if(box.childNodes[i].nodeType === 3){//文本节点
+			  window.alert(box.childNodes[i].nodeValue);
+		  }
+	  } */
+	  //box.childNodes[0].nodeValue = "<em>em</em>";
+	  //box.innerHTML = "<em>em</em>";
+	  box.nodeValue="<em>em</em>";
+   };
+</script>
+</head>
+<body>
+<div id="box">2</div>
+</body>
+</html>
