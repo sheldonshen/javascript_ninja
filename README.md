@@ -70,6 +70,10 @@ dart<br>
 #其他ECMAScript实现
 http://help.adobe.com/zh_CN/FlashPlatform/reference/actionscript/3/package-summary.html ActionScript<br>
 
+#标准
+http://www.ecma-international.org/publications/standards/Ecma-404.htm ECMA JSON<br>
+http://www.ecma-international.org/publications/standards/Ecma-262.htm ECMA JavaScript<br>
+https://www.w3.org/DOM/DOMTR                                           W3C DOM<br> 
 #单元测试
 jsunit<br>
 Qunit<br>
@@ -110,4 +114,3 @@ http://www.thatjsdude.com/
 http://devdocs.io/ <br>
 http://www.javascripture.com/ <br>
 http://krook.org/jsdom/ jsdom api(Class Hierarchy)<br>
-
