@@ -36,6 +36,11 @@ https://addyosmani.com/resources/essentialjsdesignpatterns/book/   Learning Java
 http://speakingjs.com/   Speaking JavaScript<br>
 http://exploringjs.com/   Exploring ES6: Upgrade to the next version of JavaScript<br>
 http://es6.ruanyifeng.com/    ECMAScript 6入门(阮一峰开源电子书)<br>
+http://www.javascriptenlightenment.com/   JavaScript Enlightenment<br>
+http://domenlightenment.com/              DOM Enlightenment<br>
+http://jqueryenlightenment.com/           JQuery Enlightenment<br>
+http://chimera.labs.oreilly.com/books/1234000001623 JS.next: A Manager’s Guide<br>
+http://chimera.labs.oreilly.com/books/1234000000262 Programming JavaScript Applications<br>
 #books
 ##初级读物：
 《JavaScript高级程序设计》：一本非常完整的经典入门书籍，被誉为JavaScript圣经之一，详解的非常详细，最新版第三版已经发布了，建议购  买。<br>
@@ -56,7 +61,7 @@ http://es6.ruanyifeng.com/    ECMAScript 6入门(阮一峰开源电子书)<br>
 
 ##更多javascript图书
 https://search.jd.com/Search?keyword=javascript&enc=utf-8&suggest=1.rem.1.coverage&wq=javasc&pvid=jasjkyti.vcj4pe jd搜索<br>
-
+http://shop.oreilly.com/category/browse-subjects/web-development/javascript.do  oreilly书店<br>
 #糖语言
 typescript<br>
 coffeescript<br>
