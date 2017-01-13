@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+   window.onload = function(){
+	  var box = document.getElementById("box");
+	  //window.alert(box.childNodes[0].nodeValue);
+	  //window.alert(box.childNodes[2].nodeValue);
+	  //window.alert(box.firstChild.nodeValue);
+	  //window.alert(box.lastChild.nodeValue);
+	  //window.alert(box.ownerDocument === document);
+	  //window.alert(box.ownerDocument);//HTMLDocument
+	  //window.alert(box.ownerDocument.nodeName);
+	  //window.alert(box.ownerDocument.nodeType);//document_node
+	  //window.alert(box.parentNode);
+	  //window.alert(box.firstChild.nextSibling);
+	  //window.alert(box.lastChild.previousSibling);
+	  //NamedNodeMap
+	  //Attr,属性节点
+	  //Text
+	  //window.alert(box.attributes[0].nodeValue);//属性节点 2
+	  //window.alert(box.attributes.getNamedItem("id").value);
+	  //window.alert(box.attributes.getNamedItem("class").value);
+	  
+	  //window.alert(removeWhiteNode(box.childNodes).length);
+	  //window.alert(filterWhiteNode(box.childNodes).length);
+	  //忽略空白符
+	  function filterWhiteNode(node){
+		  var ret = [];
+		  for(var i=0; i < node.length;i++){
+			  if(node[i].nodeType === 3 && /^\s+$/.test(node[i].nodeValue)){
+				  continue;
+			  }else{
+				  ret.push(node[i]);
+			  }
+		  }
+		  return ret;
+	  }
+	  //移除空白符
+	  /* function removeWhiteNode(node){
+		  for(var i=0; i < node.length;i++){
+			  if(node[i].nodeType === 3 && /^\s+$/.test(node[i].nodeValue)){
+				  node[i].parentNode.removeChild(node[i]);
+			  }
+		  }
+		//The Node.childNodes read-only property returns a live collection of child nodes of the given elemen
+		  return node;
+	  } */
+	  
+	  window.alert(removeWhiteNode(box).lastChild.firstChild.nodeValue);  
+	  //移除空白节点
+	  function removeWhiteNode(node){
+		  window.alert("before:"+node.childNodes.length);
+		  for(var i=0; i < node.childNodes.length;i++){
+			  if( node.childNodes[i].nodeType === 3 && /^\s+$/.test( node.childNodes[i].nodeValue)){
+				  node.childNodes[i].parentNode.removeChild(node.childNodes[i]);
+			  }
+		  }
+		  window.alert("after:"+node.childNodes.length);
+		//The Node.childNodes read-only property returns a live collection of child nodes of the given elemen
+		  return node;
+	  }
+   };
+</script>
+</head>
+<body>
+<div id="box" class="classBox">
+    <p>1</p>
+    <p>2</p>
+    <p>3</p>
+</div>
+</body>
+</html>
