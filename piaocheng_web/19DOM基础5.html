@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>19DOM基础5</title>
+<script type="text/javascript">
+   window.onload = function(){
+	  //var box = document.getElementById("box");
+      //document.write("测试div");//一般用于测试
+      //var box = document.getElementById("box");
+      //var pElement = document.createElement("p");//只是创建了一个元素节点p,还没有添加到文档中去,只是驻留在内存中
+      //var text = document.createTextNode("文本");
+      //pElement.appendChild(text);
+      //box.appendChild(pElement);
+      //box.parentNode.insertBefore(pElement,box);
+      //box.parentNode.appendChild(pElement);
+      //insertAfter(box,pElement);
+      
+      /* var body = document.getElementsByTagName("body")[0];
+      var input = document.createElement("input");
+      input.setAttribute("type", "button");
+      input.setAttribute("value", "click me");
+      body.appendChild(input); */
+      
+      //var span = document.getElementsByTagName("span")[0];
+      //var em = document.createElement("em");
+      //span.parentNode.replaceChild(em,span);
+      
+      //var node = document.getElementById("box");
+      //var dupNode = node.cloneNode(true);
+      //document.body.appendChild(dupNode);
+      
+      var node = removeWhiteNode(document.getElementById("box"));
+      var oldChild = node.removeChild(node.firstChild);
+      window.alert(oldChild.innerHTML);
+   };
+   
+    //移除空白节点
+    function removeWhiteNode(node){
+		  //window.alert("before:"+node.childNodes.length);
+		  for(var i=0; i < node.childNodes.length;i++){
+			  if( node.childNodes[i].nodeType === 3 && /^\s+$/.test( node.childNodes[i].nodeValue)){
+				  node.childNodes[i].parentNode.removeChild(node.childNodes[i]);
+			  }
+		  }
+		  //window.alert("after:"+node.childNodes.length);
+		//The Node.childNodes read-only property returns a live collection of child nodes of the given elemen
+		  return node;
+	}
+   
+   function insertAfter(div,insertE){
+	   removeWhiteNode(document.body);//移除body中的空白子节点
+	   if(div.nextSibling){//是否有下一个兄弟节点,bug
+		   div.parentNode.insertBefore(insertE,div.nextSibling);//插入下一个兄弟节点之前
+	   }else{
+		   div.parentNode.appendChild(insertE,div);//插入父节点的孩子中
+	   }
+   }
+</script>
+</head>
+<body>
+
+<span>开始</span>
+
+<div id="box" class="classBox">
+    <p>测试div1</p>
+    <p>测试div2</p>
+    <p>测试div3</p>
+</div>
+
+</body>
+</html>
