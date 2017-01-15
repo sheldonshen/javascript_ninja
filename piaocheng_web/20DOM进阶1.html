@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>DOM进阶1</title>
+<script type="text/javascript">
+window.onload = function(){
+	//window.alert(Node);
+	//window.alert(DocumentType);
+	//window.alert(Attr);
+	//window.alert(CSSStyleDeclaration);
+	//window.alert(Document);
+	//window.alert(DocumentFragment);
+	//window.alert(Element);
+	//window.alert(Entity);
+	//window.alert(Event);
+	//window.alert(EventSource);
+	//window.alert(File);
+	//window.alert(FormData);
+	//window.alert(Geolocation);
+	//window.alert(HTMLBodyElement);
+	//window.alert(HTMLDocument);
+	//window.alert(HTMLElement);
+	//window.alert(History); 
+	//window.alert(IDBDatabase);
+	//window.alert(Node.ELEMENT_NODE);//1
+    //window.alert(Node.TEXT_NODE);//3
+    //window.alert(typeof Node);//function,object
+    //window.alert(document);//HTMLDocument
+    //window.alert(document.nodeType);//9
+    //window.alert(document.nodeValue);//null
+    //window.alert(document.nodeName);//#document
+    //window.alert(document.firstChild);//DocumentType
+    //window.alert(document.firstChild.nodeType);//10
+    //window.alert(document.firstChild.nodeName);//10
+    //window.alert(document.childNodes[1]);//HTMLHtmlElement
+    //window.alert(document.childNodes[1].nodeType);//1,元素节点
+    //window.alert(document.childNodes[1].nodeName);//1,元素节点
+    //window.alert(document.childNodes[1].nodeValue);//1,元素节点
+    //window.alert(document.documentElement);
+    //window.alert(document.body.nodeName);
+    //window.alert(document.doctype);//DocumentType
+    //window.alert(document.title);
+    //window.alert(document.forms);
+    /* var box = document.getElementById("box");
+    var text1 = document.createTextNode("Mr.");
+    var text2 = document.createTextNode("Lee");
+    box.appendChild(text1);
+    box.appendChild(text2);
+    window.alert(box.childNodes.length);//2
+    box.normalize();//合并同一级别的文本节点
+    window.alert(box.childNodes.length);//1 */
+    
+    /* var box = document.getElementById("box");
+    var textNode = box.childNodes[0];
+    window.alert(textNode);
+    var replacementNode = textNode.splitText(3);//分离
+    // creating a span with ' span contents '
+    var span = document.createElement('span');
+    span.appendChild(document.createTextNode(' span contents '));
+    box.insertBefore(span,replacementNode); */
+    
+    //var box = document.getElementById("box");
+    //box.childNodes[0].deleteData(0,3);
+    //box.childNodes[0].insertData(0,"hello");
+    //box.childNodes[0].replaceData(0,2,"Mrs");
+    //window.alert(box.childNodes[0].substringData(0,2));
+    var box = document.getElementById("box");
+    window.alert(box.childNodes[0].nodeValue);   
+};
+if(typeof Node === 'undefined'){
+	window.Node = {
+			ELEMENT_NODE:1,
+			TEXT_NODE:3
+	};
+}
+</script>
+</head>
+<body>
+<div id="box"><!-- 我是注释 --></div>
+</body>
+</html>
