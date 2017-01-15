@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+  window.onload = function(){
+	  //window.alert(document.compatMode);
+	 /*  if(document.compatMode === 'CSS1Compat'){
+		  window.alert(document.documentElement.clientWidth);
+	  }else{
+		  window.alert(document.body.clientWidth);
+	  }	  */
+	  //document.getElementById("div").scrollIntoView();//将指定的节点滚动到可见范围内
+	  //var box = document.getElementById("div");
+	  //window.alert(box.childNodes.length);//7
+	  //window.alert(box.children.length);//3,忽略掉了空白节点
+	  //window.alert(box.children[0].nodeName);
+	  //var div =document.getElementById("div");
+	  //var child = div.childNodes[0];
+	  //var child = div.children[0];
+	  //window.alert(div.contains(child));
+	  var box = document.getElementById("div");
+	  window.alert(box.innerText);
+	  window.alert(box.innerHTML);
+	  window.alert(box.textContent);
+  };
+</script>
+</head>
+<body>
+
+<div id="div">测试<strong>div</strong></div>
+
+</body>
+</html>
