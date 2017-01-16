@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>6DOM模型：概述</title>
+<base target="_blank" href="http://www.example.com/page.html">
+<script type="text/javascript">
+//1基本概念
+
+//1.1DOM
+//DOM是javascript操作网页的接口,全称为“文档对象模型”（Document Object Model）,它的作用是将网页转为一个javascript对象,
+//从而可以利用脚本进行各种操作(比如增删内容)
+//严格地说，DOM不属于JavaScript，但是操作DOM是JavaScript最常见的任务，而JavaScript也是最常用于DOM操作的语言。
+//本章介绍的就是JavaScript对DOM标准的实现和用法
+
+//1.2节点
+//节点的类型
+/* Document：整个文档树的顶层节点
+DocumentType：doctype标签（比如<!DOCTYPE html>）
+Element：网页的各种HTML标签（比如<body>、<a>等）
+Attribute：网页元素的属性（比如class="right"）
+Text：标签之间或标签包含的文本
+Comment：注释
+DocumentFragment：文档的片段 */
+
+//1.3节点树
+//除了根节点以外，其他节点对于周围的节点都存在三种关系。
+/* 父节点关系（parentNode）：直接的那个上级节点
+子节点关系（childNodes）：直接的下级节点
+同级节点关系（sibling）：拥有同一个父节点的节点 */
+
+//2特征相关的属性
+//所有节点对象都是浏览器内置的Node对象的实例,继承了Node属性和方法,这是所有节点的共同特征
+
+//2.1Node.nodeName,Node.nodeType
+window.onload = function(){
+	//window.alert(document.nodeName);//"#document"
+	//window.alert(document.nodeType);//9
+	window.alert(document.querySelector("a").nodeType === 1);
+	window.alert(document.querySelector("a").nodeType === Node.ELEMENT_NODE);
+};
+
+//2.2Node.nodeValue
+//由于只有Text节点、Comment节点、XML文档的CDATA节点有文本值，因此只有这三类节点的nodeValue可以返回结果，其他类型的节点一律返回null
+
+//2.3Node.textContent
+window.onload = function(){
+	//window.alert(document.getElementById("divA").textContent);
+	document.getElementById("foo").textContent = "<p>GoodBye</p>";
+	//上面代码在插入文本时，会将<p>标签解释为文本，而不会当作标签处理
+	
+	window.alert(document.textContent);
+	//window.alert(doctype.textContent);
+	window.alert(document.documentElement.textContent);
+};
+
+//2.4Node.baseURI
+window.onload = function(){
+	window.alert("baseURI");
+	window.alert(document.baseURI);
+};
+
+//3相关节点的属性
+//3.1Node.ownerDocument
+window.onload = function(){
+	var d = document.getElementById("foo").ownerDocument;
+	window.alert(d === document);//true
+	window.alert(document.ownerDocument);//null
+	
+};
+//3.2Node.nextSibling
+window.onload = function(){
+	var el = document.getElementById("div-01").firstChild;
+	var i = 1;
+	while(el){
+		console.log(i + "." + el.nodeName);
+		el = el.nextSibling;
+		i++;
+	}
+};
+//3.3Node.previousSibling
+window.onload = function(){
+	window.alert(document.getElementById("b1").previousSibling);//null
+	window.alert(document.getElementById("b2").previousSibling.id);//b1
+};
+//3.4Node.parentNode
+//对于一个节点来说，它的父节点只可能是三种类型：element节点、document节点和documentfragment节点
+//下面代码是如何从父节点移除指定节点
+/* if(node.parentNode){
+	node.parentNode.removeChild(node);
+} */
+
+window.onload =function(){
+	window.alert(document.parentNode);//null
+	//window.alert(documentfragment.parentNode);
+};
+
+//3.5Node.parentElement
+//parentElement属性返回当前节点的父Element节点。如果当前节点没有父节点，或者父节点类型不是Element节点，则返回null
+/* if(node.parentElement){
+	node.parentElement.style.color='red';
+} */
+
+//3.6Node.childNodes
+//childNodes属性返回一个NodeList集合,由于NodeList对象是一个动态集合，一旦子节点发生变化，立刻会反映在返回结果之中
+//var ulElementChildNodes = document.querySelector("ul").childNodes;
+
+//3.7Node.firstChild和Node.lastChild
+window.onload = function(){
+	//window.alert(document.getElementById("para-01").firstChild.nodeName);
+	//注意，firstChild返回的除了HTML元素子节点，还可能是文本节点或评论节点
+	//window.alert(document.getElementById("para-01").children[0].nodeName);
+	window.alert(document.getElementById("para-01").firstChild);//null
+};
+
+//4节点对象的方法
+//4.1Node.appendChild
+window.onload = function(){
+	var p = document.createElement("p");
+	document.body.appendChild(p);
+};
+//4.2Node.hasChildNodes
+window.onload = function(){
+	var foo = document.getElementById("divA");
+	if(foo.hasChildNodes()){
+	   foo.removeChild(foo.childNodes[0]);	
+	}
+};
+//hasChildNodes方法结合firstChild属性和nextSibling属性，可以遍历当前节点的所有后代节点
+
+//4.3Node.cloneNode
+//4.4Node.insertBefore
+//4.5Node.removeChild
+//4.6Node.replaceChild
+//4.7Node.contains
+//4.8Node.compareDocumentPosition
+//4.9Node.isEqualNode
+//4.10Node.normalize
+
+//5NodeList对象,HTMLCollection对象
+//5.1NodeList对象
+//5.2HTMLCollection对象
+
+//6ParentNode接口,ChildNode接口
+//6.1ParentNode接口
+//6.2ChildNode接口
+
+//7参考链接
+
+//http://javascript.ruanyifeng.com/dom/node.html
+
+</script>
+</head>
+<body>
+<a>test link</a>
+<div id="divA">This is <span>some</span> text</div>
+<div id="foo"></div>
+<div id="div-01">
+   <em>em</em>
+   <b>b</b>
+   <strong>strong</strong>
+</div>
+<a><b1 id="b1"/><b2 id="b2"/></a>
+<div id="para-01"></div>
+</body>
+</html>
