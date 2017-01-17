@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>JavaScript 有多灵活</title>
+<script type="text/javascript">
+Number.prototype.add = function(x){
+	return this + x;
+};
+window.alert(8['add'](2));//10
+//window.alert(8.add(2));//.会被解释为小数点，而不是点运算符。
+//将数值放在圆括号中，就可以使用点运算符调用方法了。
+window.alert((8).add(2));//10
+window.alert(8..add(2));//10,第一个点解释为小数点，第二个点解释为点运算符
+//由于add方法返回的还是数值，所以可以链式运算。
+Number.prototype.subtract = function(x){
+	return this -x;
+};
+window.alert((8).add(2).subtract(4));//6
+//如果使用方括号调用属性，写法会很古怪。
+window.alert(8['add'](2)['subtract'](4));//6
+//我们还可以部署更复杂的方法。
+Number.prototype.iterate = function(){
+	var result=[];
+	for(var i=0; i < this; i++){
+		result.push(i);
+	}
+	return result;
+};
+
+window.alert((8).iterate());
+
+//(8).double().square()调用改成(8).double.suqare,如何做?
+		
+//ES5规定，每个对象的属性都有一个取值方法get，用来自定义该属性的读取操作
+Number.prototype = Object.defineProperty(
+   Number.prototype,'double',{
+	   get:function(){
+		   return this + this;
+	   }
+   }
+);
+Number.prototype = Object.defineProperty(
+		   Number.prototype,'square',{
+			   get:function(){
+				   return this * this;
+			   }
+		   }
+);
+//上面代码在 Number.prototype 上定义了两个属性 double 和 square ，以及它们的取值方法 get 。
+//因此，在任一数值上，读取这两个属性，就可以写成下面的样子。
+window.alert((8).double.square);//256
+//也可以改用方括号运算符。
+window.alert((8)['double']['square']);//256
+</script>
+</head>
+<body>
+</body>
+</html>
