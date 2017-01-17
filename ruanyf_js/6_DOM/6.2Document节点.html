@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>6.2Document节点</title>
+<style type="text/css">
+</style>
+<!-- <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script> -->
+<script type="text/javascript">
+!(function(){
+	var editor = document.getElementById("editor");
+	editor.contentDocument.designMode = "on";
+})();
+</script>
+<script type="text/javascript">
+//1概述
+//document节点有不同的方法可以获取
+/* 对于正常的网页，直接使用document或window.document。
+对于iframe载入的网页，使用iframe节点的contentDocument属性。
+对Ajax操作返回的文档，使用XMLHttpRequest对象的responseXML属性。
+对于包含某个节点的文档，使用该节点的ownerDocument属性。 */
+
+//2内部节点属性
+//2.1document.doctype,document.documentElement,document.defaultView
+window.onload = function(){
+	var doctype = document.doctype;
+	//window.alert(doctype);//object DocumentType
+	//window.alert(doctype.name);//"html"
+	//window.alert(document.firstChild);
+	//window.alert(document.documentElement);//HTMLHtmlDocument
+	window.alert(document.defaultView === window);//true
+	
+};
+
+//2.2document.body,document.head
+window.onload = function(){
+	window.alert(document.body === document.querySelector("body"));//true
+	window.alert(document.head === document.querySelector("head"));//true
+};
+
+//2.3document.activeElement
+
+//3节点集合属性
+//3.1document.links,document.forms,document.images,document.embeds
+window.onload = function(){
+	var selecteForm = document.forms[0];
+	var imglist = document.images;
+	for(var i=0; i < imglist.length; i++){
+		if(imglist[i].src === 'banner.gif'){
+			//...
+		}
+	}
+	window.alert(document.links instanceof HTMLCollection);//true
+	window.alert(document.images instanceof HTMLCollection);//true
+	window.alert(document.forms instanceof HTMLCollection);//true
+	window.alert(document.embeds instanceof HTMLCollection);//true
+	window.alert(document.myForm === document.forms.myForm);//true
+	
+	
+};
+
+//3.2document.scripts,document.styleSheets
+window.onload = function(){
+	/* var scripts  = document.scripts;
+	if(scripts.length !== 0){
+		window.alert("当前页面有脚本");
+	}
+	window.alert(document.scripts instanceof HTMLCollection);//true
+	window.alert(document.scripts.myScript);//HTMLScriptElement */
+	
+	window.alert(document.styleSheets);
+	window.alert(document.styleSheets[0].cssRules);
+	var allSheets = [].slice.call(document.styleSheets);
+};
+
+//4文档信息属性
+//4.1document.documentURI,document.URL
+window.onload = function(){
+	window.alert(document.documentURI === document.URL);
+};
+//4.2document.domain
+window.onload = function(){
+	var badDomain = "www.example.xxx";
+	if(document.domain === badDomain){
+		window.close();
+	}
+};
+//4.3document.lastModified
+window.onload=function(){
+	window.alert(document.lastModified);
+	if(Date.parse(doc1.lastModified) > Date.parse(doc2.lastModified)){
+		//...
+	}
+};
+//4.4document.location
+window.onload = function(){
+	window.alert(document.location === window.location);//true
+	//location对象有以下方法
+	//跳转到另一个网址
+	document.location.assign("http://www.google.com");
+	//优先从服务器重新加载
+	document.location.reload(true);
+	//优先从本地缓存重新加载（默认值）
+	document.location.reload(false);
+	//跳转到新网址，并将取代掉history对象中的当前记录
+	document.location.replace("http://www.google.com");
+	//将location对象转为字符串，等价于document.location.href
+	document.location.toString();
+	//如果将新的网址赋值给location对象，网页就会自动跳转到新网址
+	document.location = "http://www.example.com";
+	// 等同于
+	document.location.href = 'http://www.example.com';
+	document.location="page2.html";//也可以指定相对URL
+	document.location="#top";//如果指定的是锚点，浏览器会自动滚动到锚点处
+};
+//4.5document.referrer,document.title,document.characterSet
+//4.6document.readyState
+//document.readyState属性返回当前文档的状态，共有三种可能的值。
+//loading:加载HTML代码阶段（尚未完成解析）
+//interactive:加载外部资源阶段时
+//complete:加载完成
+window.onload = function(){
+	//基本检查
+	//if(document.readyState === 'complete'){
+		//...
+	//}
+	//轮询检查
+	var interval = setInterval(function(){
+		if(document.readyState === 'loading'){
+			console.log("loading");
+		}else if(document.readyState === 'interactive'){
+			console.log("interactive");
+		}else if(document.readyState === "complete"){
+			console.log("complete");
+			clearInterval(interval);
+		}
+	},10);
+};
+//4.7document.designMode
+//4.8document.implementation
+window.onload = function(){
+  window.alert(document.implementation.hasFeature("HTML",'2.0'));
+  window.alert(document.implementation.hasFeature("MutationEvents",'2.0'));
+};
+//上面代码表示，当前环境部署了DOM HTML 2.0版和MutationEvents的2.0版
+
+//4.9document.compatMode
+//BackCompat,CSS1Compat
+
+//4.10document.cookie
+
+//5读写相关的方法
+//5.1document.open,document.close
+//5.2document.write,document.writeIn
+window.onload=function(){
+	document.open();
+	document.write("hello");
+	document.write("world");
+	document.write("<strong>hello world</strong>");
+	document.close();
+	/* document.addEventListener("DOMContentLoaded",function(event){
+		document.write("<p>Hello World</p>");
+	}); */
+};
+document.addEventListener("DOMContentLoaded",function(event){
+	document.write("<p>Hello World</p>");
+});
+//等同于
+document.addEventListener("DOMContentLoaded",function(event){
+	document.open();
+	document.write("<p>Hello World</p>");
+	document.close();
+});
+//document.write是JavaScript语言标准化之前就存在的方法，现在完全有更符合标准的方法向文档写入内容（比如对innerHTML属性赋值）。
+//所以，除了某些特殊情况，应该尽量避免使用document.write这个方法
+
+//6查找节点的方法
+
+
+//7生成节点的方法
+
+//8事件相关的方法
+
+//9其他方法
+
+</script>
+</head>
+<body>
+<form name="myForm" >
+<!-- <iframe id="editor" src="about:blank"></iframe> -->
+hello
+<script type="text/javascript">
+  document.write("world")
+</script>
+</body>
+</html>
