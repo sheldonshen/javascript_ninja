@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>6DOM模型：概述</title>
+<base target="_blank" href="http://www.example.com/page.html">
+<script type="text/javascript">
+//1基本概念
+
+//1.1DOM
+//DOM是javascript操作网页的接口,全称为“文档对象模型”（Document Object Model）,它的作用是将网页转为一个javascript对象,
+//从而可以利用脚本进行各种操作(比如增删内容)
+//严格地说，DOM不属于JavaScript，但是操作DOM是JavaScript最常见的任务，而JavaScript也是最常用于DOM操作的语言。
+//本章介绍的就是JavaScript对DOM标准的实现和用法
+
+//1.2节点
+//节点的类型
+/* Document：整个文档树的顶层节点
+DocumentType：doctype标签（比如<!DOCTYPE html>）
+Element：网页的各种HTML标签（比如<body>、<a>等）
+Attribute：网页元素的属性（比如class="right"）
+Text：标签之间或标签包含的文本
+Comment：注释
+DocumentFragment：文档的片段 */
+
+//1.3节点树
+//除了根节点以外，其他节点对于周围的节点都存在三种关系。
+/* 父节点关系（parentNode）：直接的那个上级节点
+子节点关系（childNodes）：直接的下级节点
+同级节点关系（sibling）：拥有同一个父节点的节点 */
+
+//2特征相关的属性
+//所有节点对象都是浏览器内置的Node对象的实例,继承了Node属性和方法,这是所有节点的共同特征
+
+//2.1Node.nodeName,Node.nodeType
+window.onload = function(){
+	//window.alert(document.nodeName);//"#document"
+	//window.alert(document.nodeType);//9
+	window.alert(document.querySelector("a").nodeType === 1);
+	window.alert(document.querySelector("a").nodeType === Node.ELEMENT_NODE);
+};
+
+//2.2Node.nodeValue
+//由于只有Text节点、Comment节点、XML文档的CDATA节点有文本值，因此只有这三类节点的nodeValue可以返回结果，其他类型的节点一律返回null
+
+//2.3Node.textContent
+window.onload = function(){
+	//window.alert(document.getElementById("divA").textContent);
+	document.getElementById("foo").textContent = "<p>GoodBye</p>";
+	//上面代码在插入文本时，会将<p>标签解释为文本，而不会当作标签处理
+	
+	window.alert(document.textContent);
+	//window.alert(doctype.textContent);
+	window.alert(document.documentElement.textContent);
+};
+
+//2.4Node.baseURI
+window.onload = function(){
+	window.alert("baseURI");
+	window.alert(document.baseURI);
+};
+
+//3相关节点的属性
+//3.1Node.ownerDocument
+window.onload = function(){
+	var d = document.getElementById("foo").ownerDocument;
+	window.alert(d === document);//true
+	window.alert(document.ownerDocument);//null
+	
+};
+//3.2Node.nextSibling
+window.onload = function(){
+	var el = document.getElementById("div-01").firstChild;
+	var i = 1;
+	while(el){
+		console.log(i + "." + el.nodeName);
+		el = el.nextSibling;
+		i++;
+	}
+};
+//3.3Node.previousSibling
+window.onload = function(){
+	window.alert(document.getElementById("b1").previousSibling);//null
+	window.alert(document.getElementById("b2").previousSibling.id);//b1
+};
+//3.4Node.parentNode
+//对于一个节点来说，它的父节点只可能是三种类型：element节点、document节点和documentfragment节点
+//下面代码是如何从父节点移除指定节点
+/* if(node.parentNode){
+	node.parentNode.removeChild(node);
+} */
+
+window.onload =function(){
+	window.alert(document.parentNode);//null
+	//window.alert(documentfragment.parentNode);
+};
+
+//3.5Node.parentElement
+//parentElement属性返回当前节点的父Element节点。如果当前节点没有父节点，或者父节点类型不是Element节点，则返回null
+/* if(node.parentElement){
+	node.parentElement.style.color='red';
+} */
+
+//3.6Node.childNodes
+//childNodes属性返回一个NodeList集合,由于NodeList对象是一个动态集合，一旦子节点发生变化，立刻会反映在返回结果之中
+//var ulElementChildNodes = document.querySelector("ul").childNodes;
+
+//3.7Node.firstChild和Node.lastChild
+window.onload = function(){
+	//window.alert(document.getElementById("para-01").firstChild.nodeName);
+	//注意，firstChild返回的除了HTML元素子节点，还可能是文本节点或评论节点
+	//window.alert(document.getElementById("para-01").children[0].nodeName);
+	window.alert(document.getElementById("para-01").firstChild);//null
+};
+
+//4节点对象的方法
+//4.1Node.appendChild
+window.onload = function(){
+	var p = document.createElement("p");
+	document.body.appendChild(p);
+};
+//4.2Node.hasChildNodes
+window.onload = function(){
+	var foo = document.getElementById("divA");
+	if(foo.hasChildNodes()){
+	   foo.removeChild(foo.childNodes[0]);	
+	}
+};
+
+//hasChildNodes方法结合firstChild属性和nextSibling属性，可以遍历当前节点的所有后代节点
+window.onload = function(){
+	function DOMComb(parent,callback){
+		if(parent.hasChildNodes()){
+			for(var node = parent.firstChild;node;node = node.nextSibling){
+				DOMComb(node,callback);
+			}
+		}
+		callback.call(parent);
+	}
+	function printContent(){
+		if(this.nodeValue){
+			console.log(this.nodeValue);
+		}
+	}
+	DOMComb(document.body,printContent);
+}
+//4.3Node.cloneNode
+window.onload = function(){
+	var cloneURL = document.querySelector("ul").cloneNode(true);
+};
+//4.4Node.insertBefore
+window.onload=function(){
+	var text1 = document.createTextNode("1");
+	var li = document.createElement("li");
+	li.appendChild(text1);
+	var ul = document.querySelector("ul");
+	ul.insertBefore(li,ul.firstChild);
+	//由于不存在insertAfter方法，如果要插在当前节点的某个子节点后面，可以用insertBefore方法结合nextSibling属性模拟
+	parentDiv.insertBefore(s1,s2.nextSibling);
+};
+//4.5Node.removeChild
+window.onload = function(){
+	//var divA = document.getElementById("divA");
+	//divA.parentNode.removeChild(divA);
+	
+	var element = document.getElementById("top");
+	while(element.firstChild){
+		element.removeChild(element.firstChild);
+	}
+	//被移除的节点依然存在于内存之中,但不再是DOM的一部分,所以，一个节点移除以后，依然可以使用它，比如插入到另一个节点下面。
+};
+//4.6Node.replaceChild
+window.onload = function(){
+	//replaceNode = parentNode.replaceChild(newChild,oldChild);
+	var divA = document.getElementById("divA");
+	var newSpan = document.createElement("span");
+	newSpan.textContent = "Hello World!";
+	divA.parentNode.replaceChild(newSpan,divA);
+};
+//4.7Node.contains
+window.onload = function(){
+	window.alert(document.body.contains(document.getElementById("divA")));//true
+	window.alert(document.body.contains(document.body));//true
+};
+//4.8Node.compareDocumentPosition
+window.onload = function(){
+	var div = document.getElementById("mydiv");
+	var input = document.getElementById("test");
+	window.alert(div.compareDocumentPosition(input));//20
+	window.alert(input.compareDocumentPosition(div));//10
+	var head = document.head;
+	var body = document.body;
+	if(head.compareDocumentPosition(body) & 4){
+		console.log("文档结构正确");
+	}else{
+		console.log("<head>不能在<body>前面");
+	}
+	
+	Node.prototype.before = function(arg){
+		return !!(this.compareDocumentPosition(arg) & 2);
+	};
+	//上面代码在Node对象上部署了一个before方法，返回一个布尔值，表示参数节点是否在当前节点的前面。
+	nodeA.before(nodeB);
+};
+//4.9Node.isEqualNode
+//isEqualNode方法返回一个布尔值，用于检查两个节点是否相等。所谓相等的节点，指的是两个节点的类型相同、属性相同、子节点相同
+window.onload = function(){
+	var targetEl = document.getElementById("targetEL");
+	var firstDiv = document.getElementsByTagName("div")[0];
+	targetEl.isEqualNode(firstDiv);
+};
+//4.10Node.normalize
+window.onload = function(){
+	var wrapper = document.createElement("div");
+	wrapper.appendChild(document.createTextNode("Part 1"));
+	wrapper.appendChild(document.createTextNode("Part 2"));
+	window.alert(wrapper.childNodes.length);//2
+	wrapper.normalize();
+	window.alert(wrapper.childNodes.length);//1
+};
+
+//5NodeList对象,HTMLCollection对象
+//5.1NodeList对象
+window.onload = function(){
+	//window.alert(typeof NodeList);//IE:object,other:function
+	//window.alert(typeof HTMLCollection);//IE:object;other:function
+	//但是，一般不把它们当作函数使用，甚至都没有直接使用它们的场合。主要是许多DOM属性和方法，
+	//返回的结果是NodeList实例或HTMLCollection实例，所以一般只使用它们的实例
+	
+	//Node.childNodes,document.querySelectorAll()返回的都是NodeList对象
+	//window.alert(document.childNodes instanceof NodeList);//实例对象与构造函数(true)
+	var parent = document.body;
+	//window.alert(parent.childNodes.length);//15
+	parent.appendChild(document.createElement("div"));
+	//window.alert(parent.childNodes.length);//16
+	//Node.childNodes返回的就是一个动态集合,而document.querySelectorAll方法返回的是一个静态集合
+	//DOM内部的变化,并不会实时反映在该方法的返回结果中.
+	
+	//数组的继承链
+	//myArray-->Array.prototype-->Object.prototype-->null
+	//NodeList的继承链
+	//myNodeList-->NodeList.prototype-->Object.prototype-->null
+	//window.alert(Object.getPrototypeOf(parent.childNodes));
+	//window.alert(parent.childNodes.__proto__);
+	//window.alert(Object.getPrototypeOf(parent.childNodes));//[object NodeList]
+	//window.alert(Object.getPrototypeOf(Object.getPrototypeOf(parent.childNodes)));//[object Object]
+	//window.alert(Object.getPrototypeOf(Object.getPrototypeOf(Object.getPrototypeOf(parent.childNodes))));//null
+	//window.alert(Object.getPrototypeOf(NodeList));//function
+	//window.alert(Object.getPrototypeOf(parent.childNodes));//[object NodeList]
+	//将NodeList转为真正的数组
+	var div_list = document.querySelectorAll("div");
+	var div_array = Array.prototype.slice.call(div_list);
+	//注意，采用上面的方法将NodeList实例转为真正的数组以后，div_array就是一个静态集合了，不再能动态反映DOM的变化
+	var forEach = Array.prototype.forEach;
+	forEach.call(element.childNodes,function(currentChild,currentIndex,listObj){
+		currentChild.parentNode.style.color = "#0F0";
+	});
+	//遍历NodeList实例对象的首选方法，是使用for循环。
+	for(var i=0; i < myNodeList.length; ++i){
+		var item = myNodeList[i];
+	}
+	var list = document.querySelectorAll("input[type=checkbox]");
+	for(var item of list){
+		item.checked = true;
+	}
+	nodeItem = nodeList.item(index);
+	//实例
+	var divs = document.getElementsByTagName("div");
+	var secondDivs = divs.item(1);
+	nodeItem = nodeList[index];
+};
+//5.2HTMLCollection对象
+//document.links,document.forms,document.images等属性返回的都是HTMLCollection实例对象
+window.onload = function(){
+	var c = document.images;
+	var img1 = c.item(1);
+	//等价于下面的写法
+	var img1 = c[1];
+	
+	var elem = document.forms.namedItem("myForm");
+	//等价于下面的写法
+	var elem = document.forms['myForm'];
+	
+};
+
+//6ParentNode接口,ChildNode接口
+//6.1ParentNode接口
+window.onload = function(){
+	//(1)children
+	if(el.children.length){
+		for(var i=0; i < e.children.length; i++){
+			//...
+		}
+	}
+	//(2)
+	window.alert(document.firstElementChild.nodeName);
+	window.alert(document.lastElementChild.nodeName);
+	window.alert(document.childElementCount);
+};
+
+//6.2ChildNode接口
+window.onload = function(){
+	//(1)remove()
+	//(2)before()
+	//(3)after()
+	//(4)replaceWith()
+};
+
+//7参考链接
+/* Louis Lazaris, Thinking Inside The Box With Vanilla JavaScript
+David Walsh, HTML5 classList API
+Derek Johnson, The classList API
+Mozilla Developer Network, element.dataset API
+David Walsh, The element.dataset API */
+
+</script>
+</head>
+<body>
+<a>test link</a>
+<div id="divA">This is <span>some</span> text</div>
+<div id="foo"></div>
+<div id="div-01">
+   <em>em</em>
+   <b>b</b>
+   <strong>strong</strong>
+</div>
+<a><b1 id="b1"/><b2 id="b2"/></a>
+<div id="para-01"></div>
+</body>
+</html>
