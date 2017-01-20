@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>6.3Element对象</title>
+<script type="text/javascript">
+//<a>标签的节点对象由HTMLAnchorElement()构造函数生成，<button>标签的节点对象由HTMLButtonElement()构造函数生成。因此，
+//元素节点不是一种对象，而是一组对象
+
+//1特征相关的属性
+//1.1Elements.attributes
+//1.2Element.id,Element.tagName
+window.onload = function(){
+	var span = document.getElementById("myspan");
+	window.alert(span.id);
+	window.alert(span.tagName);
+};
+//1.3Element.innerHTML
+window.onload = function(){
+	window.alert(document.getElementById("para").innerHTML);//5 &gt; 3	
+	var name = "<script>alert('haha')</script>";
+	document.getElementById("para").innerHTML = name;
+	
+	var name = "<img src= x onerror=alert(123)>";
+	document.getElementById("para").innerHTML = name;
+	//上面代码中，alert方法是会执行的。因此为了安全考虑，如果插入的是文本，最好用textContent属性代替innerHTML
+};
+
+//http://javascript.ruanyifeng.com/dom/element.html
+//https://developer.mozilla.org/en-US/docs/Web/API/Element
+
+//2盒状模型相关的属性
+//3相关节点的属性
+//4属性相关的方法
+//5查找相关的方法
+//6事件相关的方法
+//7其他方法
+//8参考链接
+</script>
+</head>
+<body>
+<span id="myspan">Hello</span>
+<p id="para"> 5 > 3 </p>										
+</body>
+</html>
