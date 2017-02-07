@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>6.4属性的操作</title>
+<script type="text/javascript">
+//1Element.attributes属性
+window.onload = function(){
+	var n = document.getElementById("mydiv");
+	n.attributes[0].name // "id"
+	n.attributes[0].nodeName // "id"
+
+	n.attributes[0].value // "mydiv"
+	n.attributes[0].nodeValue // "mydiv"
+	
+	//下面代码可以遍历一个元素节点的所有属性。
+	var result = {};
+	var para = document.getElementsByTagName("div")[0];
+	if(para.hasAttributes()){
+	  	var attrs = para.attributes;
+	  	var output = "";
+	  	for(var i = attrs.length-1; i >= 0; i--){
+	  		output += attrs[i].name + "->" + attrs[i].value;
+	  	}
+	  	result.value = output;
+	}else{
+		result.value = "No attributes to show";
+	}
+	window.alert(result.value);
+};
+//2元素节点对象的属性
+window.onload = function(){
+	var a = document.getElementById("test");
+	window.alert(a.id);
+	window.alert(a.href);
+	
+	var img = document.getElementById('myImage');
+	img.src = 'http://www.example.com/image.jpg';
+	
+	var f = document.forms[0];
+	f.action = "submit.php";
+	f.method = 'POST';
+	//有些HTML属性名是JavaScript的保留字，转为JavaScript属性时，必须改名。主要是以下两个。
+	//for属性改为htmlFor
+	//class属性改为className
+	//另外，HTML属性值一般都是字符串，但是JavaScript属性会自动转换类型。比如，
+	//将字符串true转为布尔值，将onClick的值转为一个函数，将style属性的值转为一个CSSStyleDeclaration对象
+};
+
+//3属性操作的标准方法
+//3.1概述
+//3.2Element.getAttribute()
+window.onload = function(){
+	var image = document.images[0];
+	image.setAttribute("class",'myImage');
+	var div = document.getElementById("div1");
+	div.getAttribute('align');
+};
+
+//3.3Element.setAttribute()
+window.onload = function(){
+	var d1 = document.getElementById("d1");
+	d1.setAttribute('align','center');
+	
+	var myImage = document.querySelector("img");
+	myImage.setAttribute("src",'path/to/example.png');
+};
+//3.4Element.hasAttribute()
+window.onload = function(){
+	var d = document.getElementById('div1');
+	if(d.hasAttribute('align')){
+		d.setAttribute('align','center');
+	}
+};
+
+//3.5Element.removeAttribute()
+window.onload = function(){
+	// HTML代码为
+	// <div id="div1" align="left" width="200px">
+	document.getElementById('div1').removeAttribute('align');
+	// 现在的HTML代码为
+	// <div id="div1" width="200px">
+};
+//4dataset属性
+window.onload = function(){
+   	var mydiv = document.getElementById("mydiv");
+   	/* window.alert(mydiv.getAttribute("foo"));
+   	mydiv.setAttribute("foo",'baz');
+   	window.alert(mydiv.getAttribute("foo")); */
+   	window.alert(mydiv.dataset.foo);//bar
+   	mydiv.dataset.foo = 'baz';
+   	window.alert(mydiv.dataset.foo);//baz
+   	delete mydiv.dataset.foo;//删除一个data-*属性，可以直接使用delete命令
+   	window.alert(mydiv.dataset.foo);//undefined
+};
+
+</script>
+</head>
+<body>
+
+<a id="test" href="http://www.example.com/"></a>
+<div id="div1" align="left"></div>
+<!-- 这种方法虽然可以达到目的，但是会使得HTML元素的属性不符合标准，导致网页的HTML代码通不过校验。 
+<div id="mydiv" foo="bar"></div>-->
+<div id="mydiv" data-foo='bar'></div>
+</body>
+</html>
