@@ -26,20 +26,268 @@ window.onload = function(){
 	//上面代码中，alert方法是会执行的。因此为了安全考虑，如果插入的是文本，最好用textContent属性代替innerHTML
 };
 
-//http://javascript.ruanyifeng.com/dom/element.html
-//https://developer.mozilla.org/en-US/docs/Web/API/Element
+//1.4Element.outerHTML
+//Element.outerHTML属性返回一个字符串,内容为指定元素节点的所有HTML代码,包括他自身和包含的所有子节点
+window.onload = function(){
+  d = document.getElementById("d");
+  //window.alert(d.outerHTML);
+  //document.write("outerHTML = " + d.outerHTML);
+  console.log(d.outerHTML);
+};
+//outerHTML属性是可读写的,对他进行赋值,等于替换掉当前的元素
+window.onload = function(){
+	container = document.getElementById("container");
+	d = document.getElementById("d");
+	window.alert(container.firstChild.nodeName);//"DIV"
+	window.alert(d.nodeName);//'DIV'
+	//d.outerHTML = '<p>Hello</p>';
+	d.outerHTML = '<p>Hello</p>';
+	window.alert(container.firstChild.nodeName);//P
+	window.alert(d.nodeName);//DIV
+	
+	//Uncaught DOMException: Failed to set the 'outerHTML' property on 'Element': 
+	//This element's parent is of type '#document', which is not an element node.
+	//document.documentElement.outerHTML = "test";  
+	
+	var p = document.getElementsByTagName("p")[0];
+	window.alert(p.nodeName);//shows 'p'
+	p.outerHTML = '<div>this div replaced a paragraph</div>';
+	window.alert(p.nodeName);//still "p"
+};
+//1.5Element.className,Element.classList
+window.onload = function(){
+	//window.alert(typeof document.getElementById("myDiv").className);//string
+	//window.alert(typeof document.getElementById("myDiv").classList);//object
+	//window.alert(document.getElementById("myDiv").className);//"one two three"
+	//window.alert(document.getElementById("myDiv").classList.length);// {0: "one",1: "two",2: "three",length: 3}
+	//classList对象[DOMTokenList]有下列方法。
+	/* 
+	add()：增加一个class。
+	remove()：移除一个class。
+	contains()：检查当前元素是否包含某个class。
+	toggle()：将某个class移入或移出当前元素。
+	item()：返回指定索引位置的class。
+	toString()：将class的列表转为字符串。 
+	*/
+	var classList = document.getElementById("myDiv").classList;
+	classList.add("myCssClass");
+	window.alert(classList.length);//4
+	classList.add('foo','bar');
+	window.alert(classList.length);//6
+    classList.remove("myCssClass");
+    window.alert(classList.length);//5
+    classList.toggle("myCssClass");///如果myCssClass不存在就加入，否则移除
+    window.alert(classList.length);//6
+    window.alert(classList.contains("myCssClass"));//true
+    window.alert(classList.contains("myCSClass"));//false
+    window.alert(classList.item(0));
+    window.alert(classList.toString());
+    //下面比较一下，className和classList在添加和删除某个类时的写法。
+    //添加class
+    document.getElementById("foo").className += 'bold';
+    document.getElementById("foo").classList.add("bold");
+    //删除class
+    document.getElementById("foo").classList.remove('bold');
+    document.getElementById('foo').className = document.getElementById("foo").className.replace("/^bold$/",'');
+    //toggle方法可以接受一个布尔值,作为第二个参数,如果为true，则添加该属性；如果为false，则去除该属性。
+    //el.classList.toggle('abc',boolValue);
+    //等同于
+    if(boolValue){
+    	el.classList.add("abc");
+    }else{
+    	el.classList.remove("abc");
+    }
+};
 
 //2盒状模型相关的属性
+//2.1Element.clientHeight,Element.clientWidth
+window.onload = function(){
+	var rootElement = document.documentElement;
+	//没有水平滚动条时
+	window.alert(rootElement.clientHeight === window.innerHeight);//true
+	//没有垂直滚动条时
+	window.alert(rootElement.clientWidth === window.innerWidth);//true
+};
+//2.2Element.clientLeft,Element.clientTop
+//2.3Element.scrollHeight,Element.scrollWidth
+window.onload = function(){
+	window.alert(document.documentElement.scrollHeight);
+	//存在溢出时，当滚动条滚动到内容底部时，下面的表达式为true。
+	element.scrollHeight - element.scrollTop === element.clientHeight;
+	//向用户展示某个内容区块时，判断用户是否滚动到了区块的底部
+	var rules = document.getElementById("rules");
+	rules.onscroll = checking;
+	function checking(){
+		if(this.scrollHeight - this.scrollTop === this.clientHeight){
+			console.log("阅读完毕");
+		}else{
+			console.log("您还没有读完");
+		}
+	}
+};
+//2.4Element.scrollLeft,Element.scrollTop
+window.onload = function(){
+	//如果要查看整张网页的水平的和垂直的滚动距离，要从document.body元素上读取。
+	document.body.scrollLeft;
+	document.body.scrollTop;
+};
+//2.5Element.offsetHeight,Element.offsetWidth
+//2.6Element.offsetLeft,Element.offsetTop
+//2.7Element.style
+//每个元素节点都有style用来读写该元素的行内样式信息，具体介绍参见《CSS操作》一节。
+//2.8总结
+
 //3相关节点的属性
+//3.1Element.children,Element.childElementCount
+window.onload = function(){
+	if(param.children.length){//该属性只计算HTML元素类型的子节点
+		var children = param.children;
+		for(var i = 0; i < children.length; i++){
+			//...
+		}
+	}
+};
+//3.2Element.firstElementChild,Element.lastElementChild
+//3.3Element.nextElementSibling,Element.previousElementSibling
+window.onload = function(){
+	// 假定HTML代码如下
+	// <div id="div-01">Here is div-01</div>
+	// <div id="div-02">Here is div-02</div>
+	var el = document.getElementById("div-01");
+	window.alert(el.nextElementSibling);
+	// <div id="div-02">Here is div-02</div>
+};
+//3.4Element.offsetParent
+
 //4属性相关的方法
 //5查找相关的方法
+/* Element.querySelector()
+Element.querySelectorAll()
+Element.getElementsByTagName()
+Element.getElementsByClassName() 
+
+//上面四个方法只返回Element子节点，因此可以采用链式写法。
+document.getElementById("header").getElementsByClassName("a");
+*/
+//5.1Element.querySelector
+window.onload = function(){
+	var outer = document.getElementById("outer");
+	window.alert(outer.querySelector('div p').innerText);//<p>Hello</p>
+};
+
+//5.2Element.querySelectorAll
+window.onload = function(){
+	var el = document.querySelector("#test");
+	var matches = el.quertSelectorAll("div.highlighted > p");
+};
+//5.3Element.getElementsByClassName
+//该方法与document.getElementsByClassName方法的用法类似，只是搜索范围不是整个文档，而是当前元素节点
+window.onload = function(){
+	element.getElementsByClassName("red test");
+};
+//5.4Element.getElementsByTagName
+window.onload = function(){
+	//该方法与document.getElementsByClassName方法的用法类似，只是搜索范围不是整个文档，而是当前元素节点
+	var table = document.getElementById("forecast-table");
+	var cells = table.getElementsByTagName("td");
+};
+//5.5Element.closest()
+window.onload = function(){
+	var el = document.getElementById("div-03");
+	window.alert(el.closest("#div-02").id);
+	window.alert(el.closest("div div").id);
+	window.alert(el.closest("article > div").id);
+	window.alert(el.closest(":not(div)").nodeName);
+};
+//5.6Element.match()
+window.onload = function(){
+	if(el.match('.someClass')){
+		console.log("Match!");
+	}
+	
+	function matchesSelector(el, selector) {
+		  var p = Element.prototype;
+		  var f = p.matches
+		    || p.webkitMatchesSelector
+		    || p.mozMatchesSelector
+		    || p.msMatchesSelector
+		    || function(s) {
+		    return [].indexOf.call(document.querySelectorAll(s), this) !== -1;
+		  };
+		  return f.call(el, selector);
+		}
+
+		// 用法
+	matchesSelector(
+	document.getElementById('myDiv'),
+		  'div.someSelector[some-attribute=true]');
+		
+};
+
 //6事件相关的方法
+window.onload = function(){
+	/* Element.addEventListener()：添加事件的回调函数
+	Element.removeEventListener()：移除事件监听函数
+	Element.dispatchEvent()：触发事件 */
+	element.addEventListener("click",listener,false);
+	element.removeEventListener('click',listener,false);
+	var event = new Event("click");
+	element.dispatchEvent(event);
+};
+
 //7其他方法
+//7.1Element.scrollIntoView()
+window.onload = function(){
+	el.scrollIntoView();//等同于el.scrollIntoView(true)
+};
+//7.2Element.getBoundingClientRect()
+window.onload = function(){
+	
+};
+//7.3Element.getClientRects()
+//7.4Element.insertAdjacentHTML()
+window.onload = function(){
+	// 原来的HTML代码：<div id="one">one</div>
+	var d1 = document.getElementById("one");
+	d1.insertAdjacentHTML("afterend",'<div id="two">two</div>');
+	// 现在的HTML代码：
+	// <div id="one">one</div><div id="two">two</div>
+};
+//7.5Element.remove()
+window.onload = function(){
+	var el = document.getElementById("div-01");
+	el.remove();
+};
+//7.6Element.focus()
+window.onload = function(){
+	document.getElementById("my-span").focus();
+};
 //8参考链接
+//http://javascript.ruanyifeng.com/dom/element.html
+//https://developer.mozilla.org/en-US/docs/Web/API/Element
 </script>
 </head>
 <body>
 <span id="myspan">Hello</span>
-<p id="para"> 5 > 3 </p>										
+<p id="para"> 5 > 3 </p>
+<div id="container"><div id="d">Hello</div></div>	
+<div class='one two three' id="myDiv"></div>	
+
+<div>
+<blockquote id="outer">
+  <p>Hello</p>
+  <div id="inner">
+    <p>World</p>
+  </div>
+</blockquote>
+</div>
+		
+<article>
+  <div id="div-01">Here is div-01
+    <div id="div-02">Here is div-02
+      <div id="div-03">Here is div-03</div>
+    </div>
+  </div>
+</article>										
 </body>
 </html>
