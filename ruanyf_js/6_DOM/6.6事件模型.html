@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>6.6事件模型</title>
+<script type="text/javascript">
+//1EventTarget接口
+///1.1addEventListener()
+window.onload = function(){
+	//实例
+	window.addEventListener('load',function(){},false);
+	//request.addEventListener("readystatechange",function(){},false);
+	function hello(){
+		window.alert("hello world");
+	}
+	function world(){
+		window.alert("welcome");
+	}
+	function print(x){
+		window.alert(x);
+	}
+	var button = document.getElementById("btn");
+	button.addEventListener('click',hello,false);
+	button.addEventListener('click',world,false);
+	button.addEventListener("click",function(){
+		print("print");
+	},false);
+};
+///1.2removeEventListener()
+window.onload = function(){
+	div.addEventListener('click',listener,false);
+	div.removeEventListener("click",listener,false);
+};
+///1.3dispatchEvent
+window.onload = function(){
+	function hello(){
+		window.alert("hello world");
+	}
+	var button = document.getElementById("btn");
+	button.addEventListener('click',hello,false);
+	var event = new Event("click");
+	button.dispatchEvent(event);//在当前节点触发click事件
+	//下面代码根据dispatchEvent方法的返回值，判断事件是否被取消了。
+	var canceled = !cb.dispatchEvent(event);
+	if(canceled){
+		console.log("事件取消");
+	}else{
+		console.log("事件未取消");
+	}
+};
+//2监听函数
+///2.1HTML标签的on-属性
+window.onload = function(){
+	el.setAttribute('onclick',"doSomething()");
+};
+///2.2Element节点的事件属性
+window.onload = function(){
+	window.onload = doSomething;
+	div.onclick = function(event){
+		console.log("触发事件");
+	};
+};
+///2.3addEventListener方法
+window.onload = function(){
+	//addEventListener是推荐的指定监听函数的方法。它有如下优点：
+	/* 可以针对同一个事件，添加多个监听函数。
+
+	能够指定在哪个阶段（捕获阶段还是冒泡阶段）触发回监听函数。
+
+	除了DOM节点，还可以部署在window、XMLHttpRequest等对象上面，等于统一了整个JavaScript的监听函数接口。 */
+};
+///2.4this对象的指向
+window.onload = function(){
+	var id = 'doc';
+	var para = document.getElementById("para");
+	function hello(){
+		window.alert(this.id);
+	}
+	//para.addEventListener('click',hello,false);
+	//para.onclick = hello;
+	//总结一下，以下写法的this对象都指向Element节点。
+	// JavaScript代码
+	element.onclick = print
+	element.addEventListener('click', print, false)
+	element.onclick = function () {console.log(this.id);}
+
+	// HTML代码
+	//<element onclick="console.log(this.id)">
+	
+	//以下写法的this对象，都指向全局对象。
+	// JavaScript代码
+	element.onclick = function (){ doSomething() };
+	element.setAttribute('onclick', 'doSomething()');
+
+	// HTML代码
+	//<element onclick="doSomething()">
+};
+var id = 'doc';
+function hello(){
+	window.alert("hello function");
+	window.alert(this.id);
+}
+//3事件的传播
+///3.1传播的三个阶段
+//当一个事件发生以后，它会在不同的DOM节点之间传播（propagation）。这种传播分成三个阶段：
+//第一阶段：从window对象传导到目标节点，称为“捕获阶段”（capture phase）。
+//第二阶段：在目标节点上触发，称为“目标阶段”（target phase）。
+//第三阶段：从目标节点传导回window对象，称为“冒泡阶段”（bubbling phase）。
+window.onload = function(){
+	var phases = {
+			1:'capture',
+			2:'target',
+			3:'bubble'
+	};
+	var div = document.querySelector("div");
+	var p   = document.querySelector("p");
+	div.addEventListener('click',callback,true);
+	p.addEventListener("click",callback,true);
+	div.addEventListener("click",callback,false);
+	p.addEventListener("click",callback,false);
+	
+	function callback(event){
+		var tag = event.currentTarget.tagName;
+		var phase = phases[event.eventPhase];
+		console.log("Tag:" + tag + ',EventPhase:' + phase);
+	}
+};
+
+///3.2事件的代理
+//由于事件会在冒泡阶段向上传播到父节点，因此可以把子节点的监听函数定义在父节点上，
+//由父节点的监听函数统一处理多个子元素的事件。这种方法叫做事件的代理（delegation）
+window.onload = function(){
+	var ul = document.querySelector("ul");
+	ul.addEventListener('click',function(event){
+		if(event.target.tagName.toLowerCase() === 'li'){
+			//some code
+			//event.stopPropagation()
+			
+		}
+	});
+	//stopPropagation方法只会阻止当前监听函数的传播，不会阻止<p>节点上的其他click事件的监听函数。
+	//如果想要不再触发那些监听函数，可以使用stopImmediatePropagation方法
+	p.addEventListener("click",function(event){
+		event.stopImmediatePropagation();
+	});
+	p.addEventListener("click",function(event){
+		//不会被触发
+	});
+};
+
+//4Event对象
+window.onload = function(){
+	var ev = new Event("look",{
+		'bubbles':true,
+		"cancelable":false
+	});
+	document.dispatchEvent(ev);
+	//IE8及以下版本，事件对象不作为参数传递，而是通过window对象的event属性读取，
+	//并且事件对象的target属性叫做srcElement属性。所以，以前获取事件信息，往往要写成下面这样
+	function myEventHandler(event){
+		var actualEvent = event || window.event;
+		var actualTarget = actualEvent.target || actualEvent.srcElement;
+	}
+};
+///4.1event.bubbles,event.eventPhase
+window.onload = function(){
+	function goInput(e){
+		if(!e.bubbles){
+			passItOn(e);
+		}else{
+			doOutput(e);
+		}
+	}
+	//eventPhase属性返回一个整数值，表示事件目前所处的节点。	
+};
+///4.2event.cancelable,event.defaultPrevented
+///4.3event.currentTarget,event.target
+window.onload = function(){
+	function hide(e){
+		console.log(this === e.currentTarget);
+		e.currentTarget.style.visibility = false;
+	}
+	para.addEventListener('click',hide,false);
+};
+///4.4event.type,event.event.detail,event.timeStamp,event.isTrusted
+window.onload = function(){
+	//isTrusted属性返回一个布尔值，表示该事件是否为真实用户触发。
+	var bool = event.isTrusted;
+	//用户触发的事件返回true，脚本触发的事件返回false。
+};
+///4.5event.preventDefault()
+///4.6event.stopPropagation()
+///4.7event.stopImmediatePropagation()
+window.onload = function(){
+	function checkName(e){
+		if(e.charCode < 97 || e.charCode > 122){
+			e.preventDefault();
+			//如果监听函数最后返回布尔值false（即return false），浏览器也不会触发默认行为，与preventDefault方法有等同效果
+		}
+	}
+	    //stopImmediatePropagation方法阻止同一个事件的其他监听函数被调用
+	    function l1(e){
+		  e.stopImmediatePropagation();
+		}
+
+		function l2(e){
+		  console.log('hello world');
+		}
+
+		el.addEventListener('click', l1, false);
+		el.addEventListener('click', l2, false);
+};
+
+//5自定义事件和事件模拟
+window.onload = function(){
+	var elem = document.getElementById("btn");
+	//新建事件实例
+	var event = new Event("build");
+	//添加监听函数
+	elem.addEventListener('build',function(e){
+		window.alert("custom event");
+	},false);
+	//触发事件
+	elem.dispatchEvent(event);
+};
+///5.1CustomEvent()
+window.onload = function(){
+	var event = new CustomEvent("build",{'detail':'hello'});
+	function eventHandler(e){
+		console.log(e.detail);
+	}
+	var myEvent = new CustomEvent('myevent',{detail:{foo:"bar"},bubbles:true,cancelable:false});
+	el.addEventListener('myevent',function(event){
+		console.log("hello" + event.detail.foo);
+	});
+	el.dispatchEvent(myEvent);
+	//IE不支持这个方法，可以用下面的垫片函数模拟。
+	(function () {
+	   function CustomEvent ( event, params ) {
+	    params = params || { bubbles: false, cancelable: false, detail: undefined };
+	    var evt = document.createEvent( 'CustomEvent' );
+	    evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+	    return evt;
+	   }	
+	  CustomEvent.prototype = window.Event.prototype;	
+	  window.CustomEvent = CustomEvent;
+	})();
+};
+///5.2事件的模拟
+window.onload = function(){
+	//下面是一个通过MouseEvent构造函数，模拟触发click鼠标事件的例子。
+	function simulateClick(){
+		var event = new MouseEvent("click",{
+			'bubbles':true,
+			'cancelable':true
+		});
+		var cb = document.getElementById('checkbox');
+		cb.dispatchEvent(event);
+	}
+};
+///5.3自定义事件的老式写法
+window.onload = function(){
+	//(1)document.createEvent()
+	//新建Event实例
+	var event = document.createEvent("Event");
+	//事件的初始化
+	event.initEvent('build',true,true);
+	//加上监听函数
+	document.addEventListener('build',doSomething,false);
+	//触发事件
+	document.dispatchEvent(event);
+};
+///5.4事件模拟的老式写法
+window.onload = function(){
+	//模仿并触发click事件的写法如下。
+	var simulateDivClick = document.createEvent('MouseEvents');
+
+	simulateDivClick.initMouseEvent('click',true,true,
+	  document.defaultView,0,0,0,0,0,false,
+	  false,false,0,null,null
+	);
+
+	divElement.dispatchEvent(simulateDivClick);
+};
+//6参数链接
+//https://developer.mozilla.org/en/docs/Web/API/EventTarget
+
+</script>
+</head>
+<body>
+
+<div>
+  <p>Click Me</p>
+</div>
+
+<input type="button" id="btn" value="clickMe">
+
+<!-- this不会指向触发事件的元素节点 -->
+<!-- <p id="para" onclick="hello()">Hello</p> -->
+<p id="para" onclick="window.alert(this.id);">Hello</p>
+<!-- 正确 -->
+<!-- <body onload="doSomething()"> -->
+
+<!-- 错误 -->
+<!-- <body onload="doSomething"> -->
+
+</body>
+</html>
