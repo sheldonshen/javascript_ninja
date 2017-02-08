@@ -5,23 +5,103 @@
 <title>Text节点和DocumentFragment节点</title>
 <script type="text/javascript">
 //1Text节点的概念
-
+window.onload = function(){
+	//获取Text节点
+	var textNode = document.querySelector("p").firstChild;
+	//创造Text节点
+	var textNode = document.createTextNode("Hi");
+	document.querySelector("div").appendChild(textNode);
+	//optional parameter:DOMString
+	var text1 = new Text();//create an empty text node
+	var text2 = new Text("This is a text node");
+	
+};
 //2Text节点的属性
 ////2.1data
+window.onload = function(){
+	//读取文本内容
+	document.querySelector("p").firstChild.data;
+	//等同于
+	document.querySelector("p").firstChild.nodeValue;
+	//设置文本内容
+	document.querySelector("p").firstChild.data = 'Hello World';
+};
 ////2.2wholeText
+window.onload = function(){
+	var el = document.getElementById("para");
+	window.alert(el.firstChild.wholeText);//"A"
+	window.alert(el.firstChild.data);//"A
+    el.removeChild(el.childNodes[1]);
+    window.alert(el.firstChild.wholeText);//"A C"
+	window.alert(el.firstChild.data);//"A"
+};
 ////2.3length
+window.onload = function(){
+	window.alert((new Text('Hello')).length);//5
+};
 ////2.4nextElementSibling
+window.onload = function(){
+	var tn = document.querySelector("div").firstChild;
+	window.alert(tn.nextElementSibling.innerText);
+};
 ////2.5previousElementSibling
 
 //3Text节点的方法
 ////3.1appendData(),deleteData(),insertData(),replaceData(),subStringData()
+window.onload = function(){
+	var pElementText = document.querySelector("p").firstChild;
+	pElementText.appendData("!");
+	//window.alert(pElementText.data);
+	pElementText.deleteData(7,5);
+	pElementText.insertData(7,'Hello ');
+	pElementText.replaceData(7,5,'World');
+	window.alert(pElementText.substringData(7,10));
+};
 ////3.2remove()
+window.onload = function(){
+	//document.querySelector("p").firstChild.remove();
+	document.querySelector('p').firstChild.remove();
+};
 ////3.3splitText(),normalize()
+window.onload = function(){
+	var p = document.getElementById("p");
+	var textnode = p.firstChild;
+	var newText = textnode.splitText(3);
+	window.alert(newText.data);//bar
+	window.alert(textnode.data);//foo
+	window.alert(p.childNodes.length);//2
+	//// 将毗邻的两个Text节点合并
+	p.normalize();
+	window.alert(p.childNodes.length);//1
+};
 
 //4DocumentFragment节点
-
+window.onload = function(){
+	var docFrag = document.createDocumentFragment();
+	//or
+	var docFrag = new DocumentFragment();
+	var li = document.createElement('li');
+	li.textContent = 'Hello World';
+	docFrag.appendChild(li);
+	document.querySelector('ul').appendChild(docFrag);
+	//如果想要保存DocumentFragment节点的内容，可以使用cloneNode方法。
+	document.querySelector("ul").appendChild(docFrag.cloneNode(true));
+	function reverse(n){
+		var f = document.createDocumentFragment();
+		while(n.lastChild){
+			f.appendChild(n.lastChild);
+		}
+		n.appendChild(f);
+	}
+};
 </script>
 </head>
 <body>
+
+<!-- <p id="para">A <em>B</em> C</p> -->
+<div>Hello <em>World</em></div>
+<p>Hello World</p>
+<p id="p">foobar</p>
+<ul></ul>
 </body>
 </html>
