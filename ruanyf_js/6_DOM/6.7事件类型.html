@@ -226,34 +226,247 @@ window.onload = function(){
 			var reader = new FileReader();
 			reader.onloadend = function(e){
 				if(e.target.readyState == FileReader.DONE){
-					
+					var content = reader.result;
+					contentDiv.innerHTML = "File:" + file.name + "\n\n" + content;
 				}
 			};
+			reader.readAsBinaryString(file);
 		}
 	});
 	
 	//(4)types
-	
+	function contains(list,value){
+		for(var i=0; i < list.length; i++){
+			if(list[i] === value){
+				return true;
+			}
+		}
+		return false;
+	}
+	function doDragOver(event){
+		var isLink = contains(event.dataTransfer.types,"text/uri-list");
+		if(isLink){
+			event.preventDefault();
+		}
+	}	
 };
 ///6.4DataTransfer对象的方法
-
+window.onload = function(){
+	//(1)setData
+	event.dataTransfer.setData("text/plain","Text to drag");
+	var dt = event.dataTransfer;
+	//添加链接
+	dt.setData("text/uri-list",'http://www.example.com');
+	dt.setData('text/plain','http://www.example.com');
+	//添加HTML代码
+	dt.setData('text/html','Hello there, <strong>stranger</strong>');
+	dt.setData("text/plain",'Hello there, <strong>stranger</strong>');
+	//添加图像的URL
+	dt.setData('text/uri-list',imageurl);
+	dt.setData("text/plain",imageurl);
+	
+	var dt = event.dataTransfer;
+	dt.setData('application/x-bookmark',bookmarkString);
+	dt.setData('text/uri-list','http://www.example.com');
+	dt.setData("text/plain",'http://www.example.com');
+	//(2)getData()
+	//下面是一个drop事件的监听函数，用来取出指定类型的数据。
+	function onDrop(event){
+		var data = event.dataTransfer.getData('text/plain');
+		event.target.textContent = data;
+		event.preventDefault();
+	}
+	//getData方法返回的是一个字符串，如果其中包含多项数据，就必须手动解析
+	function doDrop(event){
+		var lines = event.dataTransfer.getData('text/uri-list').split('\n');
+		for(let line of lines){
+			let link = document.createElement('a');
+			link.href = line;
+			link.textContent = line;
+			event.target.appendChild(link);
+		}
+		event.preventDefault();
+	}
+	
+	var link = event.dataTransfer.getData('URL');
+	function doDrop(event){
+		var types = event.dataTransfer.types;
+		var supportedTypes=['text/uri-list','text/plain'];
+		types = supportedTypes.filter(function(value){
+			types.includes(value);
+		});
+		if(types.length){
+			var data = event.dataTransfer.getData(types[0]);
+		}
+		event.preventDefault();
+	}
+	//(3)clearData()
+	event.dataTransfer.clearData("text/uri-list");
+	//(4)setDataImage()
+	var div = document.getElementById('drag-with-image');
+	div.addEventListener("dragstart",function(e){
+		var img = document.createElement('img');
+		img.src = 'http://path/to/img';
+		e.dataTransfer.setDataImage(img,0,0);
+	},false);
+};
 //7触摸事件
 ///7.1Touch对象
 ///7.2TouchList对象
 ///7.3TouchEvent对象
 ///7.4触摸事件的种类
-
 //8表单事件
 ///8.1Input事件,select事件,change事件
 ///8.2reset事件,submit事件
-
 //9文档事件
 ///9.1beforeunload事件,unload事件,load事件,error事件,pageshow事件,pagehide事件
+window.onload = function(){
+	//beforeunload事件
+	window.addEventListener("beforeunload",function(event){
+		event.returnValue = '你确认要离开吗？';
+	});
+	window.addEventListener("beforeunload",function(event){
+		event.preventDefault();
+	});
+	window.addEventListener("beforeunload",function(e){
+		var confirmationMessage = '确认关闭窗口？';
+		e.returnValue = confirmationMessage;
+		return confirmationMessage;
+	});
+	window.addEventListener("unload",function(event){
+		console.log("文档将要卸载");
+	});
+	window.addEventListener('pageshow',function(event){
+		console.log('pageshow',event);
+		if(event.persisted){
+			//...
+		}
+	});
+	
+};
 ///9.2DOMContentLoaded,readystatechange事件
+window.onload = function(){
+	document.addEventListener('DOMContentLoaded',function(event){
+		console.log("DOM生成");
+	});
+	document.onreadystatechange = function(){
+		if(document.readyState === 'interactive'){
+			//...
+		}
+	};
+};
 ///9.3scroll事件,resize事件
+window.onload = function(){
+	(function(){
+		var throttle = function(type,name,obj){
+		    var obj = obj || window;
+		    var running = false;
+		    var func = function(){
+		    	if(running){
+		    		return;
+		    	}
+		    	window.requestAnimationFrame(function(){
+		    		obj.dispatchEvent(new CustomEvent());
+		    		running = false;
+		    	});
+		    };
+		    obj.addEventListener(type,func);
+		};
+		// 将scroll事件重定义为optimizedScroll事件
+		throttle('scroll','optimizedScroll');
+	})();
+	
+	window.addEventListener("optimizedScroll",function(){
+		console.log("Resource conscious scroll callback!");
+	});
+	
+	(function(){
+		window.addEventListener('scroll',scrollThrottler,false);
+		var scrollTimeout;
+		function scrollThrottler(){
+			if(!scrollTimeout){
+				scrollTimeout = setTimeout(function(){
+					scrollTimeout = null;
+					 actualScrollHandler();
+				},66);
+			}
+		}
+		
+		function actualScrollHandler() {
+		    // ...
+		}
+	})();
+	
+	function throttle(fn,wait){
+		var time = Date.now();
+		return function(){
+			if((time + wait - Date.now()) < 0){
+				fn();
+				time = Date.now();
+			}
+		};
+	}
+	
+	window.addEventListener('scroll', throttle(callback, 1000));
+	//lodash函数库提供了现成的throttle函数，可以直接引用
+	window.addEventListener("scroll",_.throttle(callback,1000));
+	
+	var resizeMethod = function(){
+		if(document.body.clientWidth < 768){
+			console.log("移动设备");
+		}
+	};
+	
+	window.addEventListener('resize',resizeMethod,true);
+};
 ///9.4hashchange事件,popstate事件
+window.onload = function(){
+	(function(window){
+		if("onhashchange" in window.document.body){
+			return;
+		}
+		var location = window.location;
+		var oldURL = location.href;
+		var oldHash = location.hash;
+		// 每隔100毫秒检查一下URL的hash
+		window.setInterval(function(){
+			var newURL = location.href;
+			var newHash = location.hash;
+			if(newHash !== oldHash && typeof window.onhashchange === 'function'){
+				window.onhashchange({
+					type:'hashchange',
+					oldURL:oldURL,
+					newURL:newURL
+				});
+				oldURL = newURL;
+				oldHash = newHash;
+			}
+		},100);	
+	})(window);
+	
+	window.onpopstate = function(event){
+		console.log('state:' + event.state);
+	};
+	history.pushState({page:1},"title 1","?page=1");
+	history.pushState({page:2},"title 2","?page=2");
+	history.replaceState({page:3},"title 3",'?page=3');
+	history.back();
+	history.back();
+	history.go(2);
+}
 ///9.5cut事件,copy事件,paste事件
 ///9.6焦点事件 
+window.onload = function(){
+	//由于focus和blur事件不会冒泡，只能在捕获阶段触发，所以addEventListener方法的第三个参数需要设为true
+	form.addEventListener('focus',function(event){
+		event.target.style.background = 'pink';
+	},true);
+	form.addEventListener('blur',function(event){
+		event.target.style.background = '';
+	},true);
+	//浏览器提供一个FocusEvent构造函数，可以用它生成焦点事件的实例
+	var focusEvent = new FocusEvent(typeArg,focusEventInit);
+};
 
 </script>
 </head>
