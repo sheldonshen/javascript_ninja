@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>6.7事件类型</title>
+<script type="text/javascript">
+//1鼠标事件
+///1.1click事件,dbclick事件
+window.onload = function(){
+	//下面是一个设置click事件监听函数的例子。
+	div.addEventListener("click",function(event){
+		 // 显示在该节点，鼠标连续点击的次数
+		 event.target.innerHTML = "click count:" + event.detail;
+	},false);
+};
+///1.2mouseup事件,mousedown事件,mousemove事件
+///1.3mouseover事件,mousenter事件
+window.onload = function(){
+	var test = document.getElementById('test');
+	// 进入test节点以后，该事件只会触发一次
+	// event.target 是 ul 节点
+	test.addEventListener('mouseenter',function(event){
+		event.target.style.color = 'red';
+		setTimeout(function(){
+			event.target.style.color = "";
+		},500);
+	},false);
+	
+	// 进入test节点以后，只要在子Element节点上移动，该事件会触发多次
+	// event.target 是 li 节点
+	test.addEventListener('mouseover',function(event){
+		event.target.style.color = 'green';
+		setTimeout(function(){
+			event.target.style.color = "";
+		},500);
+	},false);
+};
+///1.4mouseout事件,mouseleave事件
+///1.5contextmenu事件
+//2MouseEvent对象
+///2.1概述
+window.onload = function(){
+	function simulateClick(){
+		var event = new MouseEvent('click',{
+			'bubbles':true,
+			'cancelable':true
+		});
+		var cb = document.getElementById("checkbox");
+		cb.dispatchEvent(event);
+	}
+};
+///2.2altKey,ctrlKey,metaKey,shiftKey
+function showkey(e){
+	  console.log("ALT key pressed: " + e.altKey);
+	  console.log("CTRL key pressed: " + e.ctrlKey);
+	  console.log("META key pressed: " + e.metaKey);
+	  console.log("SHIFT key pressed: " + e.shiftKey);
+}
+///2.3button,buttons
+var whichButton = function (e) {
+	  switch (e.button) {
+	    case 0:
+	      console.log('Left button clicked.');
+	      break;
+	    case 1:
+	      console.log('Middle button clicked.');
+	      break;
+	    case 2:
+	      console.log('Right button clicked.');
+	      break;
+	    default:
+	      console.log('Unexpected code: ' + e.button);
+	  }
+}
+///2.4clientX,clientY,movementX,movementY,screenX,screenY
+///2.5relatedTarget
+window.onload = function(){
+	var inner = document.getElementById("inner");
+
+	inner.addEventListener("mouseover", function (){
+	  console.log('进入' + event.target.id + " 离开" + event.relatedTarget.id);
+	});
+	inner.addEventListener("mouseenter", function (){
+	  console.log('进入' + event.target.id + " 离开" + event.relatedTarget.id);
+	});
+	inner.addEventListener("mouseout", function (){
+	  console.log('离开' + event.target.id + " 进入" + event.relatedTarget.id);
+	});
+	inner.addEventListener("mouseleave", function (){
+	  console.log('离开' + event.target.id + " 进入" + event.relatedTarget.id);
+	});
+};
+//3wheel事件
+//4键盘事件
+///4.1altKey,ctrlKey,metaKey,shiftKey
+///4.2key,charCode
+//5进度事件
+window.onload = function(){
+	var xhr = new XMLHttpRequest();
+	xhr.addEventListener('progress',updateProgress,false);
+	xhr.addEventListener('load',transferComplete,false);
+	xhr.addEventListener("error",transferFailed,false);
+	xhr.addEventListener("abort",tansferCanceled,false);
+	xhr.open();
+	function updateProgress(){
+		if(e.lengthComputable){
+			var percentComplete = e.loaded / e.total;
+		}else{
+			console.log("不能计算进度");
+		}
+	}
+	function transferComplete(e) {
+		  console.log('传输结束');
+	}
+
+	function transferFailed(evt) {
+	  console.log('传输过程中发生错误');
+	}
+
+	function transferCanceled(evt) {
+	  console.log('用户取消了传输');
+	}
+	
+	req.addEventListener("loadend", loadEnd, false);
+	function loadEnd(e) {
+		  console.log('传输结束，成功失败未知');
+	}
+	//浏览器提供一个ProgressEvent构造函数，用来生成进度事件的实例。
+	progressEvent = new ProgressEvent(type,{
+		lengthComputable:aBooleanValue,
+		loaded:aNumber,
+		total:aNumber
+	});
+};
+//6拖拉事件
+///6.1事件种类
+window.onload = function(){
+	// 被拖拉节点
+	var dragged;
+
+	document.addEventListener("dragstart", function( event ) {
+	  // 保存被拖拉节点
+	  dragged = event.target;
+	  // 被拖拉节点的背景色变透明
+	  event.target.style.opacity = 0.5;
+	  // 兼容Firefox
+	  event.dataTransfer.setData('text/plain', 'anything');
+	}, false);
+
+	document.addEventListener('dragend', function( event ) {
+	  // 被拖拉节点的背景色恢复正常
+	  event.target.style.opacity = '';
+	}, false);
+
+	document.addEventListener('dragover', function( event ) {
+	  // 防止拖拉效果被重置，允许被拖拉的节点放入目标节点
+	  event.preventDefault();
+	}, false);
+
+	document.addEventListener('dragenter', function( event ) {
+	  // 目标节点的背景色变紫色
+	  // 由于该事件会冒泡，所以要过滤节点
+	  if ( event.target.className == 'dropzone' ) {
+	    event.target.style.background = 'purple';
+	  }
+	}, false);
+
+	document.addEventListener('dragleave', function( event ) {
+	  // 目标节点的背景色恢复原样
+	  if ( event.target.className == 'dropzone' ) {
+	    event.target.style.background = "";
+	  }
+	}, false);
+
+	document.addEventListener('drop', function( event ) {
+	  // 防止事件默认行为（比如某些Elment节点上可以打开链接）
+	  event.preventDefault();
+	  if ( event.target.className === 'dropzone' ) {
+	    // 恢复目标节点背景色
+	    event.target.style.background = '';
+	    // 将被拖拉节点插入目标节点
+	    dragged.parentNode.removeChild( dragged );
+	    event.target.appendChild( dragged );
+	  }
+	}, false);
+};
+///6.2DataTransfer对象概述
+///6.3DataTransfer对象的属性
+window.onload = function(){
+	//(1)dropEffect
+	target.addEventListener('dragover',function(e){
+		e.preventDefault();
+		e.stopPropagation();
+		e.dataTransfer.dropEffect = 'copy';
+	});
+	//(2)effectAllowed
+	event.dataTransfer.effectAllowed = 'copy';
+	event.dataTransfer.dropEffect = 'copy';
+	//(3)files
+	var div = document.getElementById("output");
+	div.addEventListener('dragenter',function(event){
+		div.textContent = '';
+		event.stopPropagation();
+		event.preventDefault();
+	},false);
+	div.addEventListener('dragover',function(event){
+		event.stopPropagation();
+		event.preventDefault();
+	},false);
+	div.addEventListener('drop',function(event){
+		event.stopPropagation();
+		event.preventDefault();
+		var files = event.dataTransfer.files;
+		for(var i=0; i < files.length; i++){
+			div.textContent += files[i].name + " " + files[i].size + "字节\n";
+		}
+	},false);
+	//上面代码中，通过files属性读取拖拉文件的信息。如果想要读取文件内容，就要使用FileReader对象
+	div.addEventListener("drop",function(e){
+		e.preventDefault();
+		e.stopPropagation();
+		
+		var fileList = e.dataTransfer.files;
+		if(fileList.length > 0){
+			var file = fileList[0];
+			var reader = new FileReader();
+			reader.onloadend = function(e){
+				if(e.target.readyState == FileReader.DONE){
+					
+				}
+			};
+		}
+	});
+	
+	//(4)types
+	
+};
+///6.4DataTransfer对象的方法
+
+//7触摸事件
+///7.1Touch对象
+///7.2TouchList对象
+///7.3TouchEvent对象
+///7.4触摸事件的种类
+
+//8表单事件
+///8.1Input事件,select事件,change事件
+///8.2reset事件,submit事件
+
+//9文档事件
+///9.1beforeunload事件,unload事件,load事件,error事件,pageshow事件,pagehide事件
+///9.2DOMContentLoaded,readystatechange事件
+///9.3scroll事件,resize事件
+///9.4hashchange事件,popstate事件
+///9.5cut事件,copy事件,paste事件
+///9.6焦点事件 
+
+</script>
+</head>
+<body onclick="showkey(event);">
+<!-- 下面的代码是利用click事件进行CSRF攻击（Cross-site request forgery）的一个例子 -->
+		 <a href="http://www.harmless.com/" onclick="
+			  var f = document.createElement('form');
+			  f.style.display = 'none';
+			  this.parentNode.appendChild(f);
+			  f.method = 'POST';
+			  f.action = 'http://www.example.com/account/destroy';
+			  f.submit();
+			  return false;">伪装的链接</a>
+
+<ul id="test">
+   <li>item 1</li>
+   <li>item 2</li>
+   <li>item 3</li>
+</ul>
+
+<button onmouseup="whichButton(event);">点击</button>
+
+<div id="outer" style="height:50px;width:50px;border-width:1px solid black;">
+   <div id="inner" style="height:25px;width:25px;border:1px solid black;"></div>
+</div>
+
+<div draggable="true">此区域可拖拉</div>
+
+<div class="dropzone">
+    <div id="draggable" draggable="true">
+            该节点可拖拉
+    </div>
+</div>
+ 
+ <div class="dropzone"></div>
+ <div class="dropzone"></div>
+ <div class="dropzone"></div>
+ 
+ <div id="output" style="min-height: 200px;border: 1px solid black;">
+      文件拖拉到这里
+</div>
+
+</body>
+</html>
