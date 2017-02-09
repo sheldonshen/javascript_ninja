@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>7.1概述</title>
+<script src="/assets/application.js"
+  integrity="sha256-TvVUHzSfftWg1rcfL6TIJ0XKEGrgLyEq6lEpcmrG9qs=">
+</script>
+<script id="mydata" type="x-custom-data">
+  console.log('Hello World');
+</script>
+<script src="jquery.min.js" onload="console.log(document.body.innerHTML)"></script>
+<script type="text/javascript">
+//1JavaScript代码嵌入网页的方法
+///1.1script标签:代码嵌入网页
+window.onload = function(){
+	window.alert(document.getElementById("mydata").text);
+};
+///1.2script标签:加载外部脚本
+window.onload = function(){
+	//script标签有一个integrity属性，指定了外部脚本/assets/application.js的SHA265签名。
+	//一旦有人改了这个脚本，导致SHA265签名不匹配，浏览器就会拒绝加载
+};
+///1.3事件属性
+///1.4URL协议
+
+//2script标签
+///2.1工作原理
+window.onload = function(){
+	/* 
+	1浏览器一边下载HTML网页，一边开始解析
+	2解析过程中，发现<script>标签
+	3暂停解析，网页渲染的控制权转交给JavaScript引擎
+	4如果<script>标签引用了外部脚本，就下载该脚本，否则就直接执行
+	5执行完毕，控制权交还渲染引擎，恢复往下解析HTML网页
+	*/
+	document.addEventListener("DOMContentLoaded",function(event){
+		console.log(document.body.innerHTML);
+	});
+};
+//console.log(document.body.innerHTML);
+///2.2defer属性
+window.onload = function(){
+	/* 对于内置而不是加载外部脚本的script标签，以及动态生成的script标签，defer属性不起作用。
+	另外，使用defer加载的外部脚本不应该使用document.write方法 */
+};
+///2.3async属性
+window.onload = function(){
+	//一般来说，如果脚本之间没有依赖关系，就使用async属性，如果脚本之间有依赖关系，就使用defer属性。
+	//如果同时使用async和defer属性，后者不起作用，浏览器行为由async属性决定
+};
+///2.4脚本的动态加载
+window.onload = function(){
+	(function(){
+		var scripts = document.getElementsByTagName('script')[0];
+		function load(url){
+			var script = document.createElement("script");
+			script.async = true;
+			script.src = url;
+			scripts.parentNode.insertBefore(script,scripts);
+		}
+		  load('//apis.google.com/js/plusone.js');
+		  load('//platform.twitter.com/widgets.js');
+		  load('//s.thirdpartywidget.com/widget.js');
+	})();
+	
+	//如果想为动态加载的脚本指定回调函数，可以使用下面的写法。
+	function loadScript(src,done){
+		var js = document.createElement("script");
+		js.src = src;
+		js.onload = function(){
+			done();
+		};
+		js.onerror = function(){
+			done(new Error("Failed to load script " + src));
+		};
+		document.head.appendChild(js);
+	}
+};
+///2.5加载使用的协议
+//3浏览器的组成
+//浏览器的核心是两部分：渲染引擎和JavaScript解释器（又称JavaScript引擎）。
+///3.1渲染引擎
+Firefox：Gecko引擎
+Safari：WebKit引擎
+Chrome：Blink引擎
+IE: Trident引擎
+Edge: EdgeHTML引擎
+///3.2重流和重绘
+window.onload = function(){
+   //下面是一个window.requestAnimationFrame()对比效果的例子。
+	// 重绘代价高
+	function doubleHeight(element) {
+	  var currentHeight = element.clientHeight;
+	  element.style.height = (currentHeight * 2) + 'px';
+	}
+
+	all_my_elements.forEach(doubleHeight);
+
+	// 重绘代价低
+	function doubleHeight(element) {
+	  var currentHeight = element.clientHeight;
+
+	  window.requestAnimationFrame(function () {
+	    element.style.height = (currentHeight * 2) + 'px';
+	  });
+	}
+
+	all_my_elements.forEach(doubleHeight);
+	//使用window.requestAnimationFrame()，因为它可以把代码推迟到下一次重流时执行，而不是立即要求页面重流
+	
+	//下面是一些优化技巧
+	/* 
+	读取DOM或者写入DOM，尽量写在一起，不要混杂
+	缓存DOM信息
+	不要一项一项地改变样式，而是使用CSS class一次性改变样式
+	使用document fragment操作DOM
+	动画时使用absolute定位或fixed定位，这样可以减少对其他元素的影响
+	只在必要时才显示元素
+	使用window.requestAnimationFrame()，因为它可以把代码推迟到下一次重流时执行，而不是立即要求页面重流
+	使用虚拟DOM（virtual DOM）库 
+	*/
+}
+///3.3JavaScript引擎
+Chakra(Microsoft Internet Explorer)
+Nitro/JavaScript Core (Safari)
+Carakan (Opera)
+SpiderMonkey (Firefox)
+V8 (Chrome, Chromium)
+//4参数链接
+</script>
+</head>
+<body>
+<!-- URL支持javascript:协议，调用这个URL时，就会执行JavaScript代码 -->
+<a href="javascript:alert('Hello')"></a>
+<a href="javascript:new Date().toLocaleTimeString();">
+  What time is it?
+</a>
+<a href="javascript:console.log(new Date().toLocaleTimeString())">
+What time is it?
+</a>
+
+<!--  
+  <script>
+    console.log(document.body.innerHTML);
+ </script> -->
+  
+</body>
+</html>
