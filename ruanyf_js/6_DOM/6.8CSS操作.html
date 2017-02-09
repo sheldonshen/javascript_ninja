@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>css操作</title>
+<style type="text/css">
+#test:before{
+  content:'Before',
+  color:#FF0
+}
+</style>
+<script type="text/javascript">
+//1style属性
+///1.1Style对象
+window.onload = function(){
+	var divStyle = document.querySelector("div").style;
+	divStyle.backgroundColor = 'red';
+	window.alert(divStyle.background);
+	//通过监听事件，改写网页元素的CSS样式
+	var docStyle = document.documentElement.style;
+	var someElement = document.querySelector(...);
+	document.addEventListener('mousemove',function(e){
+		someElement.style.transform =  'translateX(' + e.clientX + 'px)' +
+	    'translateY(' + e.clientY + 'px)';
+	});
+};
+///1.2cssText属性
+window.onload = function(){
+	var divStyle = document.querySelector('div').style;
+	divStyle.cssText = 'background-color: red;'
+		  + 'border: 1px solid black;'
+		  + 'height: 100px;'
+		  + 'width: 100px;';
+};
+///1.3css模块的侦测
+window.onload = function(){
+	//一个比较普遍适用的方法是，判断某个DOM元素的style对象的某个属性值是否为字符串。
+	window.alert(element.style.animationName === 'string');
+	window.alert(element.style.transform === 'string');
+	document.body.style['maxWidth'] // ""
+	document.body.style['maximumWidth'] // undefined
+	//需要注意的是，不管CSS属性名带不带连词线，style对象都会显示该属性存在
+	document.body.style['backgroundColor'] // ""
+    document.body.style['background-color'] // ""
+	var content = document.getElementById("content");
+	typeof content.style['webkitAnimation'] === 'string';
+	//侦测方法可以写成一个函数
+	function isPropertySupported(property){
+		if(property in document.body.style){
+			return true;
+		}
+		var prefixes = ['Moz','Webkit','O','ms','Khtml'];
+		var prefProperty = property.charAt(0).toUpperCase() + property.substr(1);
+		for(var i = 0; i < prefixes.length; i++){
+			if((prefixes[i] + prefProperty) in document.body.style){
+				return true;
+			}
+		}
+		return false;
+	}
+};
+///1.4setProperty(),getPropertyValue(),removeProperty()
+window.onload = function(){
+	var divStyle = document.querySelector("div").style;
+	divStyle.setProperty('background-color','red');
+	divStyle.getPropertyValue('background-color');
+	divStyle.removeProperty("background-color");
+};
+//2window.getComputedStyle()
+window.onload = function(){
+	var div = document.querySelector("div");
+	window.getComputedStyle(div).backgroundColor;
+	var result = window.getComputedStyle(div,':before');
+	//下面的例子是如何获取元素的高度
+	var elem = document.getElementById("elem-container");
+	var hValue = window.getComputedStyle(elem,null).getPropertyValue("height");
+};
+//3CSS伪元素
+window.onload = function(){
+	//JavaScript获取伪元素，可以使用下面的方法
+	var test = document.querySelector("#test");
+	var result = window.getComputedStyle(test,':before').content;
+	var color  = window.getComputedStyle(test,":before").color;
+	var result = window.getComputedStyle(test,':before').getPropertyValue("content");
+	var color  = window.getComputedStyle(test,":before").getPropertyValue("color");
+};
+//4StyleSheet对象
+///4.1获取样式表
+window.onload = function(){
+	
+};
+///4.2属性
+///4.3insertRule(),deleteRule()
+///4.4添加样式表
+//5CSS规则
+///5.1CSSRule接口
+///5.2CSSStyleRule接口
+///5.3CSSMediaRule接口
+///5.4CSSStyleDeclaration对象
+//6window.matchMedia()
+///6.1基本用法
+///6.2监听事件
+//7css事件
+///7.1transitionEnd事件
+///7.2animationstart事件,animation事件,animationiteration事件
+//8参考链接
+</script>
+</head>
+<body>
+
+</body>
+</html>
