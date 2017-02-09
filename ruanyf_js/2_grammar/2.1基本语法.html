@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>2.1基本语法</title>
+<script type="text/javascript">
+//2.2变量提升
+window.onload = function(){
+	window.alert(a);
+	//window.alert(b);//Uncaught ReferenceError: b is not defined
+	var a = 1;
+	//window.alert(c);//Uncaught ReferenceError: c is not defined
+	c = 1;
+	//变量提升只对var命令声明的变量有效,如果一个变量不是用var命令声明的，就不会发生变量提升。
+	var 临时变量 = 1;
+	
+	x = 1; <!-- x = 2;
+	--> x = 3;
+	window.alert(x);//1
+	
+	function countdown(n){
+		while(n --> 0){
+			console.log(n);//上面代码中，n --> 0实际上会当作n-- > 0，因此输出2、1、0
+		}
+	}
+	
+	countdown(3);
+	
+	//5区块
+	{
+		var d =123;
+	}
+	window.alert(d);//123
+	
+	if(x = 2){}//不报错
+	//if(2 = x){}//报错
+	
+	var x = 1;
+	switch(x){
+	   case true://使用的是“===”
+		   console.log("x发生类型转换");
+	   default:
+		   console.log('x没有发生类型转换');
+	}
+}
+</script>
+</head>
+<body>
+
+</body>
+</html>
