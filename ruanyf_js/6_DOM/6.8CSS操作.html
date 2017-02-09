@@ -3,6 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <title>css操作</title>
+<style type="text/css" id="styleElement">
+body{font-size: 1.2 rem;};
+@media all and (max-width: 700px){
+   body{
+      background:#FF0
+   }
+};
+@media all and (max-device-width: 700px){
+   body{
+      background:#FF0
+   }
+}
+</style>	
 <style type="text/css">
 #test:before{
   content:'Before',
@@ -87,22 +100,109 @@ window.onload = function(){
 //4StyleSheet对象
 ///4.1获取样式表
 window.onload = function(){
-	
+	var sheets = document.styleSheets;
+	var sheet  = document.styleSheets[0];
+	///等同于document.styleSheets[0]
+	document.querySelector("#linkElement").sheet;
+	//等同于document.styleSheets[1]
+	document.querySelector("#styleElement").sheet;
 };
 ///4.2属性
+window.onload = function(){
+	window.alert(document.styleSheets[0].media.mediaText);//all
+	document.querySelector("#linkElement").disabled = true;
+	document.querySelector("#linkElement").disabled = "disabled";
+	//注意，disabled属性只能在JavaScript脚本中设置，不能在HTML语句中设置。
+	window.alert(document.styleSheets[0].href);
+	window.alert(document.styleSheets[0].type);//"text/css"
+	/* if(stylesheet.parentStyleSheet){
+		sheet = stylesheet.parentStyleSheet;
+	}else{
+		sheet = stylesheet;
+	} */
+	window.alert(document.styleSheets[0].ownerNode);//[object HTMLLinkElement]
+	var sheet = document.getElementById("styleElement").sheet;
+	window.alert(sheet.cssRules[0].cssText);
+	window.alert(sheet.cssRules[1].cssText);
+};
 ///4.3insertRule(),deleteRule()
+window.onload = function(){
+	var sheet = document.querySelector("#linkElement").sheet;
+	sheet.insertRule("#block {color:white}",0);
+	sheet.insertRule('p {color:red}',1);
+	sheet.deleteRule(1);
+};
 ///4.4添加样式表
+window.onload = function(){
+	//添加样式表有两种方式。一种是添加一张内置样式表，即在文档中添加一个<style>节点。
+	var style = document.createElement("style");
+	style.setAttribute("media",'screen');
+	//或者
+	style.setAttribute("media", "@media only screen and (max-width : 1024px)");
+	style.innerHTML = "body{color:red}";
+	// 或者
+	sheet.insertRule("header { float: left; opacity: 0.8; }", 1);
+	document.head.appendChild(style);
+	//另一种是添加外部样式表，即在文档中添加一个<link>节点，然后将href属性指向外部样式表的URL
+	var linkElm = document.createElement('link');
+	linkElm.setAttribute('rel','stylesheet');
+	linkElm.setAttribute("type",'text/css');
+	linkElm.setAttribute('href','reset-min.css');
+	document.head.appendChild(linkElm);
+};
+
 //5CSS规则
 ///5.1CSSRule接口
 ///5.2CSSStyleRule接口
+window.onload = function(){
+	var stylesheet = document.styleSheets[0];
+	styleSheets.cssRules[0].selectorText;
+	window.alert(document.styleSheets[0].cssRules[0].style.cssText);
+};
 ///5.3CSSMediaRule接口
 ///5.4CSSStyleDeclaration对象
+//https://developer.mozilla.org/en-US/docs/Web/API/CSSStyleDeclaration
 //6window.matchMedia()
 ///6.1基本用法
+window.onload = function(){
+	var result = window.matchMedia('(min-width: 600px)');
+	window.alert(result.media);
+	window.alert(result.matches);
+	//根据mediaQuery是否匹配当前环境，执行不同的JavaScript代码
+	var result = window.matchMedia("(min-width: 700px)");
+	if(result.matches){
+		console.log('页面宽度小于等于700px');
+	}else{
+		console.log('页面宽度大于700px');
+	}
+	//下面的例子根据mediaQuery是否匹配当前环境，加载相应的CSS样式表
+	var result = window.matchMedia("(min-width: 700px)");
+	if(result.matches){
+		var linkEle = document.createElement("link");
+		linkEle.setAttribute('rel','stylesheet');
+		linkEle.setAttribute('type','text/css');
+		linkEle.setAttribute('href','small.css');
+		document.head.appendChild(linkEle);
+	}
+};
 ///6.2监听事件
+window.onload = function(){
+	var mql = window.matchMedia("(min-width: 700px)");
+	//// 指定回调函数
+	mql.addListener(mqCallback);
+	mql.removeListener(mqCallback);
+	function mqCallback(){
+		 if (mql.matches) {
+			    // 宽度小于等于700像素
+		 } else {
+			    // 宽度大于700像素
+	     }
+	}
+};
 //7css事件
 ///7.1transitionEnd事件
 ///7.2animationstart事件,animation事件,animationiteration事件
+
 //8参考链接
 </script>
 </head>
