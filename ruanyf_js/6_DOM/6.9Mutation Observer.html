@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Mutation Observer</title>
+<script type="text/javascript">
+//1概述
+//Mutation Observer有以下特点：
+/* 它等待所有脚本任务完成后，才会运行，即采用异步方式。
+它把DOM变动记录封装成一个数组进行处理，而不是一条条地个别处理DOM变动。
+它既可以观察发生在DOM的所有类型变动，也可以观察某一类变动。 */
+window.onload = function(){
+	var MutationObserver = window.MutationObserver 
+	|| window.WebKitMutationObserver
+	|| window.MozMutationObserver;
+	var observeMutationSupport = !!MutationObserver;
+};
+//2MutationObserver构造函数 
+//3Mutation Observer实例的方法
+///3.1observer()
+window.onload = function(){
+	/* var observer = new MutationObserver(callback);
+	var article = document.querySelector("article");
+	var option = {
+			'childList':true,
+			'attributes':true
+	};
+	observer.observe(article,option); */
+		
+	//下面的例子是观察新增的子节点。
+	function observerChildList(){
+		var insertedNodes = [];
+		var observer = new MutationObserver(function(mutations){
+			mutations.forEach(function(mutation){
+				for(var i=0; i < mutation.addedNodes.length;i++){
+					insertedNodes.push(mutation.addedNodes[i]);
+				}
+			});
+		});
+		observer.observe(document,{childList:true});
+		console.log("observer childList" + insertedNodes);
+	}
+		
+	//window.setInterval(observerChildList,1000);
+	
+	document.body.appendChild(document.createElement("p"));
+};
+///3.2disconnect(),takeRecords()
+///3.3MutationRecord对象
+//4应用示例
+///4.1子元素的变动
+window.onload = function(){
+	//下面的例子说明如何读取变动记录。
+	var callback = function(records){
+		records.map(function(record){
+			console.log("Mutation type:" + record.type);
+			console.log("Mutation target:" + record.target);
+		});
+	};
+	
+	var mo = new MutationObserver(callback);
+	var option = {
+			"childList":true,
+			"subtree":true
+	};
+	mo.observer(document.body,option);
+};
+///4.2属性的变动
+window.onload  = function(){
+	//下面的例子说明如何追踪属性的变动
+	var callback = function(records){
+		records.map(function(record){
+			console.log("Previous attribute value:" + record.oldValue);
+		});
+	};
+	var mo = new MutationObserver(callback);
+	var element = document.getElementById('#my_element');
+	var options = {
+			'attributes':true,
+			'attributeOldValue':true
+	};
+	mo.observer(element,options);
+};
+///4.3取代DOMContentLoaded事件
+window.onload = function(){
+	var observer = new MutationObserver(callback);
+	observer.observe(document.documentElement,{childList:true,subtree:true});
+	//下面的代码，使用MutationObserver对象封装一个监听DOM生成的函数
+	(function(win){
+		"use strict";
+		var listeners = [];
+		var doc = window.document;
+		var MutationObserver = win.MutationObserver || win.WebKitMutationObserver;
+		var observer;
+		function ready(selector,fn){
+			 // 储存选择器和回调函数
+			listeners.push({
+				selector:selector,
+				fn:fn
+			});
+			if(!observer){
+				// 监听document变化
+				observer = new MutationObserver(check);
+				observer.observe(doc.documentElement,{
+					childList:true,
+					subtree:true
+				});
+			} 
+			// 检查该节点是否已经在DOM中
+			check(); 
+		}
+		
+		function check(){
+			 // 检查是否匹配已储存的节点
+			 for(var i = 0; i < listeners.length; i++){
+				 var listener = listeners[i];
+				 // 检查指定节点是否有匹配
+				 var elements = document.querySelectorAll(listener.selector);
+				 for(var j=0; j < elements.length; i++){
+					 var element = elements[i];
+					 // 确保回调函数只会对该元素调用一次
+					  if(!element.ready){
+						  element.ready = true;
+						  // 对该节点调用回调函数
+						  listener.fn.call(element,element);
+					  }
+				 }
+			 }
+		}
+		
+		// 对外暴露ready
+		win.ready = ready;
+		
+	})(this);
+	
+	ready('.foo',function(element){
+		//...
+	});
+};
+//5参考链接
+</script>
+</head>
+<body>
+
+</body>
+</html>
