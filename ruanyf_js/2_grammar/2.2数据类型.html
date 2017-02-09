@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>2.1数据类型</title>
+<script type="text/javascript">
+//1概述
+window.onload = function(){
+	//JavaScript的数据类型，共有六种。（ES6又新增了第七种Symbol类型的值，本教程不涉及。）
+};
+//2typeof运算符
+window.onload = function(){
+	//JavaScript有三种方法，可以确定一个值到底是什么类型。
+	//1typeof运算符
+	//2instanceof运算符
+	//3Object.prototype.toString方法
+	
+	//typeof运算符可以返回一个值的数据类型，可能有以下结果
+	//(1)原始类型
+	window.alert(typeof 123);//"number"
+	window.alert(typeof '123');//"string"
+	window.alert(typeof false);//"boolean"
+	//(2)函数
+	function f(){}
+	window.alert(typeof  f);//"function"
+	//(3)undefined
+	window.alert(typeof undefined);//"undefined"
+	//window.alert(v);//Uncaught ReferenceError: v is not defined
+	//if(v){
+		//// 错误的写法
+		// ReferenceError: v is not defined
+	//}
+	if(typeof v === 'undefined'){//// 正确的写法
+		window.alert("typeof undefined");
+	}
+	//(4)其他object
+	window.alert(typeof window);//"object"
+	window.alert(typeof {});//"object"
+	window.alert(typeof []);//"object"
+	window.alert(typeof null);//"object"
+	//区分[]和{}
+	var o = {};
+	var a = [];
+	window.alert(o instanceof Array);//false
+	window.alert(a instanceof Array);//true
+};
+//3null和undefined
+//3.1概述
+window.onload = function(){
+	if (!undefined) {
+		  console.log('undefined is false');
+		}
+	// undefined is false
+
+	if (!null) {
+	  console.log('null is false');
+	}
+	
+	window.alert(undefined == null);//true
+	window.alert(Number(null));//0
+	window.alert(5 + null);//5
+	window.alert(Number(undefined));//NaN
+	window.alert(5 + undefined);//NaN
+};
+//3.2用法和含义
+window.onload = function(){
+	// 变量声明了，但没有赋值
+	var i;
+	i // undefined
+
+	// 调用函数时，应该提供的参数没有提供，该参数等于undefined
+	function f(x) {
+	  return x;
+	}
+	f() // undefined
+
+	// 对象没有赋值的属性
+	var  o = new Object();
+	o.p // undefined
+
+	// 函数没有返回值时，默认返回undefined
+	function f() {}
+	f() // undefined
+};
+//4布尔值
+window.onload = function(){
+	if ([]) {
+		  console.log(true);
+		}
+	// true
+
+	if ({}) {
+	  console.log(true);
+	}
+	// true
+};
+//5参考链接
+</script>
+</head>
+<body>
+</body>
+</html>
