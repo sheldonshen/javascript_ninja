@@ -9,6 +9,7 @@ Allen M http://blog.allenm.me/ <br>
 高云 http://nuysoft.com/ <br>
 aaronjs http://www.cnblogs.com/aaronjs<br>
 小胡子哥 http://www.barretlee.com/blog/categories/JavaScript/<br>
+叶小钗 http://www.cnblogs.com/yexiaochai/category/471016.html<br>
 ##国外
 Juriy Zaytsev http://perfectionkills.com/<br>
 Web Reflection http://webreflection.blogspot.hk/<br>
