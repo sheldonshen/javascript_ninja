@@ -3,13 +3,43 @@
 <head>
 <meta charset="utf-8">
 <title>window对象</title>
+<script crossorigin="anonymous" src="//example.com/file.js"></script>
 <script type="text/javascript">
 //1概述
+window.onload = function(){
+	var a =1;
+	window.alert("onload =" + window.a);
+};
+var a =2;
+//window.alert(window.a);
 //2window对象的属性
 //2.1window.window，window.name
+window.onload = function(){
+	//window.alert(window.window === this);
+};
+//window.alert(window.window === this);//true
+//window.name = 'windowName';
+//window.alert(window.name);
 //2.2window.location
+window.onload = function(){
+	window.alert(window.location === document.location);//true
+};
 //2.3window.closed，window.opener
+window.onload = function(){
+	window.alert(window.open().opener === window);//true
+	window.alert(window.closed);//false
+	var popup = window.open();
+	if((popup !== null) && (!popup.closed)){
+		window.alert("窗口仍然打开着");
+	}
+};
 //2.4window.frames，window.length
+window.onload = function(){
+	//frames属性实际上是window对象的别名。
+	window.alert(frames === window);//true
+	window.alert(frames[0]===window[0]);//true
+	window.alert(window.frames.length === window.length);//true
+};
 //2.5window.screenX，window.screenY
 //2.6window.innerHeight，window.innerWidth
 //2.7window.outerHeight，window.outerWidth
@@ -22,33 +52,107 @@
 //3.4navigator.geolocation
 //3.5navigator.javaEnabled()，navigator.cookieEnabled
 //4window.screen对象
+window.onload = function(){
+	if((screen.width <= 800) && (screen.height <= 600)){
+		window.location.replace("small.html");
+	}else{
+		window.location.replace("wide.html");
+	}
+};
 //5window对象的方法
 //5.1window.moveTo()，window.moveBy()
+window.onload = function(){
+	window.moveTo(100,200);
+	window.moveBy(25,50);
+	window.scrollTo(0,100);
+	window.scrollBy(0,window.innerHeight);
+};
 //5.2window.scrollTo()，window.scrollBy()
 //5.3window.open(), window.close()
+window.onload = function(){
+	//var popup = window.open('somepage.html','DefinitionsWindows','height=200,width=200,location=no,status=yes,resizable=yes,scrollbars=yes');
+	//var windowB = window.open('windowB.html', 'WindowB');
+	//window.alert(windowB.window.name);
+	var w = window.open();
+	w.alert("窗口已经打开");
+	w.location = 'http://example.com';
+};
 //5.4window.print()
+window.onload = function(){
+	if(typeof window.print === 'function'){
+		window.alert("支持打印功能");
+	}
+};
 //5.5window.getComputedStyle()
 //5.6window.matchMedia()
 //5.7window.focus()
+window.onload = function(){
+	var popup = window.open("popup.html",'Popup Window');
+	if((popup !== null) && (!popup.closed)){
+		popup.focus();
+	}
+};
 //5.8window.getSelection()
+window.onload = function(){
+	var selObj = window.getSelection();
+	var selectedText = selObj.toString();
+};
 //6多窗口操作
 //6.1窗口的引用
+window.onload = function(){
+	/* top：顶层窗口，即最上层的那个窗口
+	parent：父窗口
+	self：当前窗口，即自身 */
+	//下面代码可以判断，当前窗口是否为顶层窗口
+	window.alert(top === self);//true
+	// 更好的写法
+	window.alert(window.top === window.self);//true
+	/* _top：顶层窗口
+	_parent：父窗口
+	_blank：新窗口 */
+	//<a href="somepage.html" target="_top">Link</a>
+};
 //6.2iframe标签
+window.onload = function(){
+	var frame = document.getElementById('theFrame');
+	var frameWindow = frame.contentWindow;
+
+	// 等同于 frame.contentWindow.document
+	var frameDoc = frame.contentDocument;
+
+	// 获取子窗口的变量和属性
+	//frameWindow.function()
+
+	// 获取子窗口的标题
+	frameWindow.title
+	if(window.parent !== window.self){
+	  // 当前窗口是子窗口
+	}
+};
 //6.3frames属性
+window.onload = function(){
+	window.alert(myFrame);//toString()
+	window.alert(frames.myFrame === myFrame);//true
+};
 //7事件
 //7.1load事件和onload属性
 //7.2error事件和onerror属性
+window.onerror = function(message, filename, lineno, colno, error){
+	console.log("出错了！--> %s", error.stack);
+};
 //8URL的编码/解码方法
 //8.1encodeURI
 //8.2encodeURIComponent
 //8.3decodeURI
 //8.4decodeURIComponent
+
 //9alert()，prompt()，confirm()  
+
 //10参考链接
 //https://developer.mozilla.org/en-US/docs/Web/API/Window
 </script>
 </head>
 <body>
-
+<iframe id="myFrame">
 </body>
 </html>
