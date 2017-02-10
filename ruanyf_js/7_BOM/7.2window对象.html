@@ -141,13 +141,34 @@ window.onerror = function(message, filename, lineno, colno, error){
 	console.log("出错了！--> %s", error.stack);
 };
 //8URL的编码/解码方法
+//网页URL的合法字符分成两类
+/* URL元字符：分号（;），逗号（’,’），斜杠（/），问号（?），冒号（:），at（@），&，等号（=），加号（+），美元符号（$），井号（#）
+语义字符：a-z，A-Z，0-9，连词号（-），下划线（_），点（.），感叹号（!），波浪线（~），星号（*），单引号（\），圆括号（()`） */
 //8.1encodeURI
 //8.2encodeURIComponent
 //8.3decodeURI
 //8.4decodeURIComponent
-
+window.onload = function(){
+	window.alert(window.encodeURI("http://www.example.com/q=春节"));
+	window.alert(window.encodeURIComponent("http://www.example.com/q=春节"));
+	window.alert(window.decodeURI("http://www.example.com/q=%E6%98%A5%E8%8A%82"));
+	window.alert(window.decodeURIComponent("http%3A%2F%2Fwww.example.com%2Fq%3D%E6%98%A5%E8%8A%82"));
+};
 //9alert()，prompt()，confirm()  
-
+window.onload = function(){
+	window.alert('本条提示\n分成两行');
+	var result = window.prompt("你的年龄?",25);
+	var result = window.confirm("你最近好吗?");
+	var okay = window.confirm('Please confirm this message.');
+	if (okay) {
+	  // 用户按下“确定”
+	} else {
+	  // 用户按下“取消”
+	}
+	window.onunload = function(){
+		return window.confirm("你确定要离开当面页面吗？");
+	};
+};
 //10参考链接
 //https://developer.mozilla.org/en-US/docs/Web/API/Window
 </script>
