@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>History对象</title>
+<script type="text/javascript">
+//1概述
+window.onload = function(){
+	history.back();
+	history.forward();
+	history.go(-2);
+	history.go(0);//刷新当前页面
+	document.getElementById("backLink").onclick = function(){
+		//注意，返回上一页时，页面通常是从浏览器缓存之中加载，而不是重新要求服务器发送新的网页
+		window.history.back();
+	};
+};
+//2history.pushState()
+window.onload = function(){
+	if(!!(window.history && history.pushState)){
+		//支持History API
+		window.alert("支持History API");
+	}else{
+		//不支持
+		window.alert("不支持");
+	}
+	var stateObj = {foo:'bar'};
+	window.history.pushState(stateObj,'page 2','2.html');
+	window.alert("all right");
+	//history.pushState(null, null, 'https://twitter.com/hello');
+};
+//3history.replaceState()
+window.onload = function(){
+	history.pushState({page: 1}, 'title 1', '?page=1');
+	history.pushState({page: 2}, 'title 2', '?page=2');
+	history.replaceState({page: 3}, 'title 3', '?page=3');
+
+	history.back()
+	// url显示为http://example.com/example.html?page=1
+
+	history.back()
+	// url显示为http://example.com/example.html
+
+	history.go(2)
+	// url显示为http://example.com/example.html?page=3
+};
+//4history.state属性
+window.onload = function(){
+	history.pushState({page: 1}, 'title 1', '?page=1');
+	window.alert(history.state);
+};
+//5popstate事件
+window.onload = function(){
+	 window.onpopstate = function(event){
+		 console.log('location:' + document.location);
+		 console.log("state:" + JSON.stringify(event.state));
+		 
+	 };
+};
+//6URLSearchParams API
+window.onload = function(){
+	var paramsString = 'q=URLUtils.searchParams&topic=api';
+	var searchParams = new URLSearchParams(paramsString);
+	window.alert(searchParams.has('topic'));//true
+	window.alert(searchParams.get("topic"));//api
+	window.alert(searchParams.getAll("topic"));//['api']
+	window.alert(searchParams.get("foo"));//null
+	searchParams.set("foo",2);
+	window.alert(searchParams.get("foo"));//2
+    searchParams.append('topic','webdev');
+	window.alert(searchParams);//"q=URLUtils.searchParams&topic=api&foo=2&topic=webdev"
+	searchParams.append('foo',3);
+	window.alert(searchParams.getAll("foo"));//[2,3]
+	searchParams.delete('topic');
+	window.alert(searchParams.toString());//"q=URLUtils.searchParams&foo=2&foo=3"
+};
+window.onload = function(){
+	//URLSearchParams还有三个方法，用来遍历所有参数。
+	/* keys()：遍历所有参数名
+	values()：遍历所有参数值
+	entries()：遍历所有参数的键值对 */
+	var searchParams = new URLSearchParams("key1=value1&&key2=value2");
+	for(var key of searchParams.keys()){
+		window.alert(key);
+	}
+	for(var value of searchParams.values()){
+		window.alert(value);
+	}
+	for(var pair of searchParams.entries()){
+		window.alert(pair[0] + ":" + pair[1]);
+	}
+};
+window.onload = function(){
+	var searchParams = new URLSearchParams("key1=value1&&key2=value2");
+	for(var p of searchParams){
+		window.alert(p);
+	}
+	//URL: https://example.com?version=1.0
+    var params = new URLSearchParams(location.search.slice(1));
+	params.set("version",2.0);
+	window.history.replaceState({},"",`${location.pathname}?${params}`);
+	//URL: https://example.com?version=2.0
+			
+    //URLSearchParams实例可以当作POST数据发送，所有数据都会URL编码
+    /* let params = new URLSearchParams();
+	params.append('api_key','12345678');
+	fetch('https://example.com/api',{
+		method:"POST",
+		body:params
+	},).then(...) */
+};
+window.onload = function(){
+	var a = document.createElement("a");
+	a.href = "https://example.com?filter=api";
+	//window.alert(a.searchParams.get('filter'));
+	//URLSearchParams还可以与URL接口结合使用
+	var url = new URL(location);
+	var foo = url.searchParams.get('foo') || 'somedefault';
+	window.alert(foo);
+};
+//7参考链接
+</script>
+</head>
+<body>
+
+</body>
+</html>
