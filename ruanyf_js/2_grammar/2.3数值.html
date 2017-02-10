@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>2.3数值</title>
+<script type="text/javascript">
+window.onload = function(){
+	//1.1整数和浮点数
+	//JavaScript内部，所有数字都是以64位浮点数形式储存，即使整数也是如此。所以，1与1.0是相同的，是同一个数
+	window.alert(1 === 1.0);//true
+	window.alert(0.1 + 0.2 === 0.3);//false
+	window.alert(0.3 / 0.1);//2.9999999999999996
+	window.alert((0.3 - 0.2) === (0.2 - 0.1));//false
+	//1.2数值精度
+	//1.3数值范围
+	var x = 0.5;
+	for(var i = 0; i < 25; i++){
+		x = x  * x;
+	}
+	window.alert(x);
+};
+window.onload = function(){
+	//4特殊数值
+	//4.1正零和负零
+	window.alert(-0 === +0);//true
+	window.alert(0 === -0);//true
+	window.alert(0 === +0);//true
+	window.alert((-0).toString());//'0'
+	window.alert((+0).toString());//'0'
+	window.alert((1 / +0) === (1 / -0));//false
+	window.alert(+Infinity === -Infinity);//false
+	//4.2NaN
+	window.alert(0 / 0);//NaN
+	window.alert(typeof NaN);//number
+	//运算规则
+	window.alert(NaN === NaN);//false
+	window.alert([NaN].indexof(NaN));//-1
+	window.alert(Boolean(NaN));
+	window.alert(isNaN({}));
+	window.alert(isNaN(Number({})));//true
+	window.alert(isNaN(Number(['xyz'])));
+	function myIsNaN(value){
+		return typeof value === 'number' && isNaN(value);
+	}
+	function myIsNaN(value){
+		return value !== value;
+	}
+};
+window.onload = function(){
+	window.alert(Infinity === -Infinity);//false
+	window.alert(1 / -0);//-Infinity
+	window.alert(-1 / -0);//Infinity
+	window.alert(window.isFinite(Infinity));//false
+	window.alert(window.isFinite(NaN));//false
+};
+window.onload = function(){
+	//5与数值相关的全局方法
+	window.alert(window.parseInt("   81"));
+	window.alert(window.parseInt(1.12));
+	//等同于
+	window.alert(window.parseInt('1.12'));
+	window.alert(window.parseInt('8a'));//8
+	window.alert(window.parseInt('abc'));//NaN
+};
+</script>
+</head>
+<body>
+
+</body>
+</html>
