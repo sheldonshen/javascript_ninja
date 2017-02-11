@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>WebStorage浏览器端数据存储机制</title>
+<script type="text/javascript">
+//1概述
+window.onload = function(){
+	//这个API的作用是，使得网页可以在浏览器端储存数据。它分成两类：sessionStorage和localStorage
+	//sessionStorage保存的数据用于浏览器的一次会话，当会话结束（通常是该窗口关闭），数据被清空；localStorage保存的数据长期存在，
+	//下一次访问该网站的时候，网页可以直接读取以前保存的数据。除了保存期限的长短不同，这两个对象的属性和方法完全一样
+	function checkStorageSupport(){
+		//sessionStorage
+		if(window.sessionStorage){
+			return true;
+		}eles{
+			return false;
+		}
+		//localStorage
+		if(window.localStorage){
+			return true;
+		}else{
+			return false;
+		}
+	}
+};
+//2操作方法
+///2.1存入/读取数据
+window.onload = function(){
+   window.sessionStorage.setItem("key",'value');
+   window.localStorage.setItem('key','value');
+   var valueSession = window.sessionStorage.getItem("key");
+   var valueLocal   = window.localStorage.getItem("key");
+};
+///2.2清除数据
+window.onload = function(){
+	window.sessionStorage.removeItem("key");
+	window.localStorage.removeItem("key");
+	window.sessionStorage.clear();
+	window.localStorage.clear();
+};
+///2.3遍历操作
+window.onload = function(){
+	for(var i = 0; i < localStorage.length; i++){
+		//其中的key方法，根据位置（从0开始）获得键值
+		console.log(localStorage.key(i));
+	}
+};
+//3storage事件
+window.onload = function(){
+	//当储存的数据发生变化时，会触发storage事件。我们可以指定这个事件的回调函数
+	window.addEventListener('storage',onStorageChange);
+	function onStorageChange(event){
+		//回调函数接受一个event对象作为参数。这个event对象的key属性，保存发生变化的键名
+		console.log(event.key);
+	}
+	
+	//值得特别注意的是，该事件不在导致数据变化的当前页面触发
+}
+//4参考链接
+</script>
+</head>
+<body>
+
+</body>
+</html>
