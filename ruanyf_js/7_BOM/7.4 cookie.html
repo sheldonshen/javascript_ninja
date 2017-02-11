@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>cookie</title>
+<script type="text/javascript">
+//1概述
+window.onload = function(){
+	//Cookie保存以下几方面的信息
+	/* 
+	Cookie的名字
+	Cookie的值
+	到期时间
+	所属域名（默认是当前域名）
+	生效的路径（默认是当前网址） */
+	window.alert(window.navigator.cookieEnabled);//表示浏览器是否打开Cookie功能
+	// 读取当前网页的所有cookie
+	var allCookies = document.cookie;
+	//由于document.cookie返回的是分号分隔的所有Cookie，所以必须手动还原，才能取出每一个Cookie的值
+	var cookies = document.cookie.split(";");
+	for(var i = 0; i < cookies.length;i++){
+		//coookies[i] name=value形式的单个cookie
+	}
+	//document.cookie属性是可写的，可以通过它为当前网站添加Cookie
+	document.cookie='fontSize=14';
+	//另外，写入Cookie的时候，必须对分号、逗号和空格进行转义（它们都不允许作为Cookie的值），这可以用encodeURIComponent方法达到
+	//document.cookie一次只能写入一个Cookie，而且写入并不是覆盖，而是添加
+	document.cookie = 'test1=hello';
+	document.cookie = 'test2=world';
+	window.alert(document.cookie);
+};
+//2cookie的属性
+window.onload = function(){
+	//浏览器设置这些属性的写法如下
+	document.cookie = 'fontSize=14;'
+	     + 'expires=' + someDate.toGMTString() + ";"
+	     + 'path=/subdirectory;'
+	     + 'domain=*.example.com';
+	//删除一个Cookie的简便方法，就是设置expires属性等于0，或者等于一个过去的日期
+	document.cookie = 'fontSize=;expires=Thu, 01-Jan-1970 00:00:01 GMT';
+};
+//3cookie的限制
+window.onload = function(){
+	//浏览器对Cookie数量的限制，规定不一样。目前，Firefox是每个域名最多设置50个Cookie，而Safari和Chrome没有域名数量的限制
+	name=a=b&c=d&e=f&g=h
+	//上面代码实际上是设置了一个Cookie，但是这个Cookie内部使用&符号，设置了多部分的内容。因此，读取这个Cookie的时候，
+	//就要自行解析，得到多个键值对。这样就规避了cookie的数量限制
+};
+//4同源政策
+//浏览器的同源政策规定，两个网址只要域名相同和端口相同，就可以共享Cookie
+//5Http-Only Cookie
+//设置Cookie的时候，如果服务器加上了HttpOnly属性，则这个Cookie无法被JavaScript读取
+//（即document.cookie不会返回这个Cookie的值），只用于向服务器发送
+//Set-Cookie: key=value;HttpOnly
+//上面的这个Cookie将无法用JavaScript获取。进行AJAX操作时，XMLHttpRequest对象也无法包括这个Cookie。这主要是为了防止XSS攻击盗取Cookie
+</script>
+</head>
+<body>
+
+</body>
+</html>
