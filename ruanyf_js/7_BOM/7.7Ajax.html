@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ajax</title>
+<script type="text/javascript">
+//1XMLHttpRequest对象
+window.onload = function(){
+	//XMLHttpRequest对象用来在浏览器与服务器之间传送数据
+	var ajax = new XMLHttpRequest();
+	ajax.open('GET','http://www.example.com/page.php',true);
+	ajax.onreadystatechange = handleStateChange;
+	//下面是XMLHttpRequest对象的典型用法
+	var xhr = new XMLHttpRequest();
+	//指定通信过程中状态改变时的回调函数
+	xhr.onreadystatechange = function(){//异步时的回调函数
+		//通信成功时,状态为4
+		if(xhr.readyState === 4){
+			if(xhr.status === 200){
+				console.log(xhr.responseText);
+			}else{
+				console.error(xhr.statusText);
+			}
+		}
+	};
+	
+	xhr.onerror = function(e){
+		console.error(xhr.statusText);
+	};
+	
+	// open方式用于指定HTTP动词、请求的网址、是否异步
+	xhr.open('GET','/endpoint',true);//异步
+	
+	//发送HTTP请求
+	xhr.send(null);
+	
+	//open方法的第三个参数是一个布尔值，表示是否为异步请求。如果设为false，就表示这个请求是同步的，下面是一个例子
+	var request = new XMLHttpRequest();
+	request.open('GET','/bar/foo.txt',false);//同步
+	request.send(null);
+	if(request.status === 200){
+		console.log(request.responseText);
+	}
+};
+//2XMLHttpRequest实例的属性
+//2.1readyState
+window.onload = function(){
+	if(ajax.readyState === 4){
+		//Handle the response
+	} else{
+		//Show the 'Loading...'  message or  do nothing
+	}
+};
+//2.2onreadystatechange
+window.onload = function(){
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.open('GET','http://example.com',true);
+	xmlhttp.onreadystatechange = function(){
+		if(XMLHttpRequest.DONE !== xmlhttp.readyState){
+			return;
+		}
+		if(200 !== xmlhttp.status){
+			return;
+		}
+		console.log(xmlhttp.responseText);
+	};
+	xmlhttp.send();
+};
+//2.3response
+//2.4responseType
+window.onload = function(){
+	//responseType属性用来指定服务器返回数据（xhr.response）的类型
+	/* 
+	”“：字符串（默认值）
+	“arraybuffer”：ArrayBuffer对象
+	“blob”：Blob对象
+	“document”：Document对象
+	“json”：JSON对象
+	“text”：字符串 */
+	
+	//text类型适合大多数情况，而且直接处理文本也比较方便，document类型适合返回XML文档的情况，blob类型适合读取二进制数据，比如图片文件
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET','/path/to/image.png',true);
+	xhr.responseType = 'blob';
+	xhr.onload = function(){
+		if(this.status === 200){
+			var blob = new Blob([this.response],{type:'image/png'});
+			//或者
+			var blob = oReq.response;
+		}
+	};
+	xhr.send();
+	
+	//如果将这个属性设为ArrayBuffer，就可以按照数组的方式处理二进制数据。
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET','/path/to/image.png',true);
+	xhr.responseType = 'arraybuffer';
+	xhr.onload = function(){
+		var uInt8Array = new UInt8Array(this.response);
+		for(var i = 0,len = binStr.length; i < len; i++){
+			//var byte = uInt8Array[i];
+		}
+	};
+	xhr.send();
+};
+//2.5responseText
+window.onload = function(){
+	//如果服务器返回的数据格式是JSON，就可以使用responseText属性
+	var data = ajax.responseText;
+	data = JSON.parse(data);
+};
+//2.6responseXML
+windwo.onload = function(){
+	/* 返回的XML文件如下
+	  <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+	  <book>
+	      <chapter id="1">(Re-)Introducing JavaScript</chapter>
+	      <chapter id="2">JavaScript in Action</chapter>
+	  </book>
+	*/
+	var data = ajax.responseXML;
+	var chapters = data.getElementsByTagName("chapter");
+    //如果服务器返回的数据，没有明示Content-Type头信息等于text/xml，可以使用overrideMimeType()方法，
+    //指定XMLHttpRequest对象将返回的数据解析为XML
+};
+//2.7status
+window.onload = function(){
+	if(ajax.readyState === 4){
+		if((ajax.status >= 200 && ajax.status < 300) || (ajax.status === 304)){
+			//handle the response
+		}else{
+			//staus error
+		}
+	}
+};
+//2.8statusText
+//不同于status属性，该属性包含整个状态信息，比如”200 OK“。
+//2.9timeout
+window.onload = function(){
+	//不同于status属性，该属性包含整个状态信息，比如”200 OK“。
+	var xhr = new XMLHttpRequest();
+	xhr.ontimeout = function(){
+		console.error("The request for " + url + ' timed out');
+	};
+	xhr.onload = function(){
+		if(xhr.readyState === 4){
+			if(xhr.status === 200){
+				callback.apply(xhr,args);
+			}else{
+				console.error(xhr.statusText);
+			}
+		}
+	};
+	xhr.open('GET',url,true);
+	xhr.timeout = timeout;
+	xhr.send(null);
+};
+//2.10事件监听接口
+window.onload = function(){
+	//XMLHttpRequest第一版，只能对onreadystatechange这一个事件指定回调函数。
+	//该事件对所有情况作出响应。 XMLHttpRequest第二版允许对更多的事件指定回调函数
+	/* onloadstart 请求发出
+	onprogress 正在发送和加载数据
+	onabort 请求被中止，比如用户调用了abort()方法
+	onerror 请求失败
+	onload 请求成功完成
+	ontimeout 用户指定的时限到期，请求还未完成
+	onloadend 请求完成，不管成果或失败 */
+	xhr.onload = function(){
+		var responseText = xhr.responseText;
+		console.log(responseText);
+		//process the response
+	};
+	xhr.onerror = function(){
+		console.log("There was an error!");
+	};
+};
+//2.11withCredentials
+window.onload = function(){
+	//如果你需要通过跨域AJAX发送Cookie，需要打开withCredentials
+	xhr.withCredentials = true;
+	//为了让这个属性生效，服务器必须显式返回Access-Control-Allow-Credentials这个头信息
+	Access-Control-Allow-Credentials: true
+};
+//3XMLHttpRequest实例的方法
+//3.1abort()
+window.onload = function(){
+	ajax.open("GET",'http://example.com/page.php',true);
+	var ajaxAbortTimer = setTimeout(function(){
+		if(ajax){
+			ajax.abort();
+			ajax = null;
+		}
+	},5000);
+};
+//3.2getAllResponseHeaders()
+//3.3getResponseHeader()
+window.onload = function(){
+	function getHeaderTime(){
+		console.log(this.getResponseHeader('Last-Modified'));
+	}
+	var oReq = new XMLHttpRequest();
+	oReq.open('HEAD','yourpage.html');
+	oReq.onload = getHeaderTime;
+	oReq.send();
+};
+//3.4open()
+window.onload = function(){
+	//如果对使用过open()方法的请求，再次使用这个方法，等同于调用abort()
+	xhr.open("POST",encodeURI("someURL"));
+	xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+	xhr.onload = function(){};
+	xhr.send(encodeURI("dataString"));
+	//下面是一个同步AJAX请求的例子
+	var request = new XMLHttpRequest();
+	request.open('GET','/bar/foo.txt',false);
+	request.send(null);
+	if(request.status === 200){
+		console.log(request.responseText);
+	}
+};
+//3.5send()
+window.onload = function(){
+	ajax.open('GET',"http://www.example.com/somepage.php?id" + encodeURIComponent(id),true);
+	//等同于
+	var data = 'id=' + encodeURIComponent(id);
+	ajax.open('GET','http://www.example.com/somepage.php',true);
+	ajax.send(data);
+	
+	//下面是发送POST请求的例子
+	var data = 'email=' 
+	         + encodeURIComponent(email)
+	         + '&password' 
+	         + encodeURIComponent(password);
+	ajax.open('GET','http://www.example.com/somepage.php',true);
+	ajax.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+	ajax.send(data);
+	
+	//send方法的参数就是发送的数据。多种格式的数据，都可以作为它的参数
+	/* 
+	void send();
+	void send(ArrayBufferView data);
+	void send(Blob data);
+	void send(Document data);
+	void send(String data);
+	void send(FormData data); 
+	*/
+	//如果发送Document数据，在发送之前，数据会先被串行化,
+	//发送二进制数据，最好使用ArrayBufferView或Blob对象，这使得通过Ajax上传文件成为可能
+	//下面是一个上传ArrayBuffer对象的例子
+	function sendArrayBuffer(){
+		var xhr = new XMLHttpRequest();
+		var uInt8Array = new Uint8Array([1,2,3]);
+		xhr.open('POST','/server',true);
+		xhr.onload = function(e){
+			//...
+		};
+		xhr.send(uInt8Array.buffer);
+	}
+	
+	//FormData类型可以用于构造表单数据
+	var formData = new FormData();
+	formData.append('username','张三');
+	formData.append('email','zhangsan@example.com');
+	formData.append('birthDate',1940);
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST",'/register');
+	xhr.send(formData);
+	//FormData也可以将现有表单构造生成。
+	var formElement = document.querySelector("form");
+	var request = new XMLHttpRequest();
+	request.open("POST",'submitform.php');
+	request.send(new FormData(formElement));
+	//FormData对象还可以对现有表单添加数据，这为我们操作表单提供了极大的灵活性
+	function sendForm(form){
+		var formData = new FormData(form);
+		formData.append('csrf','e69a18d7db1286040586e6da1950128c');
+		
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST',form.action,true);
+		xhr.onload = function(e){
+			//...
+		};
+		xhr.send(formData);
+		return  false;
+	}
+	var form = document.querySelector("#registration");
+	sendForm(form);
+	//FormData对象也能用来模拟File控件，进行文件上传。
+	function uploadFiles(url,files){
+		var formData = new FormData();
+		for(var i = 0,file;file = files[i];i++){
+			formData.append(file.name,file);//// 可加入第三个参数，表示文件名
+		}
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST',url,true);
+		xhr.onload = function(){
+			//...
+		};
+		xhr.send(formData);//multipart/form-data
+	}
+	document.querySelector('input[type="file"]').addEventListener('change',function(e){
+		uploadFiles('/server',this.files);
+	},false);
+	
+	//FormData也可以加入JavaScript生成的文件。
+	//添加JavaScript生成的文件
+	var content = '<a id="a"><b id="b">hey!</b></a>';
+	var blob = new Blob([content],{type:'text/xml'});
+	formData.append('webmasterfile',blob);
+};
+//3.6setRequestHeader()
+window.onload = function(){
+	xhr.setRequestHeader('Content-Type','application/json');
+	xhr.setRequestHeader('Content-Length',JSON.stringify(data).length);
+	xhr.send(JSON.stringify(data));
+};
+//3.7overrideMimeType()
+window.onload = function(){
+	//传统上，如果希望从服务器取回二进制数据，就要使用这个方法，人为将数据类型伪装成文本数据
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET','/path/to/image.png'.true);
+	// 强制将MIME改为文本类型
+	xhr.overrideMimeType('text/plain;character=x-user-defined');
+	xhr.onreadystatechange = function(){
+		if(this.readyState == 4 && this.status == 200){
+			var binStr = this.responseText;
+			for(var i = 0; len = binStr.length;i < len; i++){
+				var c = binStr.charCodeAt(i);
+				var byte = c & 0xff; // 去除高位字节，留下低位字节
+			}
+		}
+	};
+	xhr.send();
+	//这种方法很麻烦，在XMLHttpRequest版本升级以后，一般采用指定responseType的方法。
+	var xhr = new XMLHttpRequest();
+	xhr.onload = function(){
+		var arraybuffer = xhr.response;
+		//...
+	};
+	xhr.open('GET',url);
+	xhr.responseType = 'arraybuffer';
+	xhr.send();
+};
+
+//4XMLHttpRequest实例的事件
+//4.1readyStateChange事件
+//4.2progress事件
+//4.3load事件,error事件,abort事件
+//4.4loadend事件
+
+//5文件上传
+
+//6Fetch API
+//6.1基本用法
+//6.2stream数据流
+//6.3fetch()
+//6.4Headers
+//6.5Request对象
+//6.6Response
+//6.7body属性
+
+//7参考链接
+</script>
+</head>
+<body>
+
+</body>
+</html>
