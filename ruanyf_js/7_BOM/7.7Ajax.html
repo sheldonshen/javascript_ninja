@@ -345,25 +345,392 @@ window.onload = function(){
 
 //4XMLHttpRequest实例的事件
 //4.1readyStateChange事件
+//readyState属性的值发生改变,就会触发readyStateChange事件，我们可以通过onReadyStateChange属性指定这个事件的回调函数
 //4.2progress事件
+function upload(blobOrFile){
+	var xhr = new XMLHttpRequest();
+	xhr.open('POST','/server',true);
+	xhr.onload = function(e){
+		//...
+	};
+	
+	//Listen to the upload progress
+	var progressBar = document.querySelector('progress');
+	xhr.upload.onprogress = function(e){
+		if(e.lengthComputable){
+			progressBar.value = (e.loaded / e.total) * 100;
+			progressBar.textContent = progressBar.value;//// Fallback for unsupported browsers.
+		}
+	};
+	xhr.send(blobOrFile);
+}
+upload(new Blob(['hello world'],{type:'text/plain'}));
 //4.3load事件,error事件,abort事件
+window.onload = function(){
+	var xhr = new XMLHttpRequest();
+	xhr.addEventListener('progress',updateProgress);
+	xhr.addEventListener('load',transferComplete);
+	xhr.addEventListener('error',transferFailed);
+	xhr.addEventListener("abort",transferCanceled);
+	xhr.open();
+	
+	function updataProgress(evt){
+	   if(evt.lengthCompute){
+		   var percentComplete = evt.loaded / evt.total;
+	   }else{
+		   // 回应的总数据量未知，导致无法计算百分比
+	   }	
+	}
+	
+	function transferComplete(evt) {
+	  console.log("The transfer is complete.");
+	}
+
+	function transferFailed(evt) {
+	  console.log("An error occurred while transferring the file.");
+	}
+
+	function transferCanceled(evt) {
+	  console.log("The transfer has been canceled by the user.");
+	}
+};
 //4.4loadend事件
+//abort、load和error这三个事件，会伴随一个loadend事件，表示请求结束，但不知道其是否成功
+window.onload = function(){
+   	req.addEventListener('loadend',loadEnd);
+   	function loadEnd(e){
+   		window.alert("请求结束（不知道是否成功）");
+   	}
+};
 
 //5文件上传
+window.onload = function(){
+	//得到FileList
+	var fileSelect = document.getElementById("file-select");
+	var files = fileSelect.files;//FileList对象
+	//然后，新建一个FormData对象的实例，用来模拟发送到服务器的表单数据，把选中的文件添加到这个对象上面
+	var formData = new FormData();
+	for(var i = 0; i < files.length; i++){
+		var file = files[i];
+		if(!file.type.match("image.*")){
+			continue;
+		}
+		formData.append('photos[]',file,file.name);
+		//formData.append(name,file,filename);//Files
+		//formData.append(name,blob,filename);//Blobs
+		//formData.append(name,value);//Strings
+	}
+	//最后，使用Ajax方法向服务器上传文件。
+	var xhr = new XMLHttpRequest();
+	xhr.open('POST','handler.php',true);
+	xhr.onload = function(){
+		if(xhr.status !== 200){
+			window.alert('An error occurred!');
+		}
+	};
+	xhr.send(formData);//Ajax上传文件
+	//除了使用FormData接口上传，也可以直接使用File API上传
+	var file = document.getElementById("test-input").files[0];
+	var xhr = new XMLHttpRequest();
+	xhr.open('POST','myserver/uploads');
+	xhr.setRequestHeader("Content-Type",file.type);
+	xhr.send(file);
+};
 
 //6Fetch API
 //6.1基本用法
+window.onload = function(){
+	//Fetch API是一种新规范，用来取代XMLHttpRequest对象
+	/* 它主要有两个特点，一是接口合理化，Ajax是将所有不同性质的接口都放在XHR对象上，而Fetch是将它们分散在几个不同的对象上，设计更合理；
+	二是Fetch操作返回Promise对象，避免了嵌套的回调函数。 */
+	
+	//下面的代码检查浏览器是否部署了Fetch API
+	if(fetch in window){
+		window.alert("支持");
+	}else{
+		window.alert("不支持");
+	}
+	
+	//下面是一个Fetch API的简单例子。
+	fetch(url).then(function(response){
+		return response.json();
+	}).then(function(jsonData){
+		console.log(jsonData);
+	}).catch(function(){
+		console.log("出错了");
+	});
+	//注意，fetch方法返回的是一个Promise对象
+	//作为比较，XMLHttpRequest的写法如下。
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET",url);
+	xhr.responseType = 'json';
+	xhr.onload = function(){
+		console.log(xhr.response);
+	};
+	xhr.onerror = function(){
+		console.log('出错了');
+	};
+	xhr.send();
+};
 //6.2stream数据流
+window.onload = function(){
+	response.text().then(function(responseText){
+		console.log(responseText);
+	});
+	//Fetch API提供以下五个数据流读取器
+	/* .text()：返回字符串
+	.json()：返回一个JSON对象
+	.formData()：返回一个FormData对象
+	.blob()：返回一个blob对象
+	.arrayBuffer()：返回一个二进制数组 */
+	var url = 'LargeFile.txt';
+	var progress = 0;
+	var contentLength = 0;
+	fetch(url).then(function(response){
+		//本次请求总的数据长度
+		contentLength = response.headers.get('Content-Length');
+		var getStream = function(reader){};
+		return getStream(response.body.getReader());
+	}).catch(function(error){
+		console.log(error);
+	});
+	
+	var progress = 0;
+	var contentLength = 0;
+	var getStream = function(reader){
+		return reader.read().then(function(result){
+			// 如果数据已经读取完毕，直接返回
+			if(result.done){
+				return;
+			}
+			 // 取出本段数据（二进制格式）
+			 var chunk = result.value;
+			 var text = '';
+			 // 假定数据是UTF-8编码，前三字节是数据头，
+			 // 而且每个字符占据一个字节（即都为英文字符）
+			 for(var i = 3; i < chunk.byteLength; i++){
+				 text += String.fromCharCode(chunk[i]);
+			 }
+			 //将本段数据追加到网页之中
+			 document.getElementById("content").innerHTML += text;
+			 // 计算当前进度
+			 progress += chunk.byteLength;
+			 console.log(((progress / contentLength) * 100) + '%');
+			 
+			 // 递归处理下一段数据
+			 return getStream(reader);
+		});
+	};
+};
 //6.3fetch()
+window.onload = function(){
+	//判断请求是否成功的代码可以写成下面这样
+	fetch("./api/some.json").then(function(response){
+		if(response.ok){
+			resonse.json().then(function(data){
+				console.log(data);
+			});
+		}else{
+			console.log("请求失败,状态码为",response.status);
+		}
+	},function(err){
+		console.log("出错:",err);
+	});
+	
+	fetch("user.json").then(function(response){
+		console.log(response.headers.get('Content-Type'));
+		console.log(response.headers.get("Date"));
+		console.log(response.status);
+		console.log(response.statusText);
+		console.log(response.type);
+		console.log(response.url);
+	});
+	
+	//如果需要在CORS机制下发出跨域请求，需要指明状态。
+	fetch("http://some-site.com/cors-enabled/some.json",{mode:'cors'})
+	     .then(function(response){
+	    	 return response.text();
+	     })
+	     .then(function(text){
+	    	 console.log('Request successful',text);
+	     })
+	     .catch(function(err){
+	    	 console.log('Request failed',error);
+	     });
+	fetch(url,{
+		credentials:'include'
+	});
+	//发出POST请求的写法如下
+	fetch("http://www.example.org/submit.php",{
+		method:'POST',
+		headers:{
+			"Content-Type":"application/x-www-form-urlencoded"
+		},
+		body:'firstName=Nikhil&favColor=blue&password=easytoguess'
+	}).then(function(res){
+		if(res.ok){
+			console.log("Perfect!Your settings are saved.");
+		}else if(res.status === 401){
+			console.log("Oops!You are not authorized");
+		}
+	},function(err){
+		console.log("Error submitting form!");
+	});
+	//目前，还有一些XMLHttpRequest对象可以做到，但是Fetch API还没做到的地方，比如中途中断HTTP请求，
+	//以及获取HTTP请求的进度。这些不足与Fetch返回的是Promise对象有关
+};
 //6.4Headers
+window.onload = function(){
+//Fetch API引入三个新的对象（也是构造函数）：Headers, Request和Response。其中，Headers对象用来构造/读取HTTP数据包的头信息
+  var content = 'Hello World';
+  var headers = new Headers();
+  headers.append('Accept',"application/json");
+  headers.append('Content-Type','text/plain');
+  headers.append('Content-Length',content.length.toString());
+  headers.append('X-Custom-Header','ProcessThisImmediately');
+  
+  var reqHeaders = new Headers({
+	  "Content-Type":'text/plain';
+      "Content-Length":content.length.toString(),
+      'X-Custom-Header':"ProcessThisImmediately"
+  });
+  
+    //Headers对象实例还提供了一些工具方法。
+    reqHeaders.has("Content-Type") // true
+	reqHeaders.has("Set-Cookie") // false
+	reqHeaders.set("Content-Type", "text/html")
+	reqHeaders.append("X-Custom-Header", "AnotherValue")
+	
+	reqHeaders.get("Content-Length") // 11
+	reqHeaders.getAll("X-Custom-Header") // ["ProcessThisImmediately", "AnotherValue"]
+	
+	reqHeaders.delete("X-Custom-Header")
+	reqHeaders.getAll("X-Custom-Header") // []
+    
+    //生成Header实例以后，可以将它作为第二个参数，传入Request方法
+    var headers = new Headers();
+    headers.append("Accept",'application/json');
+    var request = new Request(URL,{headers:headers});
+    fetch(request).then(function(response){
+    	console.log(response.headers);
+    });
+    
+    //同样地，Headers实例可以用来构造Response方法。
+    var headers = new Headers({
+    	'Content-Type':'application/json',
+    	'Cache-Control':'max-age=3600'
+    });
+    
+    var response = new Response(
+    		JSON.stringify({photos:{photo:[]}}),
+    		{'status':200,headers:headers}
+    );
+    
+    response.json().then(function(json){
+    	insertPhotos(json);
+    });
+};
 //6.5Request对象
+window.onload = function(){
+	var req = new Request('/index.html');
+	window.alert(req.method);
+	window.alert(req.url);
+	var uploadReq = new Request('/uploadImage',{
+		method:"POST",
+		headers:{
+			"Content-Type":'image/png',
+		},
+		body:"image data"
+	});
+	
+	var req = new Request(URL,{method:"GET",cache:'reload'});
+	fetch(req).then(function(response){
+		return response.json();
+	}).then(function(json){
+		someOperator(json);
+	});
+	
+	var arbitraryUrl = document.getElementByiId('url-input').value;
+	fetch(arbitraryUrl,{mode:'some-origin'}).then(function(res){
+		console.log("Response succeeded?", res.ok);
+	},function(e){
+		console.log("Please enter a same-origin URL!");
+	});
+	
+	var u = new URLSearchParams();
+	u.append('method','flickr.interestingness.getList');
+	u.append('api_key','<insert api key there');
+	u.append('format','json');
+	u.append('nojsoncallback','1');
+	var apiCall = fetch('https://api.flickr.com/services/rest?' + u);
+	apiCall.then(function(response){
+		return response.json().then(function(json){
+			 // photo is a list of photos.
+			 return json.photos.photo;
+		});
+	}).then(function(photos){
+		photos.forEach(function(photo){
+			console.log(photo.title);
+		});
+	});
+	
+	//Request对象的一个很有用的功能，是在其他Request实例的基础上，生成新的Request实例
+	var postReq = new Request(req,{method:'POST'});
+};
 //6.6Response
+window.onload = function(){
+	fetch("http://example.com",init).then(function(response){
+		// Check that the response is a 200
+		if(response.status === 200){
+			window.alert("Content-Type:" + response.headers.get('Content-Type'));
+		}
+	});
+};
 //6.7body属性
-
+window.onload = function(){
+	var form = new FormData(document.getElementById('login-form'));
+	fetch('/login',{
+		method:'POST',
+		body:form
+	});
+	
+	var res = new Response("one time use");
+	console.log(res.bodyUsed);//false
+	res.text().then(function(v){
+		console.log(res.bodyUsed);//true
+	});
+	console.log(res.bodyUsed);//true
+	res.text().catch(function(e){
+		console.log("Tried to read already consumed Response");
+	});
+	
+	window.addEventListener('fetch',function(evt){
+		var sheep = new Response('Dolly');
+		console.log(sheep.bodyUsed);//false
+		var clone = sheep.clone();
+		console.log(sheep.bodyUsed);//false
+		
+		cone.text();
+		console.log(sheep.bodyUsed);//false
+		console.log(clone.bodyUsed);//true
+		evt.responseWith(cache.add(sheep.clone()).then(function(e){
+			return sheep;
+		});
+	});
+};
 //7参考链接
 </script>
 </head>
 <body>
-
+<progress max="100" min='0' value="0">0% complete</progress>
+<!-- HTML网页的<form>元素能够以四种格式，向服务器发送数据 -->
+<form action='register.php' method='post' enctype="application/x-www-form-urlencoded" onsubmit="AJAXSubmit(this);return false;"></form>
+<form action="register.php" method='post' enctype="text/plain" onsubmit="AJAXSubmit(this);return false;"></form>
+<form action="register.php" method='post' enctype="multipart/form-data" onsubmit="AJAXSubmit(this);return false;"></form>
+<form action="register.php" method="get" onsubmit="AJAXSubmit(this);return false;"></form>
+<form id="file-form" action="handler.php" method="POST">
+  <input type="file" id="file-select" name="photos[]" multiple/>
+  <button type="submit" id="upload-button">上传</button>
+</form>
 </body>
 </html>
