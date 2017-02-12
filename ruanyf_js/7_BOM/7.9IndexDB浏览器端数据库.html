@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>IndexDB浏览器端数据库</title>
+<script type="text/javascript">
+//1概述
+window.onload = function(){
+	//就数据库类型而言，IndexedDB不属于关系型数据库（不支持SQL查询语句），更接近NoSQL数据库
+	//IndexDB具有以下特点
+	//(1)键值对存储
+	//(2)异步
+	//(3)支持事务
+	//(4)同域限制 IndexedDB也受到同域限制,每一个数据库对应创建该数据库的域名
+	//(5)储存空间大 IndexedDB的储存空间比localStorage大得多，一般来说不少于250MB
+	//(6)支持二进制储存
+	
+	//下面的代码用来检查浏览器是否支持这个API
+	if("indexDB" in window){
+		//支持
+	}else{
+		//不支持
+	}
+};
+
+//2indexDB.open方法
+window.onload = function(){
+	var openRequest = window.indexDB.open('test',1);
+	var db;
+	openRequest.onupgradeneeded = function(e){
+		console.log("Upgrading...");
+	};
+	openRequest.onsuccess = function(e){
+		console.log('Success!');
+		db = e.target.result;
+	};
+	openRequest.onerror = function(){
+		console.log("Error");
+		console.dir(e);
+	};
+};
+//3indexDB实例对象的方法
+//3.1createObjectStore方法
+window.onload = function(){
+	db.createObjectStore("firstOS");
+	db.createObjectStore('test',{keyPath:"email"});
+	db.createObjectStore('test2',{autoIncrement:true});
+};
+//3.2objectStoreNames属性
+window.onload = function(){
+	if(!db.objectStoreNames.contains("firstOS")){
+		db.createObjectStore("firstOS");
+	}
+};
+//3.3transaction方法
+window.onload = function(){
+	var t = db.transaction(["firstOS"],'readwrite');
+	var store = t.objectStore("firstOS");
+	
+	var transaction = db.transaction(['note','readonly']);
+	transaction.oncomplete = function(event){
+		//some code
+	};
+	//（1）添加数据：add方法
+	var store = t.objectStore("firstOS");
+	var o = {p:123};
+	var result = store.add(o,1);
+	//add方法是异步的，有自己的success和error事件，可以对这两个事件指定回调函数
+	var request = store.add(o,1);
+	request.onerror = function(e){
+		console.log('Error',e.target.error.name);
+		//error handler
+	};
+	request.onsuccess = function(e){
+		console.log("数据添加成功！");
+	}; 
+	//（2）读取数据：get方法
+	var t = db.transaction(["test"],'readonly');
+	var store = t.objectStore("test");
+	var ob = store.get(x);
+	//get方法也是异步的，会触发自己的success和error事件，可以对它们指定回调函数
+	ob.onsuccess = function(e){
+		//...
+	};
+	//从创建事务到读取数据，所有操作方法也可以写成下面这样链式形式。
+	db.transaction(['test','readonly']).objectStore("test").get(x).onsuccess = function(e){};
+	//（3）更新记录：put方法
+	var o = {p:456};
+	var request = store.put(o,1);
+	//（4）删除记录：delete方法
+	var t = db.transaction(['people'],'readwrite');
+	var request = t.objectStore("people").delete(thisId);
+	//delete方法的参数是数据的键名。另外，delete也是一个异步操作，可以为它指定回调函数
+	//(5)遍历数据：openCursor方法
+	var t = db.transaction(['test'],'readonly');
+	var store = t.objectStore("test");
+	var cursor = store.openCursor();
+	//openCursor方法也是异步的，有自己的success和error事件，可以对它们指定回调函数。
+	cursor.onsuccess = function(e){
+		var res = e.target.result;
+		if(res){
+			console.log("Key",res.key);
+			console.dir("Data",res.value);
+			res.continue();
+		}
+	};
+};
+//3.4createIndex方法
+window.onload = function(){
+	
+};
+//3.5index方法
+//4IDBKeyRange对象
+//5参考链接
+</script>
+</head>
+<body>
+
+</body>
+</html>
