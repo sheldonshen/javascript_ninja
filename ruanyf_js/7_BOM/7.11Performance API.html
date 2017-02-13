@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Performance API</title>
+<script type="text/javascript">
+//Performance API用于精确度量、控制、增强浏览器的性能表现。这个API为测量网站性能，提供以前没有办法做到的精度
+window.onload = function(){
+	var start = new Date().getTime();
+	//do something here
+	var now   = new Date().getTime();
+	var latency = now - start;
+	console.log("任务运行时间:" + latency);
+};
+//1performance.timing对象
+window.onload = function(){
+	window.alert(Date.now() - performance.timing.navigationStart);
+	var t = performance.timing;
+	var pageloadtime = t.loadEventStart - t.navigationStart;
+	var dns = t.domainLookupEnd - t.domainLoopupStart;
+	var tcp = t.connectEnd - t.connectStart;
+	var ttfb = t.responseStart - t.navigationStart;
+};
+//2performance.now()
+window.onload = function(){
+	window.alert(performance-now());
+	window.alert(Date.now() - (performance.timing.navigationStart + performance.now()));
+	//通过两次调用performance.now方法，可以得到间隔的准确时间，用来衡量某种操作的耗时
+	var start = performance.now();
+	doTasks();
+	var end = performance.now();
+	console.log('耗时:' + (end - start) + '微妙');
+};
+//3performance.mark()
+window.onload = function(){
+	window.performance.mark('mark_fully_loaded');
+	window.performance.clearMarks("mark_fully_loaded");
+	window.performance.clearMarks();
+};
+//4performance.getEntries()
+window.onload = function(){
+	window.performance.getEntries()[0];
+	// PerformanceResourceTiming { 
+	//  responseEnd: 4121.6200000017125, 
+	//  responseStart: 4120.0690000005125, 
+	//  requestStart: 3315.355000002455, 
+	//  ...
+	//}
+};
+//5performance.navigation对象
+window.onload = function(){
+	//（1）performance.navigation.type
+	//（2）performance.navigation.redirectCount
+};
+//6参考链接
+</script>
+</head>
+<body>
+</body>
+</html>
