@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Web Notification API</title>
+<script type="text/javascript">
+//1概述
+//Notification API是浏览器的通知接口，用于在用户的桌面（而不是网页上）显示通知信息，桌面电脑和手机都适用
+window.onload = function(){
+	//下面的代码用于检查浏览器是否支持这个API。
+	if(window.Notification){
+		window.alert("支持");
+	}else{
+		window.alert("不支持");
+	}
+	//目前，Chrome和Firefox在桌面端部署了这个API，Firefox和Blackberry在手机端部署了这个API。
+	if(window.Notification && Notification.permission !== 'denied'){
+		Notification.requestPermission(function(status){
+			var n = new Notification('通知标题',{body:'这里是通知内容!'});
+		});
+	}
+	//上面代码检查当前浏览器是否支持Notification对象，并且当前用户准许使用该对象，
+	//然后调用Notification.requestPermission方法，向用户弹出一条通知
+};
+//2Notification对象的属性和方法
+//2.1Notification.permission
+window.onload = function(){
+	//Notification.permission属性，用于读取用户给予的权限，它是一个只读属性，它有三种状态
+	/* default：用户还没有做出任何许可，因此不会弹出通知。
+	granted：用户明确同意接收通知。
+	denied：用户明确拒绝接收通知。 */
+};
+//2.2Notification.requestPermission()
+window.onload = function(){
+	Notification.requestPermisson(function(status){
+		if(status === 'granted'){
+			var n = new Notification("HI!");
+		}else{
+			window.alert("HI!");
+		}
+	});
+};
+//3Notification实例对象
+//3.1Notification构造函数
+window.onload = function(){
+	//下面是一个生成Notification实例对象的例子。
+	var notification = new Notification("收到新邮件",{
+		body:'您总共有3封未读邮件'
+	});
+	window.alert(notification.title);
+	window.alert(notification.body);
+	//notification.title // "收到新邮件"
+	//notification.body // "您总共有3封未读邮件。"
+};
+//3.2实例对象的事件
+window.onload = function(){
+	//Notification实例会触发以下事件。
+	/* show：通知显示给用户时触发。
+	click：用户点击通知时触发。
+	close：用户关闭通知时触发。
+	error：通知出错时触发（大多数发生在通知无法正确显示时）。 */
+	notification.onshow = function(){
+		console.log("Notification  show");
+	};
+};
+//3.3close方法
+window.onload = function(){
+	var n = new Notification("HI!");
+	//手动关闭
+	n.close();
+	//自动关闭
+    n.onclose = function(){
+		setTimeout(n.close.bind(n),5000);
+	};
+};
+//4参考链接
+</script>
+</head>
+<body>
+</body>
+</html>
