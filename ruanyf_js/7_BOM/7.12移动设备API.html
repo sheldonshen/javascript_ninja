@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>移动设备API</title>
+<script type="text/javascript">
+//为了更好地为移动设备服务，HTML 5推出了一系列针对移动设备的API
+//1Permission API
+window.onload = function(){
+	//很多操作需要用户许可，比如脚本想要知道用户的位置，或者操作用户机器上的摄像头
+	//// 查询地理位置接口的许可情况
+	navigation.permissions.query({name:'geolocation'}).then(function(result){
+		  // 状态为 prompt，表示查询地理位置时，
+		  // 用户会得到提示，是否许可本次查询
+		  /* result.status = "prompt" */
+
+		  // 状态为 granted，表示用户已经给予了许可
+		  /* result.status = "granted" */
+	});
+};
+//2Viewport
+window.onload = function(){
+	//viewport缩放规则，需要在HTML网页的head部分指定。
+	<meta name='viewport' content='width=divice-with,initial-scale=1.0,user-scalable=no'/>
+	<meta name = "viewport" content = "width = 320,  initial-scale = 2.3, user-scalable = no">
+};
+//3Geolocation API
+window.onload = function(){
+	//下面的方法，可以检查浏览器是否支持这个接口。
+	if(navigator.geolocation){
+		//支持
+	}else{
+		//不支持
+	}
+	//3.1 getCurrentPosition方法
+	navigator.geolocation.getCurrentPosition(geoSuccess,geoError);
+	//(1)同意授权
+	function geoSuccess(event){
+		console.log(event.coords.latitude + "," + event.coords.longitude);
+	}
+	//3.2 watchPosition方法和clearWatch方法
+};
+//4Vibration API
+//5Luminosity API
+//6Orientation API
+//7参考链接
+</script>
+</head>
+<body>
+
+</body>
+</html>
