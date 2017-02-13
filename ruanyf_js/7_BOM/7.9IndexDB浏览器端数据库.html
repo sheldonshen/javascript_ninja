@@ -107,10 +107,57 @@ window.onload = function(){
 };
 //3.4createIndex方法
 window.onload = function(){
-	
+	  var person = {
+			  name:name,
+			  email:email,
+			  created:new Date()
+	  };
+	  var store = db.createObjectStore("people",{autoIncrement:true});
+	  store.createIndex("name",'name',{unique:false});
+	  store.createIndex('email','email',{unique:true});
 };
 //3.5index方法
+window.onload = function(){
+	var t = db.transaction(["people"],'readonly');
+	var store = t.objectStore("people");
+	var index = store.index('name');
+	var request = index.get(name);
+	//另外，get是异步方法，读取成功以后，只能在success事件的回调函数中处理数据。
+};
 //4IDBKeyRange对象
+widow.onload = function(){
+	// All keys ≤ x	
+	var r1 = IDBKeyRange.upperBound(x);
+	// All keys < x	
+	var r2 = IDBKeyRange.upperBound(x,true);
+	// All keys ≥ y	
+	var r3 = IDBKeyRange.lowerBound(y);
+	// All keys > y
+	var r4 = IDBKeyRange.lowerBound(y,true);
+	// All keys ≥ x && ≤ y	
+	var r5 = IDBKeyRange.bound(x,y);
+	// All keys > x &&< y	
+	var r6 = IDBKeyRange.bound(x,y,true,true);
+	// All keys > x && ≤ y
+	var r7 = IDBKeyRange.bound(x,y,true,false);
+	// The key = z	
+	var r9 = IDBKeyRange.only(z);
+	//生成Range对象以后，将它作为参数输入openCursor方法，就可以在所设定的范围内读取数据
+	var t = db.transaction(['people'],'readonly');
+	var store = t.objectStore('people');
+	var index = store.index('name');
+	var range = IDBKeyRange.bound("B","D");
+	index.openCursor(range).onsuccess = function(e){
+		var cursor = e.target.result;
+		if(cursor){
+			console.log(cursor.key + ":");
+			for(var field in cursor.value){
+			   console.log(cursor.value[field]);
+			}
+			cursor.continue();
+		}
+	};
+};
 //5参考链接
 </script>
 </head>
