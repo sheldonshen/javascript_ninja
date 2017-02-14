@@ -38,11 +38,98 @@ window.onload = function(){
 	function geoSuccess(event){
 		console.log(event.coords.latitude + "," + event.coords.longitude);
 	}
+	//（2）拒绝授权
+	function geoError(event){
+		console.log("Error code " + event.code + '.' + event.message);
+	}
+	// (3)设置定位行为
+	var option = {
+			enableHighAccuracy:true,
+			timeout:Infinity,
+			maximumage:0
+	};
+	navigator.geolocation.getCurrentPosition(geoSuccess,geoError,option);
 	//3.2 watchPosition方法和clearWatch方法
+	var watchID = navigator.geolocation.watchPosition(geoSuccess,geoError,option);
+	//watchPosition方法返回的标识符，用于供clearWatch方法取消监听
+	navigator.clearWatch(watchID);
 };
 //4Vibration API
+window.onload = function(){
+	//使用下面的代码检查该接口是否可用。目前，只有Chrome和Firefox的Android平台最新版本支持它
+	navigator.vibrate = navigator.vibrate || navigator.webkitVibrate
+                                          || navigator.mozVibrate
+                                          || navigator.msVibrate;
+	if(navigator.vibrate){
+		//支持
+	}
+	//vibrate方法可以使得设备振动，它的参数就是振动持续的毫秒数
+	navigator.vibrate(1000);
+	navigator.vibrate([500,300,100]);
+	//vibrate是一个非阻塞式的操作，即手机振动的同时，JavaScript代码继续向下运行。要停止振动，只有将0毫秒或者一个空数组传入vibrate方法
+	navigator.vibrate(0);
+	navigator.vibrate([]);
+	//如果要让振动一直持续，可以使用setInterval不断调用vibrate。
+	var vibrateInterval;
+	function startVibrate(duration){
+		navigator.vibrate(duration);
+	}
+	function stopVibrate(){
+		if(vibrateInterval){
+			clearInterval(vibrateInterval)
+		}
+		navigator.vibrate(0);
+	}
+	function startPersistentVibrate(duration,interval){
+		vibrateInterval = setInterval(function(){
+			startVibrate(duration);
+		},interval);
+	}
+}
 //5Luminosity API
+window.onload = function(){
+	window.addEventListener("devicelight",function(event){
+		console.log(event.value + 'lux');
+	});
+	window.addEventListener('devicelight',function(e){
+		var lux = e.value;
+		if(lux < 50){
+			document.body.className = 'dim';
+		}
+		if(lux >= 50 && lux <= 1000){
+			document.body.className = 'normal';
+		}
+		if(lux > 1000){
+			document.body.className = 'bright';
+		}
+	});
+	//CSS下一个版本的Media Query可以单独设置亮度，一旦浏览器支持，就可以用来取代Luminosity API。
+	@media (light-level:dim) {
+		/*暗光环境 */
+	}
+	@media (light-level:normal) {
+		/*正常光环境 */
+	}
+	@media (light-level:bright) {
+		/*明亮环境*/
+	}
+};
 //6Orientation API
+window.onload = function(){
+	//使用下面的代码检测浏览器是否支持该API
+	if(window.DeviceOrientationEvent){
+		//支持
+	}else{
+		//不支持
+	}
+	//一旦设备的方向发生变化，会触发deviceorientation事件，可以对该事件指定回调函数
+	window.addEventListener('deviceorientation',callback);
+	function callback(event){
+		console.log(event.alpha);
+		console.log(event.beta);
+		console.log(event.gamma);
+	}
+};
 //7参考链接
 </script>
 </head>
