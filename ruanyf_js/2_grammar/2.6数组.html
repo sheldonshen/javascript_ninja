@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>数组</title>
+<script type="text/javascript">
+//1数组的定义
+window.onload = function(){
+	//任何类型的数据，都可以放入数组
+	var arr = [
+	    {a:1},
+	    [1,2,3],
+	    function(){
+	    	return true;
+	    }
+	];
+	var a = [[1,2],[3,4]];
+};
+//2数组的本质
+window.onload = function(){
+	//本质上,数组属于一种特殊的对象
+	window.alert(typeof [1,2,3]);
+	//数组的特殊性体现在，它的键名是按次序排列的一组整数（0，1，2…）
+	var arr = ['a','b','c'];
+	window.alert(Object.keys(arr));//["0", "1", "2"]
+	//由于数组成员的键名是固定的，因此数组不用为每个元素指定键名，而对象的每个成员都必须指定键名
+	//JavaScript语言规定，对象的键名一律为字符串，所以，数组的键名其实也是字符串。之所以可以用数值读取，
+	//是因为非字符串的键名会被转为字符串
+	var arr = ['a', 'b', 'c'];
+	arr['0'] // 'a'
+	arr[0] // 'a'
+	
+	var a = [];
+
+	a['1000'] = 'abc';
+	a[1000] // 'abc'
+
+	a[1.00] = 6;
+	a[1] // 6
+	//上面代码表明，由于字符串“1000”和浮点数1.00都可以转换为整数，所以视同为整数键赋值
+	
+	var arr = [1, 2, 3];
+    //arr.0 // SyntaxError
+    //上面代码中，arr.0的写法不合法，因为单独的数值不能作为标识符（identifier）。
+    //所以，数组成员只能用方括号arr[0]表示（方括号是运算符，可以接受数值）
+};
+//3length属性
+window.onload = function(){
+	//只要是数组，就一定有length属性。该属性是一个动态的值
+	var arr = ['a','b'];
+	window.alert(arr.length);//2
+	arr[2]='c';
+	window.alert(arr.length);//3
+	arr[9]='d';
+	window.alert(arr.length);//10
+	arr[1000]='e';
+	window.alert(arr.length);//1001
+	//数组是一种动态的数据结构，可以随时增减数组的成员
+	var arr = [ 'a', 'b', 'c' ];
+	arr.length // 3
+	
+	arr.length = 2;
+	arr // ["a", "b"]
+	//将数组清空的一个有效方法，就是将length属性设为0
+	var arr = ['a','b','c'];
+	arr.length = 0;
+	arr;//[]
+	//值得注意的是，由于数组本质上是对象的一种，所以我们可以为数组添加属性，但是这不影响length属性的值。
+	var a = [];
+
+	a['p'] = 'abc';
+	a.length // 0
+	
+	a[2.1] = 'abc';
+	a.length // 0
+	//如果数组的键名是添加超出范围的数值，该键名会自动转为字符串
+	var arr = [];
+	arr[-1] = 'a';
+	arr[Math.pow(2, 32)] = 'b';
+	
+	arr.length // 0
+	arr[-1] // "a"
+	arr[4294967296] // "b"
+};
+//4类似数组的对象
+window.onload = function(){
+	var obj = {
+			0:'a',
+			1:'b',
+			2:'c',
+			length:3
+	};
+	window.alert(obj[0]);
+	window.alert(obj[2]);
+	window.alert(obj.length);
+	window.alert(obj.push('d'));//TypeError: obj.push is not a function
+	//类似数组的对象只有一个特征，就是具有length属性。换句话说，只要有length属性，就可以认为这个对象类似于数组。
+	//但是，对象的length属性不是动态值，不会随着成员的变化而变化
+	
+	//典型的类似数组的对象是函数的arguments对象，以及大多数DOM元素集，还有字符串
+	
+};
+//5in运算符
+//6for...in循环和数组的遍历
+//7数组的空位
+//8参考链接
+</script>
+</head>
+<body>
+</body>
+</html>
