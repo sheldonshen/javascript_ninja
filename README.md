@@ -43,6 +43,7 @@ http://chimera.labs.oreilly.com/books/1234000001623 JS.next: A Manager’s Guide
 http://chimera.labs.oreilly.com/books/1234000000262 Programming JavaScript Applications<br>
 http://www.kancloud.cn/dennis/tgjavascript/241800   TG JavaScript半知半解<br>
 http://www.kancloud.cn/dennis/javascriptmethod/261471 TG Web开发实战<br>
+http://www.kancloud.cn/search?keyword=javascript  看云javascript在线书<br>
 #books
 ##初级读物：
 《JavaScript高级程序设计》：一本非常完整的经典入门书籍，被誉为JavaScript圣经之一，详解的非常详细，最新版第三版已经发布了，建议购  买。<br>
