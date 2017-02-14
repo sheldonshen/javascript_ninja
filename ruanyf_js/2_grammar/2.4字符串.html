@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>字符串</title>
+<script type="text/javascript">
+//1概述
+//1.1定义
+//1.2转义
+//1.3字符串和数组
+window.onload = function(){
+	//字符串也无法直接使用数组的方法，必须通过call方法间接使用
+	var s = 'hello';
+
+	s.join(' ') // TypeError: s.join is not a function
+	
+	Array.prototype.join.call(s, ' ') // "h e l l o"
+	//不过，由于字符串是只读的，那些会改变原数组的方法，比如push()、sort()、reverse()、splice()都对字符串无效，
+	//只有将字符串显式转为数组后才能使用
+};
+//1.4length属性
+window.onload = function(){
+	//length属性返回字符串的长度，该属性也是无法改变的
+	var s = 'hello';
+	s.length // 5
+	
+	s.length = 3;
+	s.length // 5
+	
+	s.length = 7;
+	s.length // 5
+	//上面代码表示字符串的length属性无法改变，但是不会报错。
+};
+//2字符集
+window.onload = function(){
+	//JavaScript使用Unicode字符集。也就是说，在JavaScript引擎内部，所有字符都用Unicode表示
+	//下面是能够正确处理字符串遍历的函数。
+	function getSymbols(string) {
+		  var length = string.length;
+		  var index = -1;
+		  var output = [];
+		  var character;
+		  var charCode;
+		  while (++index < length) {
+		    character = string.charAt(index);
+		    charCode = character.charCodeAt(0);
+		    if (charCode >= 0xD800 && charCode <= 0xDBFF) {
+		      output.push(character + string.charAt(++index));
+		    } else {
+		      output.push(character);
+		    }
+		  }
+		  return output;
+		}
+
+		var symbols = getSymbols('𝌆');
+
+		symbols.forEach(function(symbol) {
+		  // ...
+		});
+}
+//3Base64转码
+window.onload = function(){
+	//JavaScript原生提供两个Base64相关方法。
+	/* btoa()：字符串或二进制值转为Base64编码
+	atob()：Base64编码转为原来的编码 */
+	var string = 'Hello World!';
+	//window.alert(btoa(string)); // "SGVsbG8gV29ybGQh"
+	//window.alert(atob('SGVsbG8gV29ybGQh')); // "Hello World!"
+	
+	function b64Encode(str) {
+	  return btoa(encodeURIComponent(str));
+	}
+
+	function b64Decode(str) {
+	  return decodeURIComponent(atob(str));
+	}
+
+	window.alert(b64Encode('你好')); // "JUU0JUJEJUEwJUU1JUE1JUJE"
+	window.alert(b64Decode('JUU0JUJEJUEwJUU1JUE1JUJE')); // "你好"
+};
+
+//4参考链接
+</script>
+</head>
+<body>
+
+</body>
+</html>
