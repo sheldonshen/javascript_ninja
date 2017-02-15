@@ -90,19 +90,90 @@ window.onload = function(){
 			2:'c',
 			length:3
 	};
-	window.alert(obj[0]);
-	window.alert(obj[2]);
-	window.alert(obj.length);
-	window.alert(obj.push('d'));//TypeError: obj.push is not a function
+	//window.alert(obj[0]);
+	//window.alert(obj[2]);
+	//window.alert(obj.length);
+	//window.alert(obj.push('d'));//TypeError: obj.push is not a function
+	
 	//类似数组的对象只有一个特征，就是具有length属性。换句话说，只要有length属性，就可以认为这个对象类似于数组。
 	//但是，对象的length属性不是动态值，不会随着成员的变化而变化
 	
 	//典型的类似数组的对象是函数的arguments对象，以及大多数DOM元素集，还有字符串
-	
+	//arguments对象
+	function args(){
+		return arguments;
+	};
+	var arrayLike = args('a','b');
+	window.alert(arrayLike[0]);
+	window.alert(arrayLike.length);
+	window.alert(arrayLike instanceof Array);//false
+	//DOM元素集
+	var elts = document.getElementsByTagName('h1');
+	window.alert(elts.length);
+	window.alert(elts instanceof Array);//false
+	//字符串
+	'abc'[1] // 'b'
+	'abc'.length // 3
+	'abc' instanceof Array // false
+	//数组的slice方法将类似数组的对象，变成真正的数组
+	Array.prototype.slice.call(arrayLike);
+	//遍历类似数组的对象，可以采用for循环，也可以采用数组的forEach方法
+	// for循环
+	function logArgs(){
+		for(var i = 0; i < arguments.length; i++){
+			console.log(i + '.' + arguments[i]);
+		}
+	}
+	// forEach方法
+	function logArgs(){
+		Array.prototype.forEach.call(arguments,function(val,idx,arr){
+			console.log(i + '.' + val);
+		});
+	}
+	//由于字符串也是类似数组的对象，所以也可以用Array.prototype.forEach.call遍历
+	Array.prototype.forEach.call('abc',function(ch){
+		console.log(ch);
+	});
 };
 //5in运算符
+window.onload = function(){
+	var arr = [ 'a', 'b', 'c' ];
+	2 in arr  // true
+	'2' in arr // true
+	4 in arr // false
+	
+	var arr = [];
+	arr[100] = 'a';
+
+	100 in arr // true
+	1 in arr // false
+};
 //6for...in循环和数组的遍历
+window.onload = function(){
+	var a = [1, 2, 3];
+
+	for (var i in a) {
+	  console.log(a[i]);
+	}
+	// 1
+	// 2
+	// 3
+	var a = [1, 2, 3];
+	a.foo = true;
+	
+	for (var key in a) {
+	  console.log(key);
+	}
+	// 0
+	// 1
+	// 2
+	// foo
+};
 //7数组的空位
+window.onload = function(){
+	//当数组的某个位置是空元素，即两个逗号之间没有任何值，我们称该数组存在空位（hole）
+	//空位就是数组没有这个元素，所以不会被遍历到，而undefined则表示数组有这个元素，值是undefined，所以遍历不会跳过
+};
 //8参考链接
 </script>
 </head>
