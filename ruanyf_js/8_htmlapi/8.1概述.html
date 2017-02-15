@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>8.1概述</title>
+<script type="text/javascript">
+//1元素与变量名
+window.onload = function(){
+	//id属性
+	var example = 1;//如果已有同名全局变量，则id元素不会自动生成全局变量
+	//由于历史原因，HTML元素的id属性的名字，会自动成为全局变量，指向该HTML元素
+	window.alert(example);// [object HTMLDivElement]
+	window.alert(history);
+	window.alert(location);
+	window.alert(navigator);
+	//name属性
+	myForm[0]; // [object HTMLDivElement]
+    myForm[1]; // [object HTMLFormElement]
+	//由于历史原因，以下HTML元素的name属性，也会成为全局变量
+	window.alert(document.myImg === myImg);//true
+	window.alert(document.forms.myForm);
+	
+};
+//2Form元素(表单)
+window.onload = function(){
+	window.alert(document.forms.myForms.elements.method.length);//3
+	//如果想知道，用户到底选中了哪一个子节点，就必须遍历所有的同名节点。
+	var methods = document.forms.myForm.elements.method;
+	var result;
+	
+	for (var i = 0; i < methods.length; i++) {
+	  if (methods[i].checked) value = methods[i].value;
+	}
+};
+//3image元素
+//4table元素
+//5audio元素,video元素
+//6tabindex属性
+</script>
+</head>
+<body>
+<div id="example"></div>
+<div id="myForm"></div>
+<form name="myForm"></form>
+<img name="myImg" />
+<form name="myForms">
+  <label><input type="radio" name="method" value="1">1</label>
+  <label><input type="radio" name="method" value="2">2</label>
+  <label><input type="radio" name="method" value="3">3</label>
+</form>
+</body>
+</html>
