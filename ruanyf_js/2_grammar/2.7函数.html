@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>函数</title>
+<script type="text/javascript">
+//1概述
+//1.1函数的声明
+window.onload = function(){
+	//JavaScript有三种方法，可以声明一个函数。
+	//(1)function命令
+	function print(s){//函数的声明（Function Declaration）。
+		console.log(s);
+	}
+	//(2)函数表达式
+	var print = function(){//匿名函数又称函数表达式（Function Expression)
+		console.log(s); 
+	};
+	//采用函数表达式声明函数时，function命令后面不带有函数名。
+	//如果加上函数名，该函数名只在函数体内部有效，在函数体外部无效
+	var print = function x(){
+		  console.log(typeof x);
+	};
+
+	x
+	// ReferenceError: x is not defined
+
+	print()
+	// function 
+	//下面的形式声明函数也非常常见。
+	var f = function f(){};
+	//(3)Function构造函数
+	//还有第三种声明函数的方式：Function构造函数
+	var add = new Function('x','y','return x + y;');
+	//等同于
+	function add(x,y){
+		return x + y;
+	}
+	var foo = new Function(
+			"return 'hello world';"
+	);
+	//等同于
+	function foo(){
+		return 'hello world';
+	}
+};
+//1.2函数的重复声明
+window.onload = function(){
+	function f(){
+		console.log(1);
+	}
+	f();//2
+	function f(){
+		console.log(2);
+	}
+	f();//2
+};
+//1.3圆括号运算符,return语句和递归 
+//1.4第一等公民
+window.onload = function(){
+	//JavaScript语言将函数看作一种值，与其它值（数值、字符串、布尔值等等）地位相同。
+	//凡是可以使用值的地方，就能使用函数
+	//函数只是一个可以执行的值，此外并无特殊之处
+	//由于函数与其他数据类型地位平等，所以在JavaScript语言中又称函数为第一等公民
+	function add(x,y){
+		return x + y;
+	}
+	// 将函数赋值给一个变量
+	var operator = add;
+	// 将函数作为参数和返回值
+	function a(op){
+		return op;
+	}
+	window.alert(a(add)(1,2));//3
+};
+//1.5函数名的提升
+window.onload = function(){
+	f();
+	function f(){}
+	
+	g();//Uncaught TypeError: g is not a function
+	var g = function(){};
+	
+	var f = function(){
+		console.log('1');
+	};
+	function f(){
+		console.log('2');
+	}
+	f();//1
+};
+//1.6不能在条件语句中声明函数
+window.onload = function(){
+	/* if(foo){
+		function x(){}
+	}
+	
+	try{
+		function x(){}
+	}catch(e){
+		console.log(e);
+	} */
+	
+	if (false) {
+	  function f() {}
+	}
+
+	f(); // 不报错
+	
+	//要达到在条件语句中定义函数的目的，只有使用函数表达式
+	if(false){
+		var f = function(){};
+	}
+	f();
+};
+//2函数的属性和方法
+//2.1name属性
+window.onload = function(){
+	function f1(){}
+	window.alert(f1.name);//f1
+	var f2 = function(){};
+	window.alert(f2.name);//''
+	var f3 = function myName(){};
+	window.alert(f3.name);//myName
+};
+//2.2length属性
+window.onload = function(){
+	//length属性返回函数预期传入的参数个数，即函数定义之中的参数个数
+	function f(a,b){}
+	window.alert(f.length);//2
+	//length属性提供了一种机制，判断定义时和调用时参数的差异，以便实现面向对象编程的”方法重载“（overload）
+};
+//2.3toString()
+window.onload = function(){
+	//函数的toString方法返回函数的源码
+	//函数内部的注释也可以返回。
+	//利用这一点，可以变相实现多行字符串。
+	var multiline = function (fn) {
+	 var arr = fn.toString().split('\n');
+	 return arr.slice(1, arr.length - 1).join('\n');
+	};
+	
+	function f() {/*
+	  这是一个
+	  多行注释
+	*/}
+	
+	multiline(f);
+	// " 这是一个
+	//   多行注释"
+};
+//3函数作用域
+//3.1定义
+window.onload = function(){
+	var v = 1;//全局变量（global variable）
+
+	function f(){
+	  console.log(v);
+	}
+
+	f();//1
+	
+	function f(){
+		  //在函数内部定义的变量，外部无法读取，称为“局部变量”（local variable）
+		  var v = 1;
+	}
+
+    v // ReferenceError: v is not defined
+    //注意，对于var命令来说，局部变量只能在函数内部声明，在其他区块中声明，一律都是全局变量
+    if (true) {
+      var x = 5;//在条件判断区块之中声明，结果就是一个全局变量，可以在区块之外读取
+    }
+    console.log(x);  // 5
+};
+//3.2函数内部的变量提升
+window.onload = function(){
+	function foo(x){
+		if(x > 100){
+			var tmp = x - 100;
+		}
+	}
+	//等价于
+	function foo(x){
+		var tmp;
+		if(x > 100){
+			tmp = x - 100;
+		}
+	}
+};
+//3.3函数本身的作用域
+window.onload = function(){
+	var a = 1;
+	var x = function () {
+	  console.log(a);
+	};
+
+	function f() {
+	  var a = 2;
+	  x();
+	}
+
+	f() // 1
+	//上面代码中，函数x是在函数f的外部声明的，所以它的作用域绑定外层，内部变量a不会到函数f体内取值，所以输出1，而不是2
+	//总之，函数执行时所在的作用域，是定义时的作用域，而不是调用时所在的作用域
+	
+	//同样的，函数体内部声明的函数，作用域绑定函数体内部。
+	function foo(){
+		var x = 1;
+		function bar(){
+			console.log(x);
+		}
+		return bar;
+	}
+	var x = 2;
+	var f = foo();
+	window.alert(f());
+	//正是这种机制，构成了下文要讲解的“闭包”现象。
+};
+//4参数
+//4.1概述
+//4.2参数的省略
+window.onload = function(){
+	function f(a,b){
+		return a;
+	}
+	f(1, 2, 3) // 1
+	f(1) // 1
+	f() // undefined
+
+	f.length // 2
+};
+//4.3默认值
+//4.4传递方式
+window.onload = function(){
+	//如果需要对某个原始类型的变量，获取传址传递的效果，可以将它写成全局对象的属性
+	var a = 1;
+	function f(p){
+		window[p] = 2;
+	}
+	f('a');
+	window.alert(a);//2
+	//上面代码中，变量a本来是传值传递，但是写成window对象的属性，就达到了传址传递的效果
+};
+//4.5同名参数
+window.onload = function(){
+	function f(a, a) {
+		  console.log(a);
+	}
+
+	f(1, 2) // 2
+	//如果有同名的参数，则取最后出现的那个值
+};
+//4.6arguments对象
+//需要注意的是，虽然arguments很像数组，但它是一个对象
+window.onload = function(){
+	//(1)定义
+	var f = function(one) {
+	  console.log(arguments[0]);
+	  console.log(arguments[1]);
+	  console.log(arguments[2]);
+	};
+	
+	f(1, 2, 3);
+	//(2)与数组的关系
+	// 用于apply方法
+    myfunction.apply(obj, arguments).
+
+    // 使用与另一个数组合并
+    Array.prototype.concat.apply([1,2,3], arguments);
+	//要让arguments对象使用数组方法，真正的解决方法是将arguments转为真正的数组
+	var args = Array.prototype.slice.call(arguments);
+	//or
+	var args = [];
+	for(var i = 0; i < arguments.length; i++){
+		args.push(arguments[i]);
+	}
+	
+	//(3)callee属性
+	var f = function(){
+		console.log(arguments.callee === f);
+	};
+	f();//true
+};
+//5函数的其他知识点
+//5.1闭包
+window.onload = function(){
+	//JavaScript有两种作用域：全局作用域和函数作用域。函数内部可以直接读取全局变量
+	//这就是JavaScript语言特有的”链式作用域”结构（chain scope），子对象会一级一级地向上寻找所有父对象的变量。
+	//所以，父对象的所有变量，对子对象都是可见的，反之则不成立
+	//因此可以把闭包简单理解成“定义在一个函数内部的函数”。闭包最大的特点，就是它可以“记住”诞生的环境
+	//在本质上，闭包就是将函数内部和函数外部连接起来的一座桥梁。
+	
+	//闭包的最大用处有两个，一个是可以读取函数内部的变量，
+	//另一个就是让这些变量始终保持在内存中，即闭包可以使得它诞生环境一直存在
+	function createIncrementor(start){
+		return function(){
+			return start++;
+		};
+	}
+	
+	var inc = createIncrementor(5);
+	window.alert(inc());
+	window.alert(inc());
+	window.alert(inc());
+	//为什么会这样呢？原因就在于inc始终在内存中，而inc的存在依赖于createIncrementor，
+	//因此也始终在内存中，不会在调用结束后，被垃圾回收机制回收
+	
+	//闭包的另一个用处，是封装对象的私有属性和私有方法
+	function Person(name){
+		var _age;
+		function setAge(n){
+			_age = n;
+		}
+		function getAge(){
+			return _age;
+		}
+		return {
+			name:name,
+			getAge:getAge,
+			setAge:setAge
+		};
+	}
+	var p1 = Person('张三');
+	p1.setAge(25);
+	window.alert(p1.getAge());//25
+	//上面代码中，函数Person的内部变量_age，通过闭包getAge和setAge，变成了返回对象p1的私有变量
+	//注意，外层函数每次运行，都会生成一个新的闭包，而这个闭包又会保留外层函数的内部变量，
+	//所以内存消耗很大。因此不能滥用闭包，否则会造成网页的性能问题
+};
+//5.2立即调用的函数表达式
+window.onload = function(){
+	//解决方法就是不要让function出现在行首，让引擎将其理解成一个表达式。最简单的处理，就是将其放在一个圆括号里面
+	(function(){ /* code */ }());
+    // 或者
+    (function(){ /* code */ })();
+    
+    //通常情况下，只对匿名函数使用这种“立即执行的函数表达式”。它的目的有两个：一是不必为函数命名，避免了污染全局变量；
+    //二是IIFE内部形成了一个单独的作用域，可以封装一些外部无法读取的私有变量
+    ///写法一
+    var tmp = newData;
+    processData(tmp);
+    storeData(tmp);
+    //写法二
+    (function(){
+    	 var tmp = newData;
+    	 processData(tmp);
+    	 storeData(tmp);
+    }());
+    //上面代码中，写法二比写法一更好，因为完全避免了污染全局变量
+};
+//6eval命令 
+window.onload = function(){
+	//eval没有自己的作用域，都在当前作用域内执行，因此可能会修改当前作用域的变量的值，造成安全问题。
+	var a = 1;
+	eval('a = 2');	
+	a; // 2
+	//为了防止这种风险，JavaScript规定，如果使用严格模式，eval内部声明的变量，不会影响到外部作用域
+	(function f() {
+      'use strict';
+       eval('var foo = 123');
+       console.log(foo);  // ReferenceError: foo is not defined
+    })();
+	//eval的命令字符串不会得到JavaScript引擎的优化，运行速度较慢。这也是一个不应该使用它的理由。
+	var a = 1;
+
+	function f() {
+	  var a = 2;
+	  var e = eval;
+	  e('console.log(a)');
+	}
+	
+	f() // 1
+	//上面代码中，eval是间接调用，所以即使它是在函数中，它的作用域还是全局作用域，因此输出的a为全局变量
+	//不过，new Function()的写法也可以读写全局作用域，所以也是应该避免使用它
+};
+//7参考链接
+</script>
+</head>
+<body>
+</body>
+</html>
