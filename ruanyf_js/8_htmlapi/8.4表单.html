@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>8.4表单</title>
+<script type="text/javascript">
+//1表单元素
+//1.1select
+window.onload = function(){
+	var selected = [];
+	for (var i = 0, count = elem.options.length; i < count; i++) {
+	  if (elem.options[i].selected) {
+	    selected.push(elem.options[i].value);
+	  }
+	}
+};
+//1.2checkbox
+window.onload = function(){
+	if (which.checked) {
+		  var value = document.getElementById('someCheckbox').value;
+	}
+};
+//1.3radio
+window.onload = function(){
+	var radios = document.getElementsByName('gender');
+	var selected;
+	for (var i = 0; i < radios.length; i++) {
+	  if (radios[i].checked) {
+	    selected = radios[i].value;
+	    break;
+	  }
+	}
+	if (selected) {
+	  // 用户选中了某个选项
+	}
+};
+//2表单的验证
+//2.1HTML5表单验证
+window.onload = function(){
+	if(inputElem.value === inputElem.defaultValue){
+		// 用户没有填入内容
+	}
+	//HTML 5原生支持表单验证，不需要JavaScript。
+	//<input type="date">
+	if (field.nodeName === "INPUT" && field.type !== field.getAttribute("type")) {
+      // 浏览器不支持该种表单验证，需自行部署JavaScript验证
+    }
+};
+//2.2checkValidity方法,setCustomValidity方法,Validity对象
+
+//3参考链接
+</script>
+</head>
+<body>
+
+</body>
+</html>
