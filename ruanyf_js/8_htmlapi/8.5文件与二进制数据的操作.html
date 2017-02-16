@@ -65,10 +65,145 @@ window.onload = function(){
 };
 //4FileReader API
 window.onload = function(){
-	
+	  var reader = new FileReader();
+	  reader.onload = function(e){
+		  var text = reader.result;
+	  };
+	  reader.readAsText(file,encoding);
+	  
+	  var file = document.getElementById('destination').files[0];
+	  if(file.type.indexOf('image')!==-1){
+		  var reader = new FileReader();
+		  reader.onload = function(e){
+			  var dataURL = reader.result;
+		  };
+		  reader.readAsDataURL(file);
+	  }
+	  
+	  var reader = new FileReader();
+	  reader.onload = function(){
+		  var rawData = reader.result;
+	  };
+	  reader.readAsBinaryString(file);
+	  
+	  var reader = new FileReader();
+	  reader.onload = function(e){
+		  var arrayBuffer = reader.result;
+	  };
+	  reader.readAsArrayBuffer(file);
+	  
+	  var reader = new FileReader();
+	  reader.abort();
+	  //下面的代码是如何展示文本文件的内容
+	  var reader = new FileReader();
+	  reader.onload = function(e){
+		  console.log(e.target.result);
+	  };
+	  reader.readAsText(blob);
+	  //下面的代码是如何展示文本文件的内容
+	  var reader = new FileReader();
+	  reader.onload = function(e){
+		  document.createElement('img').src = e.target.result;
+	  };
+	  reader.readAsDataURL(f);
+	  //下面是一个onerror事件回调函数的例子
+	  var reader = new FileReader();
+	  reader.onerror = errorHandler;
+	  function errorHandler(evt){
+		  switch(evt.target.error.code){
+		      case evt.target.error.NOT_FOUND_ERR:
+		    	  window.alert('File Not Found!');
+		    	  break;
+		      case evt.target.error.NOT_READABLE_ERR:
+		    	  window.alert('File is not readerable');
+		    	  break;
+		      case evt.target.error.ABORT_ERR:
+		    	  break;
+		      default:
+		    	  window.alert('An error occurred reading this file.');
+		  }
+	  }
+	  //下面是一个onprogress事件回调函数的例子，主要用来显示读取进度
+	  var reader = new FileReader();
+	  reader.onprogress = updateProgress;
+	  function updateProgress(evt){
+		  if(evt.lengthComputable){
+			  var percentLoaded = Math.round(evt.loaded / evt.total) * 100;
+			  var progress = document.querySelector(".percent");
+			  if(percentLoaded < 100){
+				  progress.style.width = percentLoaded + '%';
+				  progress.textContent = percentLoaded + '%';
+			  }
+		  }
+	  }
 };
 //5综合实例:显示用户选取的本地图片
+window.onload = function(){
+	//一旦用户选中图片，将其显示在canvas的函数可以这样写
+	document.querySelector('input[name=picture]').onchange = function(e){
+		readFile(e.target.files[0]);
+	};
+	function readFile(file){
+		var reader = new FileReader();
+		reader.onload = function(e){
+			applyDataUrlToCanvas(reader.result);
+		};
+		reader.readAsDataURL(file);
+	}
+	
+	//还可以在canvas上面定义拖放事件，允许用户直接拖放图片到上面
+	//stop FireFox from replacing the whole page with the file.
+	canvas.ondragover = function(){return false;};
+	//add drop handler
+	canvas.ondrop = function(e){
+		e.stopPropagation();
+		e.preventDefault();
+		e = e || window.event;
+		var files = e.dataTransfer.files;
+		if(files){
+			readFile(file[0]);
+		}
+	};
+	//所有的拖放事件都有一个dataTransfer属性，它包含拖放过程涉及的二进制数据
+	
+	//还可以让canvas显示剪贴板中的图片
+	document.onpaste = function(e){
+		e.preventDefault();
+		if(e.clipboardData && e.clipboardData.items){
+			 //pasted image
+			 for(var i = 0,items = e.clipboardData.items;i < items.length;i++){
+				 if(items[i].kind === 'file' && items[i].type.match(/^image/)){
+					 readFile(items[i].getAsFile());
+					 break;
+				 }
+			 }
+		}
+		return false;
+	};
+};
 //6URL对象
+window.onload = function(){
+	var objecturl = window.URL.createObjectURL(blob);
+	window.URL.revokeObjectURL(objecturl);//使URL失效
+	//下面是一个利用URL对象，在网页插入图片的例子
+	var img = document.createElement('img');
+	img.src = window.URL.createObjectURL(files[0]);
+	img.height = 60;
+	img.onload = function(e){
+		window.URL.revokeObjectURL(this.src);
+	};
+	window.document.body.appendChild(img);
+	var info = document.createElement('span');
+	info.innerHTML = files[i].name  + ":" + files[i].size + 'bytes';
+	window.document.body.appendChild(info);
+	
+	//还有一个本机视频预览的例子
+	var video = document.getElementById('video');
+	var obj_url = window.URL.createObjectURL(blob);
+	video.src = obj_url;
+	video.play();
+	window.URL.revokeObjectURL(obj_url);
+};
 //7参考链接
 </script>
 </head>
