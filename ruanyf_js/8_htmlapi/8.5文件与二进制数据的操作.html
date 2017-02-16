@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>文件与二进制数据的操作</title>
+<script type="text/javascript">
+//1Blob对象
+window.onload = function(){
+	//Blob（Binary Large Object）对象代表了一段二进制数据，提供了一系列操作接口。其他操作二进制数据的API（比如File对象），
+	//都是建立在Blob对象基础上的，继承了它的属性和方法
+	//var htmlParts = ["<a id=\"a\"><b id=\"b\">hey!<\/b><\/a>"];
+	//var myBlob = new Blob(htmlParts,{"type",'text\/xml'});
+	//下面是一个利用Blob对象，生成可下载文件的例子  
+	var blob = new Blob(['Hello World']);
+	var a = document.createElement('a');
+	a.href = window.URL.createObjectURL(blob);
+	a.download = 'hello-world.txt';
+	a.textContent = 'Download Hello World';
+	window.document.body.appendChild(a);
+	
+	var newBlob = oldBlob.slice(startingByte,endingByte);
+	//下面是一个使用XMLHttpRequest对象，将大文件分割上传的例子
+	function upload(blobOrFile){
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST','/server',true);
+		xhr.onload = function(e){
+			//...
+		};
+		xhr.send(blobOrFile);
+	}
+	document.querySelector('input[type="file"]').addEventListener('change',function(e){
+		var blob = this.files[0];
+		const BYTES_PER_CHUNK = 1014 * 1024;// 1MB chunk sizes.
+		const SIZE = blob.size;
+		var start = 0;
+		var end = BYTES_PER_CHUNK;
+		while(start < SIZE){
+			upload(blob.slice(start,end));
+			start = end;
+			end = start + BYTES_PER_CHUNK;
+		}
+	},false);
+	//在Ajax操作中，如果xhr.responseType设为blob，接收的就是二进制数据。
+};
+//2FileList对象
+window.onload = function(){
+	var selected_file = document.getElementById('input').files[0];
+	//采用拖放方式，也可以得到FileList对象。
+	var dropZone = document.getElementById('drop_zone');
+	dropZone.addEventListener('drop',handleFileSelect,false);
+	function handleFileSelect(evt){
+		evt.stopPropagation();
+		evt.preventDefault();
+		var files = evt.dataTransfer.files;//FileList object
+		//...
+	}
+};
+//3File API
+window.onload = function(){
+	var selected_file = document.getElementById('input').files[0];
+	var fileName = selected_file.name;
+	var fileSize = selected_file.size;
+	var fileType = selected_file.type;
+	$("#upload-file").files[0];
+};
+//4FileReader API
+window.onload = function(){
+	
+};
+//5综合实例:显示用户选取的本地图片
+//6URL对象
+//7参考链接
+</script>
+</head>
+<body>
+<input type='file' id="input" onchange = "console.log(this.files.length)" multiple="multiple">
+</body>
+</html>
