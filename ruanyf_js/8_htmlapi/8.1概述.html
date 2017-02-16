@@ -31,11 +31,71 @@ window.onload = function(){
 	for (var i = 0; i < methods.length; i++) {
 	  if (methods[i].checked) value = methods[i].value;
 	}
+	//Form对象的方法主要是下面两个。
+	/* submit()：将表单数据提交到服务器
+	reset()：重置表单数据 */
+	var element = document.querySelector('#example');
+	element.options.length;//3
+	
+	var item = new Option(
+			'Hello World',
+			'myValue',
+			false,
+			false
+	);
+	//获取Selector对象
+	var mySelector = document.forms.myForm.mySelector;
+	mySelector.options[mySelector.options.length] = item;
 };
 //3image元素
+window.onload = function(){
+	//方法一：HTML5构造函数Image
+	var img1 = new Image();
+	img1.src = 'image1.png';
+	img2.alt = 'alt';
+	document.body.appendChild(img1);
+	//方法二：DOM HTMLImageElement
+	var img2 = document.createElement('img');
+	img2.src = 'image2.png';
+	img2.alt = 'alt text';
+	document.body.appendChild(img2);
+	window.alert(document.images[0].src);
+	
+	myImage.addEventListener('onload', function() {
+		console.log('My width is: ', this.naturalWidth);
+		console.log('My height is: ', this.naturalHeight);
+	}); 
+};
 //4table元素
+window.onload = function(){
+	//下面是使用JavaScript生成表格的一个例子
+	var table = document.createElement('table');
+	var tbody = document.createElement('tbody');
+	table.appendChild(tbody);
+
+	for (var i = 0; i <= 9; i++) {
+	  var rowcount = i + 1;
+	  tbody.insertRow(i);
+	  tbody.rows[i].insertCell(0);
+	  tbody.rows[i].insertCell(1);
+	  tbody.rows[i].insertCell(2);
+	  tbody.rows[i].cells[0].appendChild(document.createTextNode('Row ' + rowcount + ', Cell 1'));
+	  tbody.rows[i].cells[1].appendChild(document.createTextNode('Row ' + rowcount + ', Cell 2'));
+	  tbody.rows[i].cells[2].appendChild(document.createTextNode('Row ' + rowcount + ', Cell 3'));
+	}
+
+	table.createCaption();
+	table.caption.appendChild(document.createTextNode('A DOM-Generated Table'));
+
+	document.body.appendChild(table);
+};
 //5audio元素,video元素
 //6tabindex属性
+window.onload = function(){
+	//tabindex属性用来指定，当前HTML元素节点是否被tab键遍历，以及遍历的优先级
+	var b1 = document.getElementById("button1");
+	b1.tabIndex = 1;
+};
 </script>
 </head>
 <body>
@@ -48,5 +108,14 @@ window.onload = function(){
   <label><input type="radio" name="method" value="2">2</label>
   <label><input type="radio" name="method" value="3">3</label>
 </form>
+<form onreset="return confirm('你要重置表单吗？')">
+  <!-- ... -->
+  <button type="reset">重置</button>
+</form>
+<select id="example">
+   <option>1</option>
+   <option>2</option>
+   <option>3</option>
+</select>
 </body>
 </html>
