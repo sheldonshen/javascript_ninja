@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Canvas API</title>
+<script type="text/javascript">
+//1概述
+window.onload = function(){
+	var canvas = document.getElementById('myCanvas');
+	if(canvas.getContext){
+		var ctx = canvas.getContext("2d");
+	}
+};
+//2绘图方法
+window.onload = function(){
+	var canvas = document.getElementById('myCanvas');
+	if(canvas.getContext){
+		var ctx = canvas.getContext("2d");
+	}
+	//(1)绘制路径
+	ctx.beginPath();// 开始路径绘制
+	ctx.moveTo(20,20);// 设置路径起点，坐标为(20,20)
+	ctx.lineTo(100,20);// 绘制一条到(200,20)的直线
+	ctx.lineWidth = 1.0;// 设置线宽
+	ctx.strokeStyle = '#CC0000';// 设置线的颜色
+	ctx.stroke();// 进行线的着色，这时整条线才变得可见
+	//(2)绘制矩形
+	ctx.fillStyle = 'yellow';
+	ctx.fillRect(50,50,200,100);
+	ctx.strokeRect(10,10,200,100);
+	ctx.clearRect(100,50,50,50);
+	//(3)绘制文本
+	ctx.font = 'Bold 20px Arial';
+	ctx.textAlign = 'left';
+	ctx.fillStyle = '#008600';
+	ctx.fillText('Hello!',10,50);
+	ctx.strokeText("Hello!",10,100);
+	//（4）绘制圆形和扇形
+	//下面是如何绘制实心的圆形。
+	/* ctx.beginPath();
+	ctx.arc(60,60,50,0,Math.PI * 2,true);
+	ctx.fillStyle = '#000000';
+	ctx.fill();  */
+	//绘制空心圆形的例子。
+	ctx.beginPath();
+	ctx.arc(60,60,50,0,Math.PI * 2,true);
+	ctx.lineWidth = 1.0;
+	ctx.strokeStyle = '#000';
+	ctx.stroke();
+	//（5）设置渐变色
+	var myGradient = ctx.createLinearGradient(0, 0, 0, 160); 
+
+	myGradient.addColorStop(0, "#BABABA"); 
+
+	myGradient.addColorStop(1, "#636363");
+	ctx.fillStyle = myGradient;
+	ctx.fillRect(10,10,200,100);
+	//（6）设置阴影
+	ctx.shadowOffsetX = 10; // 设置水平位移
+	ctx.shadowOffsetY = 10; // 设置垂直位移
+	ctx.shadowBlur = 5; // 设置模糊度
+	ctx.shadowColor = "rgba(0,0,0,0.5)"; // 设置阴影颜色
+
+	ctx.fillStyle = "#CC0000"; 
+	ctx.fillRect(10,10,200,100);
+};
+//3图像处理方法
+window.onload = function(){
+	//drawImage方法
+	var img = new Image();
+	img.src = 'image.png';
+	ctx.drawImage(img,0,0);//设置对应的图像对象，以及它在画布上的位置
+	//由于图像的载入需要时间，drawImage方法只能在图像完全载入后才能调用，因此上面的代码需要改写
+	var image = new Image();
+	image.onload = function(){
+		var canvas = document.createElement('canvas');
+		canvas.width = image.width;
+		canvas.height = image.width;
+		canvas.getContext('2d').drawImage(image,0,0);
+		// 插入页面底部
+		document.body.appendChild(image);
+		return canvas;
+	};
+	img.src = 'image.png';
+	//getImageData方法，putImageData方法
+	var imageData = context.getImageData(0,0,canvas.width,canvas.height);
+	context.putImageData(imageData,0,0);
+	//toDataURL方法
+	//对图像数据做出修改以后，可以使用toDataURL方法，将Canvas数据重新转化成一般的图像文件形式。
+	function convertCanvasToImage(canvas){
+		var image = new Image();
+		image.src = canvas.toDataURL('image/png');
+		return image;
+	}
+	//save方法，restore方法
+	//save方法用于保存上下文环境，restore方法用于恢复到上一次保存的上下文环境。
+	ctx.save();
+
+	ctx.shadowOffsetX = 10;
+	ctx.shadowOffsetY = 10;
+	ctx.shadowBlur = 5;
+	ctx.shadowColor = 'rgba(0,0,0,0.5)';
+
+	ctx.fillStyle = '#CC0000';
+	ctx.fillRect(10,10,150,100);
+
+	ctx.restore();
+
+	ctx.fillStyle = '#000000';
+	ctx.fillRect(180,10,150,100);
+};
+//4动画
+//5像素处理
+//6参考链接
+</script>
+</head>
+<body>
+<canvas id='myCanvas' width='400' height='200'>
+您的浏览器不支持canvas!
+</canvas>
+</body>
+</html>
