@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Web Worker</title>
+<script type="text/javascript">
+//1概述
+window.onload = function(){
+	//Web Worker的目的，就是为JavaScript创造多线程环境，允许主线程将一些任务分配给子线程。在主线程运行的同时，
+	//子线程在后台运行，两者互不干扰。等到子线程完成计算任务，再把结果返回给主线程。
+	//因此，每一个子线程就好像一个“工人”（worker），默默地完成自己的工作
+	
+	//这样做的好处是，一些高计算量或高延迟的工作，被worker线程负担了，所以主进程（通常是UI进程）就会很流畅，不会被阻塞或拖慢
+	
+	//Worker线程分成好几种
+	/* 
+	普通的Worker：只能与创造它们的主进程通信。
+	Shared Worker：能被所有同源的进程获取（比如来自不同的浏览器窗口、iframe窗口和其他Shared worker），它们必须通过一个端口通信。
+	ServiceWorker：实际上是一个在网络应用与浏览器或网络层之间的代理层。它可以拦截网络请求，使得离线访问成为可能 
+	*/
+	
+	//Web Worker有以下几个特点
+	//同域限制
+	//DOM限制
+	//脚本限制:子线程无法读取网页的全局变量和函数，也不能执行alert和confirm方法，不过可以执行setInterval和setTimeout，
+	       //以及使用XMLHttpRequest对象发出AJAX请求
+	//文件限制:子线程无法读取本地文件，即子线程无法打开本机的文件系统（file://），它所加载的脚本，必须来自网络
+	if(window.Worker){
+		//支持
+	}else{
+		//不支持
+	}
+};
+//2新建和启动子线程
+window.onload = function(){
+	var worker = new Worker('work.js');
+	//worker.postMessage,启动子线程
+	worker.postMessage("Hello World");
+	worker.postMessage({method:'echo',args:['Work']});
+};
+//3子线程的事件监听
+window.onload = function(){
+	//在子线程内，必须有一个回调函数，监听message事件
+	/*File:work.js*/
+	self.addEventListener('message',function(e){
+		self.postMessage('You said:' + e.data);//self代表子线程自身,
+		//self.postMessage则表示,子线程向主线程发送一个信号
+	});
+	//根据主线程发来的不同的信号值，子线程可以调用不同的方法
+	self.onmessage = function(event){
+		var method = event.data.method;
+		var args = event.data.args;
+		var reply = doSomething(args);
+		self.postMessage({method:method,reply:reply});
+	};
+};
+//4主线程的事件监听
+window.onload = function(){
+	//主线程也必须指定message事件的回调函数，监听子线程发来的信号
+	worker.addEventListener('message',function(e){
+		console.log(e.data);
+	},false);
+};
+//5错误处理
+window.onload = function(){
+	//主线程可以监听子线程是否发生错误。如果发生错误，会触发主线程的error事件
+	worker.onerror(function(event){
+		console.log(event);
+	});
+	//or
+	worker.addEventListener('error',function(event){
+		console.log(event);
+	});
+};
+//6关闭子线程
+window.onload = function(){
+	//使用完毕之后，为了节省系统资源，我们必须在主线程调用terminate方法，手动关闭子线程
+	worker.terminate();
+	self.close();//也可以子线程内部关闭自身
+};
+//7主线程和子线程的数据通信
+window.onload = function(){
+	//Transferable Objects
+	//如果要使用该方法，postMessage方法的最后一个参数必须是一个数组，用来指定前面发送的哪些值可以被转移给子线程
+	worker.postMessage(arrayBuffer,[arrayBuffer]);
+	window.postMessage(arrayBuffer,targetOrigin,[arrayBuffer]);
+};
+//8同页面的Web Worker
+window.onload = function(){
+   (function(){
+	   var blob = new Blob([document.querySelector("#worker").textContent]);
+	   var url = window.URL.createObjectURL(blob);
+	   var worker = new Worker(url);
+	   worker.addEventListener('message',function(event){
+		   console.log(e.data);
+	   },false);
+	   worker.postMessage('');
+   })();
+};
+//9实例:Worker进程完成论询
+window.onload = function(){
+	//有时，浏览器需要论询服务器状态，以便第一时间得知状态改变。这个工作可以放在 Worker 进程里面
+	var pollingWorker = createWorker(function(e){
+		var cache;
+		function compare(new,old){
+			//...
+		};
+		var myRequest = new Request('/my-api-endpoint');
+		setrInterval(function(){
+			fetch('/my-api-endpoint').then(function(res){
+				var data = res.json();
+				if(!compare(res.json(),cache)){
+					cache = data;
+					self.postMessage(data);
+				}
+			});
+		},1000);
+	});
+	pollingWorker.onmessage = function(){
+		//render data
+	};
+	pollingWorker.postMessage('init');
+};
+//10 Service Worker
+window.onload = function(){
+	//Service worker是一个在浏览器后台运行的脚本，与网页不相干，专注于那些不需要网页或用户互动就能完成的功能。它主要用于操作离线缓存
+	//Service Worker有以下特点
+	/* 属于JavaScript Worker，不能直接接触DOM，通过postMessage接口与页面通信。
+	不需要任何页面，就能执行。
+	不用的时候会终止执行，需要的时候又重新执行，即它是事件驱动的。
+	有一个精心定义的升级策略。
+	只在HTTPs协议下可用，这是因为它能拦截网络请求，所以必须保证请求是安全的。
+	可以拦截发出的网络请求，从而控制页面的网路通信。
+	内部大量使用Promise。 */
+	
+	//Service worker的常见用途
+	//通过拦截网络请求，使得网站运行得更快，或者在离线情况下，依然可以执行。
+	//作为其他后台功能的基础，比如消息推送和背景同步
+	
+	//使用Service Worker有以下步骤
+	//首先，需要向浏览器登记Service Worker
+	if('serviceWorker' in navigator){
+		navigator.serviceWorker.register('/sw.js')
+		.then(function(registration){
+			// 登记成功
+			console.log('ServiceWorker登记成功，范围为',registration.scope);
+		}).catch(function(err){
+			// 登记失败
+			console.log('ServiceWorker登记失败：',err);
+		});
+	}
+	navigator.serviceWorker.register('/path/to/serviceworker.js',{
+		scope:'/'
+	});
+	//登记成功后，浏览器执行下面步骤
+	/* 
+	下载资源（Download）
+	安装（Install）
+	激活（Activate） 
+	*/
+	self.addEventListener('install',function(event){
+		event.waitUntil(
+				fetchStuffAndInitDatabases();
+	    );
+	});
+	self.addEventListener('activate',function(event){
+		// You're good to go!
+	});
+	window.alert(navigator.serviceWorker.controller);
+	//Service worker激活以后，就能监听fetch事件
+	self.addEventListener('fetch',function(event){
+		console.log(event.request);
+	});
+	//Service worker的强大之处，在于它会拦截请求，并会返回一个全新的回应
+	self.addEventListener('fetch',function(event){
+		event.responseWith(new Response("Hello world!"));
+	});
+};
+//11参考链接
+</script>
+<script id="worker" type="app/worker">
+    addEventListener('message', function() {
+      postMessage('Work done!');
+    }, false);
+</script>
+</head>
+<body>
+
+</body>
+</html>
