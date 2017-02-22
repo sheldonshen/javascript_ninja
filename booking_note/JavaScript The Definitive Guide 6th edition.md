@@ -6,5 +6,6 @@
 ##5语句
 #第二部分客户端JavaScript
 ##13Web浏览器中的JavaScript
+##14Window对象
 #第三部分JavaScript核心参考
 #第四部分客户端JavaScript参考
