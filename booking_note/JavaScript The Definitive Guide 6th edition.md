@@ -7,6 +7,6 @@
 #第二部分客户端JavaScript
 ##13Web浏览器中的JavaScript
 ##14Window对象
-##15脚本化文档
+##15脚本化文档(15.8.2)
 #第三部分JavaScript核心参考
 #第四部分客户端JavaScript参考
