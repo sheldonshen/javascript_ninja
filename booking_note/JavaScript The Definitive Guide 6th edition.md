@@ -4,6 +4,7 @@
 ##3类型.值和变量
 ##4表达式和运算符
 ##5语句
+##6对象
 #第二部分客户端JavaScript
 ##13Web浏览器中的JavaScript
 ##14Window对象
