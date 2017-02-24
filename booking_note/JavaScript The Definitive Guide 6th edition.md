@@ -10,5 +10,6 @@
 ##14Window对象
 ##15脚本化文档
 ##16校本化CSS
+##17事件处理
 #第三部分JavaScript核心参考
 #第四部分客户端JavaScript参考
