@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>21DOM操作表格及样式1</title>
+<script type="text/javascript">
+window.onload = function(){
+	var table = document.createElement("table");
+	table.border = 1;
+	table.width = 300;
+	
+	var caption = document.createElement('caption');
+	caption.innerText = '人员表';
+	table.appendChild(caption);
+		
+	document.body.appendChild(table);
+};
+
+window.onload = function(){
+	var table = document.getElementsByTagName('table')[0];
+	//DOM方式
+	//window.alert(table.children[0]);
+	//window.alert(table.getElementsByTagName('caption')[0]);
+	
+	//表单方式
+	window.alert(table.caption.innerHTML);//清晰,方便,简单
+	table.caption.innerHTML="输出表";
+	/* window.alert(table.tHead);
+	window.alert(table.tFoot);
+	window.alert(table.tBodies[0]);//Object HTMLCollection
+	window.alert(table.rows.length);
+	window.alert(table.tBodies[0].rows.length);
+	window.alert(table.tBodies[0].rows[0].cells[0].innerHTML); */
+	table.deleteCaption();
+	table.deleteTHead();
+	table.tBodies[0].deleteRow(0);
+};
+
+window.onload = function(){
+	var table = document.createElement("table");
+	table.border = 1;
+	table.width = 300;
+	
+	table.createCaption().innerHTML='人员表';
+	var thead = table.createTHead();
+	window.alert(thead);
+	var tr = thead.insertRow(0);
+	tr.insertCell(0).innerHTML = '数据1';
+	tr.insertCell(1).innerHTML = '数据2';
+	tr.insertCell(2).innerHTML = '数据3';
+	document.body.appendChild(table);
+};
+</script>
+</head>
+<body>
+
+<table border="1" width='300'>
+   <caption>人员表</caption>
+   <thead>
+      <tr>
+         <th>姓名</th>
+         <th>性别</th>
+         <th>年龄</th>
+      </tr>
+   </thead>
+   <tbody>
+       <tr>
+             <th>张三</th>
+             <th>男</th>
+             <th>24</th>
+       </tr>
+       
+       <tr>
+             <th>李四</th>
+             <th>女</th>
+             <th>23</th>
+       </tr> 
+       
+   </tbody>
+   
+   <tfoot>
+     <tr>
+        <td colspan="3" align="center">合计:2人</td>
+     </tr>
+   </tfoot>
+   
+</table>
+
+</body>
+</html>
