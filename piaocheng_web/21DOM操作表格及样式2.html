@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>21DOM操作表格及样式2</title>
+<style type="text/css">
+#box{
+  color:red;
+  background:#ccc;
+  float:right;
+  font-size:200px
+}
+</style>
+<script type="text/javascript">
+window.onload = function(){
+	//DOM对CSS的能力检测
+	//window.alert(document.implementation);
+	//window.alert(document.implementation.hasFeature('CSS','2.0'));
+	//window.alert(document.implementation.hasFeature('CSS2','2.0'));
+	//window.alert(document.implementation.hasFeature("HTML",'1.0'));
+	
+	/* var box = document.getElementById("box");
+	window.alert(box.style);
+	window.alert(box.style.color);
+	window.alert(box.style.background);
+	window.alert(box.style.float);
+	window.alert(box.style.cssFloat);
+	window.alert(box.style.styleFloat);
+	window.alert(box.style.fontSize);
+	window.alert(box.style.cssFloat || css.style.styleFloat);//跨浏览器 */	
+	
+	/* var box = document.getElementById('box');
+	box.style.color = 'red';
+	box.style.background = '#ccc';
+	box.style.float = 'right';
+	box.style.fontSize = '200px'; */
+	
+	//var box = document.getElementById('box');
+	//window.alert(box.style);
+	//window.alert(box.style.cssText);//style只能获取行内属性,<style>和link无法获取
+	//window.alert(box.style.color);
+	//window.alert(box.style.length);
+	//box.style.removeProperty('color');
+	//box.style.setProperty('color','green');
+	
+	var box = document.getElementById("box");
+	//window.alert(box.style.fontSize);
+	//window.alert(window.getComputedStyle(box,null));
+	//window.alert(window.getComputedStyle(box,null).fontSize);
+	//window.alert(window.currentStyle.color);
+	//window.getComputedStyle获取各种样式,获取不到border属性(属于复合型属性)
+};
+</script>
+</head>
+<body>
+<div id="box" style='color:red;'>测试DIV</div>
+</body>
+</html>
