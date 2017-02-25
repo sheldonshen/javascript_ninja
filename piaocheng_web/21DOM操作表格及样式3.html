@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>21DOM操作表格及样式3</title>
+<link rel="stylesheet" type="text/css" href="basic.css">
+<script type="text/javascript">
+window.onload = function(){
+	/* var box = document.getElementById("box");
+	box.id="pox";
+	box.style.fontFamily="Arial";
+	var pox = document.getElementById("pox");
+	pox.style.color="yellow";
+	
+	pox.id="box"; */
+	
+	var box = document.getElementById("box");
+	//box.className = 'bbb';
+	//box.className  += ' bbb';
+	//addClass('aaa');
+	hasClass(box,'aaa');
+	
+	function hasClass(element,cName){
+		return !!element.className.match(new RegExp('(\\s|^)' +cName + '(\\s|$)')));
+	}
+	
+	function addClass(element,cName){
+		if(!hasClass(element,cName)){
+			 element.className += ' ' + cName;	
+		} 
+	}
+	
+};
+
+</script>
+</head>
+<body>
+<div id="box" class="aaa">测试DIV</div>
+</body>
+</html>
