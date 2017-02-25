@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>21DOM操作表格及样式4</title>
+<link rel="stylesheet" type="text/css" href="basic.css" media="xxxx">
+<script type="text/javascript">
+window.onload = function(){
+	  //window.alert(document.implementation.hasFeature("styleSheets",'2.0'));
+	  //var link = document.getElementsByTagName('link')[0];
+	  //window.alert(link);
+	  //window.alert(link.sheet);
+	  var sheet = document.styleSheets[0];
+	  //window.alert(sheet);
+	  //window.alert(sheet.disabled = true);
+	  //window.alert(sheet.href);
+	  //window.alert(sheet.media);
+	  //window.alert(sheet.cssRules);
+	  window.alert(sheet.cssRules[0].cssText);
+	  window.alert(sheet.cssRules[0].selectorText);
+	  //window.alert(sheet.deleteRule(0));
+	  sheet.insertRule('body {background-color:red}',0);
+};
+</script>
+</head>
+<body>
+<div id="box" class="aaa">测试DIV</div>
+</body>
+</html>
