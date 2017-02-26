@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>22DOM元素尺寸和位置1</title>
+<style type="text/css">
+#box{
+  background:red;
+  width:200px;
+  height:200px;
+  padding:100px
+}
+</style>
+<script type="text/javascript">
+window.onload = function(){
+	//内联的
+	var box = document.getElementById("box");
+	//window.alert(box.style.width);
+	//window.alert(box.style.height);
+	
+	//计算后的
+	//var style = window.getComputedStyle ? window.getComputedStyle(box,null):null || box.currentStyle;
+	//window.alert(style.width);
+	//window.alert(style.height);
+    
+	//使用CSSStyleSheet对象中的cssRules属性(IE rules)
+	/* var box = document.getElementById("box");
+	var sheet = document.styleSheets[0];
+	var rule = (sheet.cssRules || sheet.rules)[0];
+	window.alert(rule.style.width);
+	window.alert(rule.style.height); */
+	
+	window.alert(typeof box.clientWidth);
+	window.alert(box.clientHeight);
+};
+</script>
+</head>
+<body>
+<div id="box">div</div>
+</body>
+</html>
