@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>2.10错误处理机制</title>
+<script type="text/javascript">
+window.onload = function(){
+	//1 Error对象
+	var err = new Error('出错了');
+	window.alert(err.message);
+	if(err.name){
+		console.log(err.name + ':' + err.message); 
+	}
+	
+	function throwit(){
+		throw new Error('');
+	}
+	function catchit(){
+		try{
+			throwit();
+		}catch(e){
+			console.log(e.stack);
+		}
+	}
+	catchit();
+	
+	//2 JavaScript的原生错误类型
+	new Error('出错了！');
+    new RangeError('出错了，变量超出有效范围！');
+    new TypeError('出错了，变量类型无效！');
+	
+	//3 自定义错误
+	//除了JavaScript内建的7种错误对象，还可以定义自己的错误对象。
+	function UserError(message){
+		this.message = message || '默认信息';
+		this.name = 'UserError';
+	}
+	UserError.prototype = new Error();
+	UserError.prototype.constructor = UserError;
+	new UserError("这是自定义的错误！");
+	
+	//4 throw语句
+	// 抛出一个字符串
+	throw "Error！";
+	
+	// 抛出一个数值
+	throw 42;
+	
+	// 抛出一个布尔值
+	throw true;
+	
+	// 抛出一个对象
+	throw {toString: function() { return "Error!"; } };
+	
+	throw new Error("出错了!");
+	
+	//throw语句还可以抛出用户自定义的错误。
+	function UserError(message) {
+	  this.message = message || "默认信息";
+	  this.name = "UserError";
+	}
+
+	UserError.prototype.toString = function (){
+	  return this.name + ': "' + this.message + '"';
+	}
+
+	throw new UserError("出错了！");
+	
+	function assert(expression, message) {
+		  if (!expression)
+		    throw {name: 'Assertion Exception', message: message};
+	}
+	
+	assert(typeof myVar != 'undefined', 'myVar is undefined!');
+	console.assert(typeof myVar != 'undefined', 'myVar is undefined!');
+	
+	//5 try...catch结构
+	try{
+		throw new Error('出错了!');
+	}catch(e){
+		console.log(e.name + ":" + e.message);
+		console.log(e.stack);
+	}
+	
+	function throwIt(exception) {
+	  try {
+	    throw exception;
+	  } catch (e) {
+	    console.log('Caught: '+ e);
+	  }
+	}
+
+	throwIt(3);
+	// Caught: 3
+	throwIt('hello');
+	// Caught: hello
+	throwIt(new Error('An error happened'));
+	// Caught: Error: An error happened
+	
+	try{
+		throw "出错了";
+	}catch(e){
+		console.log(111);
+	}
+	console.log(222);
+	
+	var n = 100;
+
+	try {
+	  throw n;
+	} catch (e) {
+	  if (e <= 50) {
+	    // ...
+	  } else {
+	    throw e;
+	  }
+	}
+	//上面代码中，catch代码之中又抛出了一个错误。
+	
+	    try {
+			foo.bar();
+		} catch (e) {
+			if (e instanceof EvalError) {
+				console.log(e.name + ": " + e.message);
+			} else if (e instanceof RangeError) {
+				console.log(e.name + ": " + e.message);
+			}
+			// ...
+		}
+		
+	//6 finally块
+
+	function cleansUp() {
+			try {
+				throw new Error('出错了……');
+				console.log('此行不会执行');
+			} finally {
+				console.log('完成清理工作');
+			}
+		}
+
+	cleansUp();
+	
+	var count = 0;
+	function countUp() {
+	  try {
+	    return count;
+	  } finally {
+	    count++;
+	  }
+	}
+
+	countUp()
+	// 0
+	count
+	// 1
+    //上面代码说明，return语句的count的值，是在finally代码块运行之前，就获取完成了
+    
+    //下面是finally代码块用法的典型场景。
+    openFile();
+	try{
+		writeFile(Data);
+	}catch(e){
+		handleError(e);
+	}finally{
+		closeFile();
+	}
+	//7 参考链接
+	};
+</script>
+</head>
+<body>
+</body>
+</html>
