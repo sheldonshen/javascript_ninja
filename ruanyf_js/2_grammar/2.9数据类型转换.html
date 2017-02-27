@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>数据类型转换</title>
+<script type="text/javascript">
+window.onload = function(){
+	//var x = y : 1 : 'a';
+	//1强制转换
+	//1.1Number()
+	//（1）原始类型值的转换规则
+	window.alert(window.Number(324));
+	window.alert(window.Number('324'));
+	window.alert(window.Number('324NaN'));
+	window.alert(window.Number(""));
+	window.alert(window.Number(true));
+	window.alert(window.Number(false));
+	window.alert(window.Number(undefined));//NaN
+	window.alert(window.Number(null));//0	
+	window.alert(window.parseInt("42 cats"));//42
+	window.alert(window.Number("42 cats"));//NaN
+	//（2）对象的转换规则
+	window.alert(window.Number({a:1}));//NaN
+	window.alert(window.Number([1,2,3]));//NaN
+	Number(obj);
+	//等同于
+	if(typeof obj.valueOf() === 'object'){
+		Number(obj.toString());
+	}else{
+		Number(obj.valueOf());
+	}
+	window.alert(Number({}));//NaN
+	var obj = {
+			valueOf:function(){
+				return {};
+			},
+			toString:function(){
+				return {};
+			}
+	};
+	window.alert(Number(obj));//// TypeError: Cannot convert object to primitive value
+	window.alert(Number({valueOf:function(){
+		return 3;
+	}}));
+	window.alert(Number({toString:function(){
+		return 2;
+	}}));
+	window.alert(Number({
+		valueOf:function(){
+			return 2;
+		},
+		toString:function(){
+			return 3;
+		}
+	}));
+	//1.2String()
+	//（1）原始类型值的转换规则
+	window.alert(String(123));
+	window.alert(String('abc'));
+	window.alert(String(true));
+	window.alert(String(undefined));
+	window.alert(String(null));
+	//（2）对象的转换规则
+	window.alert(window.String({a:1}));
+	window.alert(window.String([1,2,3]));
+	//如果toString法和valueOf方法，返回的都是对象，就会报错。
+	var obj = {
+	    valueOf:function(){
+	    	console.log('valueOf');
+	    	return {};
+	    },
+	    toString:function(){
+	    	console.log("toString");
+	    	return {};
+	    }
+	};
+	window.alert(window.String(obj));//// TypeError: Cannot convert object to primitive value
+	
+	window.alert(window.String({
+		toString:function(){
+			return 3;
+		}
+	}));
+	
+	window.alert(window.String({
+		valueOf:function(){
+			return 2;
+		}
+	}));
+	
+	window.alert(window.String({
+		valueOf:function(){
+			return 2;
+		},
+		toString:function(){
+			return 3;
+		}
+	}));
+	
+	//1.3Boolean()
+	window.alert(Boolean(undefined)); // false
+	window.alert(Boolean(null)); // false
+	window.alert(Boolean(0)); // false
+	window.alert(Boolean(NaN)); // false
+	window.alert(Boolean('')); // false
+	window.alert(Boolean({})); // true
+	window.alert(Boolean([])); // true
+	window.alert(Boolean(new Boolean(false))); // true
+	
+	//2自动转换
+	//2.1自动转换为布尔值
+	// 1. 不同类型的数据互相运算
+	window.alert(123 + 'abc'); // "123abc"
+	
+	// 2. 对非布尔值类型的数据求布尔值
+	if ('abc') {
+	  window.alert('hello');
+	}  // "hello"
+	
+	// 3. 对非数值类型的数据使用一元运算符（即“+”和“-”）
+	window.alert(+ {foo: 'bar'}); // NaN
+	window.alert(- [1, 2, 3]); // NaN
+	
+	if ( !undefined
+	  && !null
+	  && !0
+	  && !NaN
+	  && !''
+	) {
+	  console.log('true');
+	} // true
+	//下面两种写法，有时也用于将一个表达式转为布尔值。它们内部调用的也是Boolean函数。
+	// 写法一
+	expression ? true : false
+	
+	// 写法二
+	!! expression
+	
+	//2.2自动转换为字符串
+	'5' + 1 // '51'
+	'5' + true // "5true"
+	'5' + false // "5false"
+	'5' + {} // "5[object Object]"
+	'5' + [] // "5"
+	'5' + function (){} // "5function (){}"
+	'5' + undefined // "5undefined"
+	'5' + null // "5null"
+	
+	var obj = {
+			  width: '100'
+		};
+
+	obj.width + 20 // "10020"
+	
+	//2.3自动转换为数值
+	'5' - '2' // 3
+	'5' * '2' // 10
+	true - 1  // 0
+	false - 1 // -1
+	'1' - 1   // 0
+	'5' * []    // 0
+	false / '5' // 0
+	'abc' - 1   // NaN
+	
+	window.alert(+'abc'); // NaN
+	window.alert(-'abc'); // NaN
+	window.alert(+true); // 1
+	window.alert(-false); // 0
+	//3参考链接	
+};
+</script>
+</head>
+<body>
+</body>
+</html>
