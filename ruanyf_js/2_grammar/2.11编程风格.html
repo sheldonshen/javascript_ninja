@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>2.11编程风格</title>
+<script type="text/javascript">
+window.onload = function(){
+	//1缩进
+	//要做的就是始终坚持这一种选择。不要一会使用Tab键，一会使用空格键。
+
+	//2区块
+	//总是使用大括号表示区块。
+	block{
+		
+	}//JavaScript风格
+	//error
+	return 
+	{
+		key:value
+	};
+	//right
+	return {
+		key:value
+	};
+	
+	//3圆括号
+	
+	//4行尾的分号
+	//4.1不适用分号的情况
+	//4.2分号的自动添加
+
+	//5全局变量
+	//避免使用全局变量。如果不得不使用，用大写字母表示变量名，比如UPPER_CASE
+	
+	//6变量声明
+	//为了避免可能出现的问题，最好把变量声明都放在代码块的头部。
+	
+	//7new命令
+	//建议使用Object.create()命令，替代new命令。如果不得不使用new，为了防止出错，最好在视觉上把构造函数与其他函数区分开来
+	
+	//8with语句
+	//不要使用with语句
+	
+	//9相等和严格相等
+	//不要使用“相等”（==）运算符，只使用“严格相等”（===）运算符
+	
+	//10语句的合并
+	//建议不要将不同目的的语句，合并成一行
+	
+	//11自增和自减运算符
+	//建议自增（++）和自减（--）运算符尽量使用+=和-=代替
+	
+	//12switch...case结构
+	//建议避免使用switch...case结构，用对象结构代替
+	function doAction(action){
+		switch(action){
+		    case 'hack':
+		    	return 'hack';
+		    	break;
+		    case 'slash':
+		    	return 'slash';
+		    	break;
+		    case 'run':
+		    	return 'run';
+		    	break;
+		    default:
+		    	throw new Error("Invalid action");
+		}
+	}
+	//上面的代码建议改写成对象结构。
+	function doAction(action){
+		var actions = {
+				'hack':function(){
+					return 'hack';
+				},
+				'slash':function(){
+					return 'slash';
+				},
+				'run':function(){
+					return 'run';
+				}
+		};
+		if(typeof actions[action] !== 'function'){
+			throw new Error("Invalid action");
+		}
+		return actions[action]();
+	}
+	//建议避免使用switch...case结构，用对象结构代替。
+	//13参考链接
+	//google javascript style guide
+	//airbnb javascript style guide
+};
+</script>
+</head>
+<body>
+</body>
+</html>
