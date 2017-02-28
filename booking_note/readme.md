@@ -12,8 +12,10 @@
 #12数据结构与算法JavaScript描述
 #13JavaScript框架设计
 
-#next year
+#part2
 #JavaScript忍者秘籍
 #深入理解JavaScript 
 #JavaScript启示录
 #你不知道的JavaScript(上,中,下卷)
+#前端函数式攻城指南
+#前端面试江湖
