@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>编程风格</title>
+<script type="text/javascript">
+//1块级作用域
+window.onload = function(){
+	//(1)let取代var
+	'use strict';
+	if(true){
+		let x = 'hello';
+	}
+	for(let i=0; i < 10; i++){
+		console.log(i);
+	}
+	if(true){
+		console.log(x);//ReferenceError
+		let x = 'hello';
+	}
+	//(2)全局常量和线程安全
+	var a=1,b=2,c=3;//bad
+	const a=1;const b=2;const c=3;//good
+	const [a,b,c] = [1,2,3];//best
+	//所有的函数都应该设置为常量。
+};
+//2字符串
+window.onload = function(){
+	//静态字符串一律使用单引号或反引号，不使用双引号。动态字符串使用反引号。
+	const a = "foobar";
+	const b = 'foo' + a + 'bar';//bad
+	const c = `foobar`;//acceptable
+	const a = 'foobar';//good
+	const b = `foo${a}bar`;
+	const c = 'foobar';
+};
+//3结构赋值
+window.onload = function(){
+	const arr = [1,2,3,4];
+	const first = arr[0];//bad
+	const second = arr[1];//bad
+	const [first,second]= arr;//good
+	
+	function getFullName(user){//bad
+		const firstName = user.firstName;
+		const lastName = user.lastName;
+	}
+	function getFullName(obj){//good
+		const [firstName,lastName] = obj;
+	}
+	function getFullName({firstName,lastName}){//best
+	}
+	//bad
+	function processInput(input){
+		return [left,right,top,bottom];
+	}
+	//good
+	function processInput(input){
+		return {left,right,top,bottom};
+	}
+	const {left,right} = processInput(input);
+};
+//4对象
+window.onload = function(){
+	//good
+	const a = {k1:v1,k2:v2};
+	const b = {
+			k1:v1,
+			k2:v2,
+	};
+	//bad
+	const a = {};
+	a.x = 3;
+	
+	// if reshape unavoidable
+	const a = {};
+	Object.assign(a,{x:3});
+	
+	// bad
+	const obj = {
+	  id: 5,
+	  name: 'San Francisco',
+	};
+	obj[getKey('enabled')] = true;
+
+	// good
+	const obj = {
+	  id: 5,
+	  name: 'San Francisco',
+	  [getKey('enabled')]: true,
+	};
+	//另外，对象的属性和方法，尽量采用简洁表达法，这样易于描述和书写。
+	var ref = 'some value';
+
+	// bad
+	const atom = {
+	  ref: ref,
+
+	  value: 1,
+
+	  addValue: function (value) {
+	    return atom.value + value;
+	  },
+	};
+	
+	//good
+	const atom = {
+			ref,
+			value:1,
+			addValue(value){
+				return atom.value + value;
+			}
+	};
+};
+//5数组
+window.onload = function(){
+	//使用扩展运算符（...）拷贝数组。
+	// bad
+	const len = items.length;
+	const itemsCopy = [];
+	let i;
+	
+	for (i = 0; i < len; i++) {
+	  itemsCopy[i] = items[i];
+	}
+	
+	//good
+	const itemsCopy = [...items];
+	//使用Array.from方法，将类似数组的对象转为数组。
+	const foo = document.querySelectorAll('.foo');
+	const nodes = Array.from(foo);
+};
+//6函数
+window.onload = function(){
+	(() => {
+		console.log("Welcome to the Internet");
+	})();
+	
+	// bad
+	[1, 2, 3].map(function (x) {
+	  return x * x;
+	});
+	
+	//good
+	[1,2,3].map((x) => {
+		return x * x;
+	});
+	
+	//best
+	[1,2,3].map(x => x * x);
+	
+	// bad
+	const self = this;
+	const boundMethod = function(...params) {
+	  return method.apply(self, params);
+	}
+	
+	// acceptable
+	const boundMethod = method.bind(this);
+	
+	// best
+	const boundMethod = (...params) => method.apply(this, params);
+	
+	// bad
+	function divide(a, b, option = false ) {
+	}
+
+	// good
+	function divide(a, b, { option = false } = {}) {
+	}
+	
+	// bad
+	function concatenateAll() {
+	  const args = Array.prototype.slice.call(arguments);
+	  return args.join('');
+	}
+
+	// good
+	function concatenateAll(...args) {
+	  return args.join('');
+	}
+	
+	// bad
+	function handleThings(opts) {
+	  opts = opts || {};
+	}
+
+	// good
+	function handleThings(opts = {}) {
+	  // ...
+	}
+};
+//7Map结构
+window.onload = function(){
+	//注意区分Object和Map，只有模拟现实世界的实体对象时，才使用Object。如果只是需要key: value的数据结构，
+	//使用Map结构。因为Map有内建的遍历机制
+	let map = new Map(arr);
+
+	for (let key of map.keys()) {
+	  console.log(key);
+	}
+	
+	for (let value of map.values()) {
+	  console.log(value);
+	}
+	
+	for (let item of map.entries()) {
+	  console.log(item[0], item[1]);
+	}
+};
+//8Class
+window.onload = function(){
+	// bad
+	function Queue(contents = []) {
+	  this._queue = [...contents];
+	}
+	Queue.prototype.pop = function() {
+	  const value = this._queue[0];
+	  this._queue.splice(0, 1);
+	  return value;
+	}
+
+	// good
+	class Queue {
+	  constructor(contents = []) {
+	    this._queue = [...contents];
+	  }
+	  pop() {
+	    const value = this._queue[0];
+	    this._queue.splice(0, 1);
+	    return value;
+	  }
+	}
+	
+	// bad
+	const inherits = require('inherits');
+	function PeekableQueue(contents) {
+	  Queue.apply(this, contents);
+	}
+	inherits(PeekableQueue, Queue);
+	PeekableQueue.prototype.peek = function() {
+	  return this._queue[0];
+	}
+
+	// good
+	class PeekableQueue extends Queue {
+	  peek() {
+	    return this._queue[0];
+	  }
+	}
+};
+//9模块
+window.onload = function(){
+	//首先，Module语法是JavaScript模块的标准写法，坚持使用这种写法。使用import取代require
+	//bad
+	const moduleA = require('moduleA');
+	const func1 = moduleA.func1;
+	const func2 = moduleA.func2;
+	//good
+	import {func1,func2} from 'moduleA';
+	
+	//使用export取代module.exports。
+	// commonJS的写法
+	var React = require('react');
+
+	var Breadcrumbs = React.createClass({
+	  render() {
+	    return <nav />;
+	  }
+	});
+
+	module.exports = Breadcrumbs;
+
+	// ES6的写法
+	import React from 'react';
+
+	const Breadcrumbs = React.createClass({
+	  render() {
+	    return <nav />;
+	  }
+	});
+
+	export default Breadcrumbs
+	
+	// bad
+	import * as myObject './importModule';
+
+	// good
+	import myObject from './importModule';
+	
+	function makeStyleGuide() {
+	}
+
+	export default makeStyleGuide;
+	
+	const StyleGuide = {
+		  es6: {
+		  }
+	};
+
+	export default StyleGuide;
+};
+//10ESLint的使用
+</script>
+</head>
+<body>
+</body>
+</html>
