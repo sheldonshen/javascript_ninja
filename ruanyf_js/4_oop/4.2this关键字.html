@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>4.2this关键字</title>
+<script type="text/javascript">
+//1涵义
+window.onload = function(){
+	//this总是返回一个对象，简单说，就是返回属性或方法“当前”所在的对象
+	var person = {
+			name:"张三",
+			describe:function(){
+				return "姓名:" + this.name;
+			}
+	};
+	window.alert(person.describe());// "姓名：张三"
+	//由于对象的属性可以赋给另一个对象，所以属性所在的当前对象是可变的，即this的指向是可变的
+	var A = {
+			name:"张三",
+			describe:function(){
+				return "姓名:" + this.name;
+			}
+	};
+	var B = {
+			name:"李四"
+	};
+	B.describe = A.describe;
+	window.alert(B.describe());// "姓名：李四"
+	//稍稍重构这个例子，this的动态指向就能看得更清楚。
+	function f(){
+		return "姓名:" + this.name;
+	}
+	var A = {
+			name:"张三",
+			describe:f
+	};
+	var B = {
+			name:'李四',
+			describe:f
+	};
+	A.describe() // "姓名：张三"
+	B.describe() // "姓名：李四"
+	
+	var A = {
+		name:'张三',
+		describe:function(){
+			return '姓名:' +this.name;
+		}
+	};
+	var name = '李四';
+	var f = A.describe;
+	window.alert(f());
+	//可以近似地认为，this是所有函数运行时的一个隐藏参数，指向函数的运行环境。
+};
+//2使用场合
+window.onload = function(){
+	//（1）全局环境
+	this === window // true
+
+	function f() {
+	  console.log(this === window); // true
+	}
+	//（2）构造函数
+	var Obj = function (p) {
+	  this.p = p;
+	};
+	
+	Obj.prototype.m = function() {
+	  return this.p;
+	};
+	var o = new Obj('Hello World!');
+
+	o.p // "Hello World!"
+	o.m() // "Hello World!"
+	//（3）对象的方法
+	var obj = {
+		foo:function(){
+			console.log(this);
+		}
+	};
+	obj.foo();
+	//（4）Node
+	//在Node中，this的指向又分成两种情况。全局环境中，this指向全局对象global；模块环境中，this指向module.exports
+	//全局环境
+	this === global;//true
+	//模块环境
+	this === module.exports;//true
+};
+
+//3使用注意点
+window.onload = function(){
+	//（1）避免多层this
+	var o = {
+		f1:function(){
+			console.log(this);
+			var f2 = function(){
+				console.log(this);
+			}();
+		}
+	};
+	o.f1();
+	// Object
+	// Window
+	var o = {
+	  f1: function() {
+	    console.log(this);
+	    var that = this;
+	    var f2 = function() {
+	      console.log(that);
+	    }();
+	  }
+	}
+    o.f1();
+	// Object
+	// Object
+	//事实上，使用一个变量固定this的值，然后内层函数调用这个变量，是非常常见的做法，有大量应用，请务必掌握
+	//JavaScript 提供了严格模式，也可以硬性避免这种问题。在严格模式下，如果函数内部的this指向顶层对象，就会报错
+	var counter = {
+			count:0
+	};
+	counter.inc = function(){
+		"use strict";
+		this.count++;
+	};
+	var f = counter.inc;
+	f();// TypeError: Cannot read property 'count' of undefined
+	
+	//（2）避免数组处理方法中的this
+	var o = {
+			v:"hello",
+			p:['a1','a2'],
+			f:function f(){
+				var that = this;
+				this.p.forEach(function(item){
+					//console.log(this.v + ' ' + item);
+					//console.log(that.v + ' ' + item);
+					console.log(this.v + ' ' + item);
+				},this);
+			}
+	};
+	o.f();
+	// undefined a1
+	// undefined a2
+	
+	//（3）避免回调函数中的this
+	//回调函数中的this往往会改变指向，最好避免使用。
+	var o = new Object();
+	o.f = function(){
+		console.log(this === o);
+	};
+	o.f();
+}; 
+
+//4绑定this的方法
+window.onload = function(){
+	var o = new Object();
+	o.f = function(){
+		console.log(this === o);
+	};
+	document.getElementById("button").onclick = o.f;
+};
+//4.1function.prototype.call()
+window.onload = function(){
+	var obj = {};
+	var f = function(){
+		return this;
+	};
+	window.alert(f() === this);
+	window.alert(f.call(obj) === obj);
+	
+	//call方法的参数，应该是一个对象。如果参数为空、null和undefined，则默认传入全局对象
+	var n = 123;
+	var obj = {n:456};
+	function a(){
+		console.log(this.n);
+	}
+	a.call() // 123
+	a.call(null) // 123
+	a.call(undefined) // 123
+	a.call(window) // 123
+	a.call(obj) // 456
+	
+	var f = function(){
+		return this;
+	};
+	console.log(f.call(5));//Number {[[PrimitiveValue]]: 5}
+	
+	var obj = {};
+	console.log(obj.hasOwnProperty("toString"));
+	// 覆盖掉继承的 hasOwnProperty 方法
+	obj.hasOwnProperty = function(){
+		return true;
+	};
+	console.log(obj.hasOwnProperty("toString"));//true
+	Object.prototype.hasOwnProperty.call(obj,'toString');//false
+};
+//4.2function.prototype.apply()
+window.onload = function(){
+	function f(x,y){
+		console.log(x + y);
+	}
+	f.call(null,1,1);
+	f.apply(null,[1,1]);
+	//（1）找出数组最大元素
+	var a = [10,2,4,15,9];//15
+	Math.max.apply(null,a);
+	//（2）将数组的空元素变为undefined
+	Array.apply(null,['a',,'b']);// [ 'a', undefined, 'b' ]
+	//（3）转换类似数组的对象
+	Array.prototype.slice.apply({0:1,length:1})
+	// [1]
+	
+	Array.prototype.slice.apply({0:1})
+	// []
+	
+	Array.prototype.slice.apply({0:1,length:2})
+	// [1, undefined]
+	
+	Array.prototype.slice.apply({length:1})
+	// [undefined]
+	//（4）绑定回调函数的对象
+	var o = new Object();
+
+	o.f = function () {
+	  console.log(this === o);
+	}
+
+	var f = function (){
+	  o.f.apply(o);
+	  // 或者 o.f.call(o);
+	};
+
+	$('#button').on('click', f);
+};
+//4.3function.prototype.bind()
+window.onload = function(){
+	var d = new Date();
+	d.getTime() // 1481869925657
+
+	//var print = d.getTime;
+	//print() // Uncaught TypeError: this is not a Date object.
+	var print = d.getTime.bind(d);
+	window.alert(print());
+	
+	var counter = {
+			count:0,
+			inc:function(){
+				this.count++;
+			}
+	};
+
+	var func = counter.inc.bind(counter);
+	counter.count;//1
+	
+	var obj = {
+			count:100
+	};
+	var func = counter.inc.bind(obj);//bind绑定thid
+	obj.count;
+	//bind绑定原函数的参数
+	var add = function(x,y){
+		return x * this.m + y * this.n;
+	};
+	var obj = {
+			m:2,
+			n:2
+	};
+	var newAdd = add.bind(obj,5);
+	window.alert(newAdd(5));//20
+	
+	function add(x,y){
+		return x + y;
+	}
+	var plus5 = add.bind(null,5);
+	window.alert(plus5(10));
+	
+	//对于那些不支持bind方法的老式浏览器，可以自行定义bind方法。
+	if(!('bind' in Function.prototype)){
+		Function.prototype.bind = function(){
+			var fn = this;
+			var context = arguments[0];
+			var args = Array.prototype.slice.call(arguments,1);
+			return function(){
+				 return fn.apply(context,args);
+			};
+		};
+	}
+	
+	//bind方法有一些使用注意点。
+	//（1）每一次返回一个新函数
+	element.addEventListener('click',o.m.bind(o));
+	element.removeEventListener("click",o.m.bind(o));
+	//正确的方法是写成下面这样：
+	var listener = o.m.bind(o);
+	element.addEventListener('click',listener);
+	element.removeEventListener("click",listener);
+	
+	//（2）结合回调函数使用
+	//回调函数是JavaScript最常用的模式之一，但是一个常见的错误是，将包含this的方法直接当作回调函数
+	var counter = {
+			count:0,
+			inc:function(){
+			   "use strict";
+			   this.count++;
+			}
+	};
+	function callIt(callback){
+		callback();
+	}
+	//callIt(counter.inc);
+	//TypeError: Cannot read property 'count' of undefined
+	callIt(counter.inc.bind(counter));
+	counter.count;//1
+	
+	var obj = {
+			name:'张三',
+			times:[1,2,3],
+			print:function(){
+				this.times.forEach(function(n){
+					console.log(this.name);
+					//console.log(this === window);
+				}.bind(this));
+			}
+	};
+	obj.print();
+	
+	//（3）结合call方法使用
+	var slice = Function.prototype.call.bind(Array.prototype.slice);
+	slice([1, 2, 3], 0, 1) // [1]
+	var push = Function.prototype.call.bind(Array.prototype.push);
+	var pop  = Function.prototype.call.bind(Array.prototype.pop);
+	var a = [1 ,2 ,3];
+	push(a, 4)
+	a // [1, 2, 3, 4]
+
+	pop(a)
+	a // [1, 2, 3]
+	
+	function f(){
+		console.log(this.v);
+	}
+	var o = {v:123};
+	var bind = Function.prototype.call.bind(Function.prototype.bind);
+	bind(f,o)();
+};
+//5参考链接
+</script>
+</head>
+<body>
+<input type="button" value="button" id="button">
+</body>
+</html>
