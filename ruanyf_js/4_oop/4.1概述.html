@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>4.1概述</title>
+<script type="text/javascript">
+//1对象的概念
+//2构造函数
+window.onload = function(){
+	//JavaScript语言的对象体系，不是基于“类”的，而是基于构造函数（constructor）和原型链（prototype）。
+	//JavaScript语言使用构造函数（constructor）作为对象的模板。所谓“构造函数”，就是专门用来生成“对象”的函数。它提供模板，
+	//描述对象的基本结构。一个构造函数，可以生成多个对象，这些对象都有相同的结构
+	var Vehicle = function(){
+		this.price = 1000;
+	};
+	//构造函数的特点有两个
+	/* 
+	函数体内部使用了this关键字，代表了所要生成的对象实例。
+	生成对象的时候，必需用new命令，调用Vehicle函数。
+	*/
+};
+//3new命令
+//3.1基本用法
+window.onload = function(){
+	var Vehicle = function(){
+		this.price = 1000;
+	};
+	var v = new Vehicle();
+	window.alert(v.price);
+	
+	var Vehicle = function(p){
+		this.price = p;
+	};
+	var v = new Vehicle(500);
+	window.alert(v.price);
+	
+	var Vehicle = function (){
+	  this.price = 1000;
+	};
+
+	var v = Vehicle();
+	v.price
+	// Uncaught TypeError: Cannot read property 'price' of undefined
+
+	price
+	// 1000
+	
+	function Fubar(foo,bar){
+	   "use strict";
+	   this._foo = foo;
+	   this._bar = bar;
+	}
+	Fubar();//TypeError: Cannot set property '_foo' of undefined
+	
+	function Fubar(foo,bar){
+		if(!(this instanceof Fubar)){
+			return new Fubar(foo,bar);
+		}
+		this._foo = foo;
+		this._bar = bar;
+	}
+	
+	Fubar(1,2)._foo;//1
+	(new Fubar(1,2))._foo;//1
+};
+//3.2new命令的原理
+window.onload = function(){
+	var Vehicle = function(){
+		this.price = 1000;
+		return 1000;
+	};
+	window.alert((new Vehicle()) === 1000);//false
+	
+	var Vehicle = function(){
+		this.price = 1000;
+		return {
+			price:2000
+		};
+	};
+	window.alert((new Vehicle()).price);//2000
+	
+	function getMessage(){
+		return "this is a message";
+	}
+	var msg = new getMessage();
+	window.alert(msg);//{}
+	window.alert(typeof msg);//"Object"
+	
+	//new命令简化的内部流程，可以用下面的代码表示。
+	function _new(/*构造函数*/ constructor,/*构造函数参数*/ param1){
+		// 将 arguments 对象转为数组
+		var args = [].slice.call(arguments);
+		// 取出构造函数
+		var constructor = args.shift();
+		// 创建一个空对象，继承构造函数的 prototype 属性
+		var context = Object.create(constructor.prototype);
+		// 执行构造函数
+		var result = constructor.apply(context,args);
+		// 如果返回结果是对象，就直接返回，则返回 context 对象
+		return (typeof result === 'object' && result !== null) ? result : context;
+	}
+	
+	var actor = new _new(Person,'张三',28);
+};
+//3.3new.target
+window.onload = function(){
+	//函数内部可以使用new.target属性。如果当前函数是new命令调用，new.target指向当前函数，否则为undefined
+	function f(){
+		console.log(new.target === f);
+	}
+    f();//false
+    new f();//true
+};
+</script>
+</head>
+<body>
+</body>
+</html>
