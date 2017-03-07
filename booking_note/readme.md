@@ -18,3 +18,6 @@
 #18你不知道的JavaScript(上,中,下卷)
 #19前端函数式攻城指南
 #20前端面试江湖
+#21JavaScript DOM高级程序设计
+#22精通JavaScript（第2版）
+#23JavaScript编程全解
