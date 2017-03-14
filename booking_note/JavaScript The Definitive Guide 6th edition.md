@@ -10,7 +10,7 @@
 ##9类和模块(继续)<br>
 ##10正则表达式的模式匹配(未读)<br>
 ##11JavaScript的子集和扩展(已读)<br>
-##12服务器端JavaScript(继续)<br>
+##12服务器端JavaScript(12.2.1 Node示列:HTTP服务器)<br>
 #第二部分客户端JavaScript<br>
 ##13Web浏览器中的JavaScript<br>
 ##14Window对象<br>
