@@ -9,7 +9,7 @@
 ##8函数
 ##9类和模块(继续)
 ##10正则表达式的模式匹配
-##11JavaScript的子集和扩展
+##11JavaScript的子集和扩展(11.2常量和局部变量)
 ##12服务器端JavaScript
 #第二部分客户端JavaScript
 ##13Web浏览器中的JavaScript
