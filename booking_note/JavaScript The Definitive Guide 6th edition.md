@@ -8,7 +8,7 @@
 ##7数组<br>
 ##8函数<br>
 ##9类和模块<br>
-##10正则表达式的模式匹配(未读)<br>
+##10正则表达式的模式匹配<br>
 ##11JavaScript的子集和扩展<br>
 ##12服务器端JavaScript<br>
 #第二部分客户端JavaScript<br>
