@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>    
+</body>
+</html>
+<script>
+    //1概述
+    var o = new Object();
+    var o1 = {a:1};
+    var o2 = new Object(o1);
+    console.log(o1 === o2);
+    console.log(new Object(123) instanceof Number);
+    //(1)部署在Object对象本身
+    Object.print = function(o){ console.log(o)};
+    var o = new Object();
+    console.log(o);
+    //(2)部署在Object.prototype对象
+    Object.prototype.print = function(){ console.log(this)};
+    var o = new Object();
+    o.print();
+    //2Object()
+    console.log(Object());
+    console.log(Object() instanceof Object);
+    console.log(Object(undefined));
+    console.log(Object(undefined) instanceof Object); 
+    console.log(Object(null));
+    console.log(Object(null) instanceof Object);
+    console.log(Object(1));
+    console.log(Object(1) instanceof Object);
+    console.log(Object(1) instanceof Number);
+    console.log(Object("foo"));
+    console.log(Object("foo") instanceof Object);
+    console.log(Object("foo") instanceof String);
+    console.log(Object(true));
+    console.log(Object(true) instanceof Object);
+    console.log(Object(true) instanceof Boolean);
+
+    console.log("-------------------");
+    var arr = [];
+    console.log(Object(arr));
+    console.log(Object(arr) === arr);
+    var obj = {};
+    console.log(Object(obj));
+    console.log(Object(obj) === obj);
+    var fn = function(){};
+    console.log(Object(fn));
+    console.log(Object(fn) === fn);
+    //判断变量是否为对象
+    function isObject(value){
+        return value === Object(value);
+    }
+    console.log(isObject([]));
+    console.log(isObject(true));//false
+    //3Object对象的静态方法
+    //3.1Object.keys(),Object.getOwnPropertyNames()
+    var o = {
+        p1:123,
+        p2:456
+    };
+    console.log(Object.keys(o));
+    console.log(Object.getOwnPropertyNames(o));
+
+    var a = ["Hello","World"];
+    console.log(Object.keys(a));
+    console.log(Object.getOwnPropertyNames(a));
+    console.log(Object.keys(a).length);
+    console.log(Object.getOwnPropertyNames(a).length);
+    //4Object对象的实例方法
+    var o = new Object();
+    console.log(o.valueOf() === o);
+    console.log(1 + o);
+    var o = new Object();
+    //o.valueOf覆盖Object.prototype.valueOf
+    o.valueOf = function(){
+        return 2;
+    };
+    console.log(1 + o);
+    var o1 = new Object();
+    console.log(o1.toString());
+    var o2 = {a:1};
+    console.log(o2.toString());
+    var o = new Object();
+    o.toString = function(){
+        return 'hello';
+    };
+    console.log(o + " " + 'world');
+    //数组,字符串,函数,Date对象分别部署了自己版本的toString方法,覆盖了Object.prototype.toString方法
+    console.log([1,2,3].toString());
+    console.log('123'.toString());
+    console.log((function(){
+        return 123;
+    }).toString());
+    console.log(new Date().toString());
+    //4.3toString()的应用:判断数据类型
+    var o = {};
+    console.log(o.toString());
+    //Object.prototype.toString.call(value);
+    console.log(Object.prototype.toString.call(null));//[object Null]
+    console.log(Object.prototype.toString.call(undefined));//[object Undefined]
+    console.log(Object.prototype.toString.call(Math));//[object Math]
+    var type = function(o){
+        var s = Object.prototype.toString.call(o);
+        return s.match(/\[object (.*?)\]/)[1].toLowerCase();
+    };
+    console.log(type({}));
+    console.log(type([])); // "array"
+    console.log(type(5)); // "number"
+    console.log(type(null)); // "null"
+    console.log(type()); // "undefined"
+    console.log(type(/abcd/)); // "regex"
+    console.log(type(new Date())); // "date"
+['Null',
+ 'Undefined',
+ 'Object',
+ 'Array',
+ 'String',
+ 'Number',
+ 'Boolean',
+ 'Function',
+ 'RegExp',
+ 'NaN',
+ 'Infinite'
+].forEach(function(t){
+    type['is' + t] = function(o){
+        return type(o) === t.toLowerCase();
+    };
+});
+console.log(type.isObject({}));
+console.log(type.isNumber(NaN));
+console.log(type.isRegExp(/abc/));
+    //5参考链接
+</script>
